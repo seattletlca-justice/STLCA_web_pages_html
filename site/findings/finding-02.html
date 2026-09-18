@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finding 02 — Ordinance 125054 Annual Reporting — STLCA</title>
+<meta name="description" content="Section 9 of Ordinance 125054 required annual reporting beginning June 15, 2017. STLCA did not locate a complete annual report series matching that obligation in the public record searched.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="paper" data-page="findings/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → <a href="index.html">Findings</a> → Finding 02</div>
+
+  <div class="page-head">
+    <div class="eyebrow" id="eyebrow"></div>
+    <h1 id="title"></h1>
+    <p class="lede" id="statement"></p>
+  </div>
+
+  <div class="notice" style="border-left-color:var(--navy)">
+    <b>Evidence-safe public language — use this wording</b>
+    <p style="margin:8px 0 0;font-size:16px" id="safe"></p>
+  </div>
+
+  <div class="bounds">
+    <div class="yes"><b>What this supports</b><p id="yes"></p></div>
+    <div class="no"><b>What this does not support</b><p id="no"></p></div>
+  </div>
+
+  <div class="limitation">
+    <b>Critical limitation</b>
+    <span id="crit"></span>
+  </div>
+
+  <h2>Why this finding carries no percentage</h2>
+  <p style="max-width:66ch">
+    The other two core findings are counts of field states in a defined record universe. This one is
+    not. It is the result of a search of the public record, and a search result is bounded by what
+    was searched. There is no denominator here because the question is not "how many of N," it is
+    "was a complete series located." It was not.
+  </p>
+  <p style="max-width:66ch">
+    That distinction is the whole finding. An absence in a searched record is evidence about the
+    searchable public record. It is not evidence that the underlying obligation went unmet, and this
+    site does not present it as such.
+  </p>
+
+  <h2>The obligation</h2>
+  <p style="max-width:66ch">
+    Ordinance 125054, Section 9, required annual reporting beginning June 15, 2017 on activity
+    connected to the tenant-protection provision. The ordinance text and the related
+    Rental Registration and Inspection Ordinance annual reports that were located are held in
+    <a href="../reports/index.html">Reports &amp; Source Records</a>.
+  </p>
+
+  <h2>What was located</h2>
+  <p style="max-width:66ch">
+    Two Rental Registration and Inspection Ordinance annual reports were located and are preserved
+    with the source records: the 2022 report and the 2024 report. These are RRIO program reports.
+    Locating them does not satisfy, and is not offered as satisfying, the Section 9 obligation — they
+    are a different reporting instrument, and this site does not treat one as evidence about the other.
+  </p>
+
+  <div class="notice">
+    <b>What would change this finding.</b>
+    A complete located series, or a City record establishing where the Section 9 reports were
+    published, would change it. STLCA has filed public-records requests on adjacent questions; that
+    correspondence is preserved in the source records. If reports are produced, this finding is
+    revised — that is the standard, not an exception to it.
+  </div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings, x = f.findings[1];
+  document.getElementById("eyebrow").textContent = "Finding " + x.number;
+  document.getElementById("title").textContent = x.title;
+  document.getElementById("statement").textContent = x.statement;
+  document.getElementById("safe").textContent = x.evidence_safe_language;
+  document.getElementById("crit").textContent = x.critical_limitation;
+  document.getElementById("yes").textContent = x.supports;
+  document.getElementById("no").textContent = x.does_not_support;
+
+  document.getElementById("prov").innerHTML =
+    "<b>Finding type</b> public-record search result — no denominator applies<br>" +
+    "<b>Obligation</b> Ordinance 125054 §9, annual reporting from 2017-06-15<br>" +
+    "<b>Located and preserved</b> RRIO annual reports 2022 and 2024 (different reporting instrument)<br>" +
+    "<b>Source records</b> SOURCE_RECORDS/rrio/ and SOURCE_RECORDS/pra_and_correspondence/<br>" +
+    "<b>Limitation</b> bounded by the public record searched · <b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

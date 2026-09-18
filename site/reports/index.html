@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reports &amp; Source Records — STLCA</title>
+<meta name="description" content="The extracts, exports, records-request correspondence and reference documents behind every figure on this site.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="paper" data-page="reports/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → Reports &amp; Source Records</div>
+
+  <div class="page-head">
+    <div class="eyebrow">Reports &amp; Source Records</div>
+    <h1>Follow the record</h1>
+    <p class="lede" id="lede"></p>
+  </div>
+
+  <div class="notice">
+    <b>No public number without provenance.</b>
+    A figure published here is tied to a source snapshot, a record universe, a date scope, an
+    extraction date, a QA status, its exclusions, and its limitations. This page is where the first
+    of those lives. Files are held in the repository alongside the site, not on a server — the paths
+    below are relative to <code>SOURCE_RECORDS/</code>.
+  </div>
+
+  <div id="groups"></div>
+
+  <h2>Governance documents</h2>
+  <p style="max-width:66ch">
+    The rules this site is built under are themselves part of the record. They are held in
+    <code>GOVERNANCE/</code>.
+  </p>
+  <ul class="tight">
+    <li><b>README_STLCA_SITE_GOVERNANCE.md</b> — editorial frame, the fixed findings, evidence and
+      publication rules, and the R.A.R.E. review model.</li>
+    <li><b>README_DATA_AND_DENOMINATORS.md</b> — source of truth, the coexisting universes, and
+      denominator discipline.</li>
+    <li><b>WEBSITE_BUILD_INSTRUCTIONS_20260807_v01.md</b> — build gates, prohibited language,
+      content controls, and QA requirements.</li>
+    <li><b>README_BUILD_HANDOFF.md</b> — the handoff notes accompanying the build instructions.</li>
+  </ul>
+
+  <h2>Archive</h2>
+  <p style="max-width:66ch">
+    Superseded pages, earlier template generations, duplicate trees and packaging snapshots are
+    retained in <code>_ARCHIVE/</code> rather than deleted, with <code>ARCHIVE_MANIFEST.csv</code>
+    recording where each item came from and why it was moved. Material whose claims exceed what the
+    record supports is held in <code>_ARCHIVE/review_required/</code> pending human review.
+  </p>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings, G = D.source_records || [];
+
+  function mb(b) {
+    if (b >= 1048576) return (b / 1048576).toFixed(1) + " MB";
+    if (b >= 1024) return Math.round(b / 1024) + " KB";
+    return b + " B";
+  }
+  var totalFiles = G.reduce(function (s, g) { return s + g.count; }, 0);
+  var totalBytes = G.reduce(function (s, g) { return s + g.bytes; }, 0);
+
+  document.getElementById("lede").textContent =
+    totalFiles + " source files across " + G.length + " groups, " + mb(totalBytes) +
+    " in total, hold the evidence behind every figure on this site — including the frozen extract " +
+    "whose SHA-256 is checked against each district file every time the site is rebuilt.";
+
+  document.getElementById("groups").innerHTML = G.map(function (g) {
+    var rows = g.files.map(function (x) {
+      return '<tr><td style="text-align:left"><code>' + S.esc(x.rel) + "</code></td><td>" +
+        mb(x.bytes) + "</td></tr>";
+    }).join("");
+    return "<h2>" + S.esc(g.title) + "</h2>" +
+      '<p style="max-width:66ch">' + S.esc(g.description) + "</p>" +
+      '<p class="chart-sub">' + g.count + " files · " + mb(g.bytes) +
+      (g.truncated ? " · showing the " + g.files.length + " largest" : "") + "</p>" +
+      '<div class="scroll-x"><table class="data"><thead><tr><th>File</th><th>Size</th></tr></thead>' +
+      "<tbody>" + rows + "</tbody></table></div>" +
+      (g.truncated ? '<p class="chart-sub">…and ' + g.truncated + " more in <code>SOURCE_RECORDS/" +
+        S.esc(g.key) + "/</code></p>" : "");
+  }).join("");
+
+  document.getElementById("prov").innerHTML =
+    "<b>Primary source</b> " + S.esc(f.source.file) + "<br><b>SHA-256</b> " + f.source.sha256 +
+    " <em>(verified against all seven district extracts at build time)</em><br>" +
+    "<b>Universe</b> " + S.num(f.universe.records) + " landlord-tenant candidate records through " +
+    f.universe.through + "<br><b>Inventory</b> " + totalFiles + " files, " + mb(totalBytes) +
+    ", scanned at build time · <b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

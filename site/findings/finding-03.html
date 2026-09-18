@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finding 03 — Closed Without a Documented Inspection Result — STLCA</title>
+<meta name="description" content="Closed and completed landlord-tenant records frequently carry no recorded LastInspResult. A documentation gap at case closure.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="paper" data-page="findings/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → <a href="index.html">Findings</a> → Finding 03</div>
+
+  <div class="page-head">
+    <div class="eyebrow" id="eyebrow"></div>
+    <h1 id="title"></h1>
+    <p class="lede" id="statement"></p>
+  </div>
+
+  <section class="grid g3" id="tiles"></section>
+
+  <div class="limitation">
+    <b>Watch the denominator</b>
+    <span id="crit"></span>
+  </div>
+
+  <div class="bounds">
+    <div class="yes"><b>What this supports</b><p id="yes"></p></div>
+    <div class="no"><b>What this does not support</b><p id="no"></p></div>
+  </div>
+
+  <h2>Records with no recorded inspection result, by district</h2>
+  <p style="max-width:66ch">
+    The district extracts report the count of records with no recorded <code>LastInspResult</code>
+    against each district's own record count. Note that the district denominator here is the full
+    district record count, not that district's closed/completed subset — so these shares are not
+    directly comparable to this finding's headline share, which uses the closed/completed denominator.
+  </p>
+  <div id="by-district"></div>
+
+  <h2>How closure statuses are distributed</h2>
+  <p style="max-width:66ch">
+    Across the district-assigned universe, the great majority of records carry a terminal status.
+    The finding is not that records stay open — it is that a terminal status frequently arrives
+    without a recorded inspection result attached to it.
+  </p>
+  <div id="status"></div>
+
+  <div class="limitation">
+    <b>Inspection-date limitation — reproduced verbatim</b>
+    <span id="verbatim"></span>
+  </div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings, x = f.findings[2];
+
+  document.getElementById("eyebrow").textContent = "Finding " + x.number;
+  document.getElementById("title").textContent = x.title;
+  document.getElementById("statement").textContent = x.statement;
+  document.getElementById("crit").textContent = x.critical_limitation;
+  document.getElementById("yes").textContent = x.supports;
+  document.getElementById("no").textContent = x.does_not_support;
+  document.getElementById("verbatim").textContent = f.inspection_date_limitation;
+
+  document.getElementById("tiles").innerHTML = [
+    { v: S.pct(x.headline_pct), k: x.headline_label,
+      d: S.num(x.headline_value) + " of " + S.num(x.headline_denominator) },
+    { v: S.pct(x.secondary_pct), k: x.secondary_label,
+      d: S.num(x.secondary_value) + " of " + S.num(x.headline_denominator) },
+    { v: S.num(x.headline_denominator), k: "Records with a Closed or Completed status",
+      d: "the denominator for this finding" }
+  ].map(function (t) {
+    return '<div class="tile"><div class="v">' + t.v + '</div><div class="k">' + S.esc(t.k) +
+      '</div><div class="d">' + S.esc(t.d) + "</div></div>";
+  }).join("");
+
+  var ids = Object.keys(D.districts).sort();
+  S.barChartH(document.getElementById("by-district"), {
+    title: "Records with no recorded LastInspResult, by Council district",
+    sub: "Count against each district's own total record count · not the closed/completed denominator",
+    cats: ids.map(function (i) { return "D" + i + " · " + D.districts[i].name; }),
+    values: ids.map(function (i) { return D.districts[i].inspection_completeness.no_lastinspresult; }),
+    notes: ids.map(function (i) {
+      var d = D.districts[i];
+      return "of " + S.num(d.totals.record_count) + " district records (" +
+        (d.inspection_completeness.no_lastinspresult / d.totals.record_count * 100).toFixed(1) + "%)";
+    }),
+    unit: "records", seriesName: "Records", catLabel: "District",
+    caption: "A missing result field does not establish that no inspection or correction occurred."
+  });
+
+  // Aggregate status across the seven district extracts.
+  var agg = {};
+  ids.forEach(function (i) {
+    var sb = D.districts[i].status_breakdown;
+    for (var k in sb) agg[k] = (agg[k] || 0) + sb[k];
+  });
+  var order = Object.keys(agg).sort(function (a, b) { return agg[b] - agg[a]; }).slice(0, 8);
+  var total = Object.keys(agg).reduce(function (s, k) { return s + agg[k]; }, 0);
+
+  S.barChartH(document.getElementById("status"), {
+    title: "Most common StatusCurrent values across the district-assigned universe",
+    sub: "Top 8 of " + Object.keys(agg).length + " distinct statuses · " + S.num(total) + " records total",
+    cats: order.map(function (k) { return k.charAt(0) + k.slice(1).toLowerCase(); }),
+    values: order.map(function (k) { return agg[k]; }),
+    notes: order.map(function (k) { return (agg[k] / total * 100).toFixed(1) + "% of district-assigned records"; }),
+    labelW: 200, unit: "records", seriesName: "Records", catLabel: "Status",
+    caption: "Summed from the seven district extracts. Closed and Completed together form the " +
+             "denominator for this finding."
+  });
+
+  document.getElementById("prov").innerHTML =
+    "<b>Source</b> " + S.esc(f.source.file) + "<br><b>SHA-256</b> " + f.source.sha256 +
+    "<br><b>Universe</b> " + S.num(f.universe.records) + " landlord-tenant candidate records; " +
+    "this finding's denominator is the " + S.num(x.headline_denominator) +
+    " records whose StatusCurrent contains Closed or Completed<br>" +
+    "<b>Date scope</b> through " + f.universe.through +
+    " · <b>QA</b> " + D.reconciliation.status + "<br><b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

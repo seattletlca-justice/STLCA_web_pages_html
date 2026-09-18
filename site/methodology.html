@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology — STLCA</title>
+<meta name="description" content="How the record universe is defined, verified, traced and bounded — and what sets the ceiling on any public claim.">
+<link rel="stylesheet" href="assets/stlca.css">
+</head>
+<body class="paper" data-page="methodology.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="index.html">The Record</a> → Methodology</div>
+
+  <div class="page-head">
+    <div class="eyebrow">Methodology</div>
+    <h1>How to check this work</h1>
+    <p class="lede">
+      Nothing here asks to be taken on trust. This page describes how the record universe is defined,
+      what is verified and how, where the joins are, what the known limitations are, and what sets the
+      ceiling on any claim published on this site.
+    </p>
+  </div>
+
+  <h2>The R.A.R.E. review model</h2>
+  <div class="grid g4">
+    <div class="card"><div class="eyebrow">01</div><h3>Collect</h3>
+      <p>Define the record universe and preserve the source.</p></div>
+    <div class="card"><div class="eyebrow">02</div><h3>Verify</h3>
+      <p>Test completeness, dates, relationships, conflicts and gaps.</p></div>
+    <div class="card"><div class="eyebrow">03</div><h3>Trace</h3>
+      <p>Connect findings back to supporting records and preserve provenance.</p></div>
+    <div class="card"><div class="eyebrow">04</div><h3>Report</h3>
+      <p>Publish what the evidence establishes — and what it does not.</p></div>
+  </div>
+  <p style="max-width:66ch">
+    R.A.R.E. does not decide what the records should say. It makes it possible to examine what they
+    do say.
+  </p>
+
+  <h2>The source of truth</h2>
+  <p style="max-width:66ch">
+    All landlord-tenant figures on this site derive from one frozen analytic CSV. Its SHA-256 is
+    recorded in the data layer, declared independently by each of the seven district extracts, and
+    checked at every build. If the file changes, the build fails rather than publishing a figure
+    whose provenance no longer holds.
+  </p>
+  <div class="prov" id="source-prov"></div>
+
+  <h2>Verification that runs on every build</h2>
+  <p style="max-width:66ch">
+    These are not descriptions of intent. They are gates in <code>build.py</code> that stop the build.
+  </p>
+  <div class="scroll-x"><table class="data">
+    <thead><tr><th>Gate</th><th>What it checks</th><th>On failure</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left">Provenance</td>
+        <td style="text-align:left">All seven district extracts declare the same source SHA-256 as the findings layer</td>
+        <td style="text-align:left">Build stops</td></tr>
+      <tr><td style="text-align:left">Reconciliation</td>
+        <td style="text-align:left">District record counts sum to the published district-assigned total</td>
+        <td style="text-align:left">Build stops</td></tr>
+      <tr><td style="text-align:left">Retired universe</td>
+        <td style="text-align:left">No district figure uses the retired keyword-expanded denominator</td>
+        <td style="text-align:left">Build stops</td></tr>
+      <tr><td style="text-align:left">Case-study computation</td>
+        <td style="text-align:left">Case-study figures are computed from the source CSV, not transcribed</td>
+        <td style="text-align:left">Figures cannot drift from the record</td></tr>
+    </tbody>
+  </table></div>
+  <div class="notice" id="recon"></div>
+
+  <h2>Denominator discipline</h2>
+  <p style="max-width:66ch">
+    The most common failure in housing-enforcement analysis is reusing one number as two different
+    things. Every metric names one denominator on the page where it appears.
+  </p>
+  <div class="scroll-x"><table class="data" id="denoms">
+    <thead><tr><th>Metric</th><th>Definition</th><th>Must not be called</th><th>Why</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+
+  <h2>Three landlord-tenant universes coexist</h2>
+  <div class="scroll-x"><table class="data" id="universes">
+    <thead><tr><th>Count</th><th>Definition</th><th>Permitted use</th></tr></thead><tbody></tbody>
+  </table></div>
+  <div class="limitation" id="not-citywide"></div>
+
+  <h2>Known limitations</h2>
+  <div class="limitation">
+    <b>Inspection-date limitation — reproduced verbatim wherever an inspection-date figure appears</b>
+    <span id="verbatim"></span>
+  </div>
+  <ul class="tight" style="max-width:66ch">
+    <li><b>Missing data is not proof of non-occurrence.</b> A blank inspection field does not prove
+      no inspection occurred. A closed status does not by itself prove correction. A report not
+      located in the searched public record is not proof it never existed elsewhere.</li>
+    <li><b>No complaint-to-violation linkage.</b> The source record does not link a complaint to a
+      resulting violation, so no conversion rate is computable. Ratios of record counts are labelled
+      as such.</li>
+    <li><b>Address joins err in both directions.</b> The RRIO feature matches two record systems on
+      address. Certified properties whose address differs across systems will not match, and a
+      matched address may cover different units or years.</li>
+    <li><b>Date fields are not internally consistent on every record.</b> Negative recorded intervals
+      — a close date preceding an open date — are present. Where a district page shows a timing
+      figure, this is stated on that page.</li>
+    <li><b>Overlapping classification categories.</b> A record can match more than one condition
+      category, so category counts sum to more than the distinct records they describe.</li>
+  </ul>
+
+  <h2>The claim ceiling</h2>
+  <p style="max-width:66ch">
+    Documented fact, reported statement, calculation, analysis, inference, allegation, finding and
+    limitation stay visibly separate. A hedge travels with its claim: where a figure needs a
+    qualifier, the qualifier appears with the figure, not in a footnote several screens down.
+    Rewriting a claim does not strengthen the evidence behind it.
+  </p>
+  <div class="notice">
+    <b>Failed QA does not publish.</b>
+    If a dataset, figure, page or evidence package fails QA, it is marked <b>QA FAILED, NOT READY</b>
+    and is not presented as authoritative or public-ready until repaired and re-checked.
+  </div>
+
+  <h2>Reproducing this yourself</h2>
+  <p style="max-width:66ch">
+    The site is static HTML, CSS and JavaScript with no build framework. From the
+    <code>STLCA_SITE/</code> directory:
+  </p>
+  <pre style="background:var(--paper-2);border:1px solid var(--rule);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px"><code>python build.py        # regenerate the data layer and district pages
+python -m http.server 8000</code></pre>
+  <p style="max-width:66ch">
+    The binding test: change a value in <code>data/District_3_SUMMARY.json</code>, run
+    <code>build.py</code>, reload District 3, and the page reflects the change with no HTML edit.
+    If that is not true, the binding is not real.
+  </p>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="assets/data.js"></script>
+<script src="assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings, u = f.universe, r = D.reconciliation;
+
+  document.getElementById("source-prov").innerHTML =
+    "<b>File</b> " + S.esc(f.source.file) + "<br><b>SHA-256</b> " + f.source.sha256 +
+    "<br><b>Verified</b> " + (f.source.sha256_verified ? "yes — recomputed from the file on disk" : "no") +
+    "<br><b>Held at</b> " + S.esc(f.source.location) +
+    "<br><b>Enriched</b> " + f.source.enriched + " · <b>Scope</b> " + S.esc(f.source.scope);
+
+  document.getElementById("recon").innerHTML =
+    "<b>Current reconciliation: " + r.status + ".</b> " +
+    S.num(r.districts_sum) + " district-assigned records + " + S.num(r.unassigned) +
+    " unassigned = " + S.num(r.universe_total) + ", matching the published universe.";
+
+  document.querySelector("#denoms tbody").innerHTML = f.denominator_rules.map(function (d) {
+    return '<tr><td style="text-align:left">' + S.esc(d.metric) + '</td><td style="text-align:left">' +
+      S.esc(d.formula) + '</td><td style="text-align:left">' + S.esc(d.must_not_be_called) +
+      '</td><td style="text-align:left">' + S.esc(d.why) + "</td></tr>";
+  }).join("");
+
+  document.querySelector("#universes tbody").innerHTML = f.coexisting_universes.map(function (x) {
+    var retired = x.permitted_use.indexOf("Retired") !== -1;
+    return "<tr><td>" + S.num(x.count) + '</td><td style="text-align:left">' + S.esc(x.definition) +
+      '</td><td style="text-align:left"' + (retired ? ' class="no"' : "") + ">" +
+      (retired ? "<b style='color:#b91c1c'>" + S.esc(x.permitted_use) + "</b>" : S.esc(x.permitted_use)) +
+      "</td></tr>";
+  }).join("");
+
+  document.getElementById("not-citywide").innerHTML =
+    "<b>The landlord-tenant universe is not the citywide universe</b>" + S.esc(u.warning) +
+    " The citywide all-record universe holds " + S.num(u.citywide_all_records) + " records.";
+
+  document.getElementById("verbatim").textContent = f.inspection_date_limitation;
+
+  document.getElementById("prov").innerHTML =
+    "<b>Universe</b> " + S.num(u.records) + " landlord-tenant candidate records through " + u.through +
+    " (" + S.num(u.assigned_to_district) + " assigned, " + S.num(u.unassigned) + " unassigned)<br>" +
+    "<b>Per-district method</b> " + S.esc(D.districts["1"].source.methodology) + "<br>" +
+    "<b>Build gates</b> provenance, reconciliation, retired-universe — all passing<br>" +
+    "<b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "stlca-site",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8743", "--directory", "C:/Users/stlca/OneDrive/Desktop/STLCA SITE/STLCA_Extraction_Program_Creation/01_APPROVED_CANDIDATE_PIPELINE_VERIFIED/STLCA_web_pages_html/STLCA_SITE"],
+      "port": 8743
+    }
+  ]
+}

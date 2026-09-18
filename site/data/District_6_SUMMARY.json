@@ -1,0 +1,223 @@
+{
+  "district": "6",
+  "source": {
+    "file": "case_nov_MASTER_SOURCE_CITYWIDE_LLT_THRU_20251231_ENRICHED_01272026__PLUS_RECORDLISTRARE.csv",
+    "sha256": "abe7883a89caae22a7c896d08e3f5d83a5346d15d7c904a18d52b7643347cdeb",
+    "citywide_llt_universe": 56258,
+    "methodology": "Direct DISTRICT filter on confirmed LT records. No keyword reclassification."
+  },
+  "totals": {
+    "record_count": 6295,
+    "unique_addresses": 3122,
+    "cp_count": 4203,
+    "vi_count": 1064,
+    "ct_count": 184
+  },
+  "recordtypedesc_composition": {
+    "note": "SDCI's own RECORDTYPEDESC field for records already confirmed real LT cases via RECORDTYPE. Documents SDCI's own data completeness -- not a reclassification method.",
+    "blank": 3849,
+    "blank_pct": 61.1,
+    "landlord_tenant_explicit": 2004,
+    "emergency_plus_lt": 268,
+    "emergency_only": 160,
+    "other_mixed_categories": 14
+  },
+  "inspection_completeness": {
+    "no_lastinspdate": 4183,
+    "no_lastinspdate_pct": 66.4,
+    "no_lastinspresult": 4186
+  },
+  "status_breakdown": {
+    "APPLICATION COMPLETED": 3,
+    "CITATION ISSUED": 5,
+    "CLOSED": 1213,
+    "COMPLETED": 4497,
+    "COMPLIANCE ACHIEVED": 11,
+    "EO REPAIR RESTORE ISSUED": 5,
+    "EO VACATE CLOSE ISSUED": 6,
+    "HAZARD CORRECTION ORDER ISSUED": 1,
+    "INITIATED": 68,
+    "ISSUED": 24,
+    "NOV ISSUED": 45,
+    "OPEN DUPLICATE": 24,
+    "REVIEWS COMPLETED": 9,
+    "REVIEWS IN PROCESS": 6,
+    "UNDER INVESTIGATION": 366,
+    "WARNING": 7,
+    "WITHDRAWN": 5
+  },
+  "resolution_time_days": {
+    "count": 2112,
+    "min": -276.0,
+    "max": 1942.0,
+    "mean": 76.840436,
+    "median": 20.0,
+    "std": 163.535592,
+    "percentiles": {
+      "0": -276.0,
+      "1": -34.89,
+      "5": -1.0,
+      "10": 0.0,
+      "25": 6.0,
+      "50": 20.0,
+      "75": 77.0,
+      "90": 200.9000000000001,
+      "95": 348.4499999999998,
+      "99": 830.8999999999987,
+      "100": 1942.0
+    }
+  },
+  "substantive_complaint_classification": {
+    "substantive_complaints": 2984,
+    "substantive_pct": 47.4,
+    "top_signals": {
+      "csv:POTA": 1781,
+      "kw:TENANT_RELOCATION": 579,
+      "csv:JCEO": 356,
+      "csv:RENT INCREASE": 301,
+      "kw:RENT_INCREASE": 292,
+      "csv:DEPOSIT": 218,
+      "kw:NO_HEAT": 97,
+      "kw:WATER_DAMAGE": 81,
+      "kw:BLACK_MOLD": 80,
+      "kw:WATER_LEAK": 64,
+      "kw:NOTICE_TO_VACATE": 60,
+      "kw:NO_HOT_WATER": 56,
+      "csv:EDRA": 55,
+      "kw:FIRE_HAZARD": 38,
+      "kw:NO_WATER": 35
+    },
+    "jceo_present": 356,
+    "pota_present": 1787,
+    "rent_increase_present": 303,
+    "method": "classifier.py is_substantive_complaint() and classify_description_codes(), approved rule set"
+  },
+  "enforcement_gap": {
+    "note": "Violations issued per complaint, by year, this district. Same 2017-2018 inflection as citywide.",
+    "by_year": {
+      "2003": {
+        "cp": 8,
+        "vi": 1,
+        "vi_to_cp_pct": 12.5
+      },
+      "2004": {
+        "cp": 39,
+        "vi": 38,
+        "vi_to_cp_pct": 97.4
+      },
+      "2005": {
+        "cp": 45,
+        "vi": 44,
+        "vi_to_cp_pct": 97.8
+      },
+      "2006": {
+        "cp": 54,
+        "vi": 43,
+        "vi_to_cp_pct": 79.6
+      },
+      "2007": {
+        "cp": 55,
+        "vi": 47,
+        "vi_to_cp_pct": 85.5
+      },
+      "2008": {
+        "cp": 44,
+        "vi": 33,
+        "vi_to_cp_pct": 75.0
+      },
+      "2009": {
+        "cp": 60,
+        "vi": 37,
+        "vi_to_cp_pct": 61.7
+      },
+      "2010": {
+        "cp": 34,
+        "vi": 23,
+        "vi_to_cp_pct": 67.6
+      },
+      "2011": {
+        "cp": 42,
+        "vi": 29,
+        "vi_to_cp_pct": 69.0
+      },
+      "2012": {
+        "cp": 46,
+        "vi": 40,
+        "vi_to_cp_pct": 87.0
+      },
+      "2013": {
+        "cp": 57,
+        "vi": 34,
+        "vi_to_cp_pct": 59.6
+      },
+      "2014": {
+        "cp": 50,
+        "vi": 43,
+        "vi_to_cp_pct": 86.0
+      },
+      "2015": {
+        "cp": 55,
+        "vi": 38,
+        "vi_to_cp_pct": 69.1
+      },
+      "2016": {
+        "cp": 53,
+        "vi": 35,
+        "vi_to_cp_pct": 66.0
+      },
+      "2017": {
+        "cp": 104,
+        "vi": 35,
+        "vi_to_cp_pct": 33.7
+      },
+      "2018": {
+        "cp": 340,
+        "vi": 34,
+        "vi_to_cp_pct": 10.0
+      },
+      "2019": {
+        "cp": 320,
+        "vi": 48,
+        "vi_to_cp_pct": 15.0
+      },
+      "2020": {
+        "cp": 344,
+        "vi": 78,
+        "vi_to_cp_pct": 22.7
+      },
+      "2021": {
+        "cp": 383,
+        "vi": 149,
+        "vi_to_cp_pct": 38.9
+      },
+      "2022": {
+        "cp": 523,
+        "vi": 118,
+        "vi_to_cp_pct": 22.6
+      },
+      "2023": {
+        "cp": 518,
+        "vi": 53,
+        "vi_to_cp_pct": 10.2
+      },
+      "2024": {
+        "cp": 509,
+        "vi": 36,
+        "vi_to_cp_pct": 7.1
+      },
+      "2025": {
+        "cp": 520,
+        "vi": 28,
+        "vi_to_cp_pct": 5.4
+      }
+    }
+  },
+  "habitability_categories": {
+    "note": "Category groups exactly as organized in classifier.py SUBSTANTIVE_KEYWORDS (approved rule set). A record can match multiple groups.",
+    "method": "classifier.py is_substantive_complaint(), signals mapped to their source category group",
+    "habitability_life_safety": 475,
+    "security_access": 24,
+    "eviction_displacement": 711,
+    "rent_financial": 292
+  }
+}

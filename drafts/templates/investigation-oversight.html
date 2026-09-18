@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seattle Keeps Passing Renter Protections — STLCA</title>
+<meta name="description" content="Six places renter-protection oversight was supposed to live — Law, Enforcement, Monitoring, Renter Oversight, Council Accountability, Education + Access — and what the record does and does not show for each.">
+<style>
+  :root {
+    --navy: #0a1628; --navy-2: #12203a; --gold: #f59e0b; --gold-dim: #c17f00;
+    --screen-ink: #e9eef7; --screen-ink-2: #aebbd0; --screen-rule: #24365a; --mono-dim: #8496b3;
+    --cream: #f2ece0; --cream-2: #e9e0cd; --cream-ink: #2a2113; --cream-ink-2: #6b5f47;
+    --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --serif: ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; font-family: var(--font); line-height: 1.6; background: var(--cream); color: var(--cream-ink); }
+
+  .back { display: inline-block; font-size: 13px; color: var(--cream-ink-2); text-decoration: none; margin-bottom: 28px; }
+  .back:hover { color: var(--cream-ink); }
+
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 20px 80px; }
+
+  .eyebrow {
+    font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-dim);
+    margin-bottom: 10px; font-weight: 650;
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 700; letter-spacing: -.01em; line-height: 1.2;
+    font-size: clamp(24px, 3.6vw, 36px); margin: 0 0 14px;
+  }
+  .lede { font-family: var(--serif); font-size: clamp(16px, 1.9vw, 19px); line-height: 1.55; max-width: 62ch; color: var(--cream-ink-2); margin: 0; }
+
+  /* ------------------------------------------------------------ panel */
+  .panel { display: grid; grid-template-columns: 250px 1fr; gap: 32px; margin-top: 34px; align-items: start; }
+  @media (max-width: 760px) { .panel { grid-template-columns: 1fr; } }
+
+  .nav { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 16px; }
+  @media (max-width: 760px) { .nav { position: static; flex-direction: row; flex-wrap: wrap; gap: 8px; } }
+
+  .navbtn {
+    font: inherit; text-align: left; cursor: pointer; background: none; border: none;
+    border-left: 3px solid transparent; padding: 9px 14px; font-size: 14.5px; font-weight: 600;
+    color: var(--cream-ink-2); border-radius: 0 6px 6px 0; transition: background .12s, color .12s;
+  }
+  .navbtn:hover { background: rgba(0,0,0,.05); color: var(--cream-ink); }
+  .navbtn[aria-pressed="true"] { color: var(--cream-ink); background: var(--cream-2); border-left-color: var(--gold-dim); }
+  @media (max-width: 760px) {
+    .navbtn { border-left: none; border-bottom: 2px solid transparent; border-radius: 6px 6px 0 0; padding: 7px 4px; }
+    .navbtn[aria-pressed="true"] { border-bottom-color: var(--gold-dim); background: none; }
+  }
+
+  .card { background: var(--navy); color: var(--screen-ink); border: 1px solid var(--screen-rule); border-radius: 12px; padding: 30px 32px 26px; }
+  .card .eyebrow { color: var(--gold); }
+  .cardhead {
+    font-family: var(--serif); font-size: clamp(24px, 3vw, 30px); font-weight: 700; margin: 0 0 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--screen-rule);
+  }
+
+  .lead { font-size: 16.5px; font-weight: 620; margin: 0 0 18px; color: #fff; }
+  .body { font-size: 14.5px; color: var(--screen-ink-2); margin: 0 0 16px; line-height: 1.65; }
+
+  .timeline { list-style: none; margin: 0 0 18px; padding: 0; }
+  .timeline li { display: grid; grid-template-columns: 110px 1fr; gap: 14px; padding: 10px 0; border-top: 1px solid var(--screen-rule); font-size: 14px; }
+  .timeline li:first-child { border-top: none; }
+  .timeline .tag { color: var(--gold); font-weight: 650; font-variant-numeric: tabular-nums; }
+  .timeline .tag small { display: block; color: var(--mono-dim); font-weight: 500; font-size: 11px; letter-spacing: .05em; }
+
+  .quote { display: grid; grid-template-columns: 60px 1fr; gap: 14px; margin: 0 0 16px; font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1.5; color: #fff; }
+  .quote .tag { font-family: var(--font); font-style: normal; color: var(--gold); font-weight: 650; font-size: 13px; }
+
+  .note { display: grid; grid-template-columns: 90px 1fr; gap: 14px; font-size: 14px; margin: 0 0 16px; }
+  .note .tag { color: var(--gold); font-weight: 650; font-size: 12.5px; }
+
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 0 0 18px; }
+  @media (max-width: 560px) { .twocol { grid-template-columns: 1fr; } }
+  .twocol .tag { display: block; color: var(--gold); font-size: 11.5px; font-weight: 650; letter-spacing: .04em; margin-bottom: 6px; }
+  .twocol p { font-size: 13.5px; color: var(--screen-ink-2); margin: 0; }
+
+  .pipeline { list-style: none; margin: 0 0 16px; padding: 0; counter-reset: step; }
+  .pipeline li { counter-increment: step; display: flex; align-items: center; gap: 12px; padding: 7px 0; border-top: 1px solid var(--screen-rule); font-size: 13.5px; font-weight: 620; }
+  .pipeline li:first-child { border-top: none; }
+  .pipeline li::before { content: counter(step, decimal-leading-zero); color: var(--gold); font-family: var(--mono); font-size: 11px; font-weight: 700; }
+  .pipeline-caption { font-size: 13px; font-style: italic; color: var(--screen-ink-2); margin: 0 0 16px; }
+
+  .map { list-style: none; margin: 0 0 16px; padding: 0; }
+  .map li { display: grid; grid-template-columns: 130px 1fr; gap: 14px; padding: 8px 0; border-top: 1px solid var(--screen-rule); font-size: 14px; }
+  .map li:first-child { border-top: none; }
+  .map .k { color: var(--gold); font-weight: 650; font-size: 12.5px; letter-spacing: .03em; }
+
+  .list { margin: 0 0 16px; padding-left: 0; list-style: none; }
+  .list li { position: relative; padding: 5px 0 5px 20px; font-size: 14.5px; }
+  .list li::before { content: "\2192"; position: absolute; left: 0; color: var(--gold); }
+
+  .sub { margin: 4px 0 16px; }
+  .sub .sublabel { display: block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); font-weight: 650; margin-bottom: 5px; }
+  .sub p { font-size: 13.5px; color: var(--screen-ink-2); margin: 0; line-height: 1.6; }
+  .sub ul { margin: 4px 0 0; padding-left: 0; list-style: none; }
+  .sub ul li { font-size: 13.5px; color: var(--screen-ink-2); padding: 2px 0; }
+
+  .closer { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--screen-ink-2); border-top: 1px solid var(--screen-rule); padding-top: 16px; margin: 6px 0 16px; line-height: 1.6; }
+
+  .cta { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 650; color: var(--gold); text-decoration: none; letter-spacing: .02em; }
+  .cta:hover { color: #fff; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="index.html">&larr; The Record</a>
+
+  <div class="eyebrow">The Record vs. The Design</div>
+  <h1>Seattle Keeps Passing Renter Protections.<br>How Do We Know They're Being Enforced?</h1>
+  <p class="lede">Six places oversight was supposed to live. Pick one to see what the record does &mdash; and does not &mdash; show.</p>
+
+  <div class="panel" id="panel">
+    <nav class="nav" id="nav" aria-label="Oversight layers"></nav>
+    <div class="card" id="card" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  /* Content transcribed from Figma: STLCA R.A.R.E. Hero Investigation —
+     Editable Design, node 103-2 "CLICK STATES — ALL SIX RIGHT-HAND PANELS".
+     Per this site's own publication standard ("generated is not delivered",
+     see about.html): this is mockup content, not yet source-QA'd copy. */
+  var STATES = [
+    {
+      trigger: "Law", eyebrow: "The Rules Existed", heading: "Law",
+      blocks: [
+        { type: "lead", text: "Seattle did not begin with an absence of renter protections." },
+        { type: "timeline", items: [
+          { y: "2012", code: "RRIO", text: "Registration, inspection and reporting infrastructure." },
+          { y: "2016", code: "125054", text: "Tenant protections plus recurring reporting tied to the provision." },
+          { y: "2017", code: "125280", text: "Created the Renters’ Commission and its monitoring role." }
+        ]},
+        { type: "sub", label: "What This Layer Does Not Tell Us",
+          text: "A law on the books does not tell us what happened after a renter asked the City to enforce it." }
+      ],
+      closing: "The next question is what the enforcement body did.",
+      link: { text: "View source", href: "methodology.html" }
+    },
+    {
+      trigger: "Enforcement", eyebrow: "The Agency Response", heading: "Enforcement",
+      blocks: [
+        { type: "lead", text: "SDCI was the enforcement body." },
+        { type: "pipeline", items: ["Complaint", "Inspection", "Finding", "Enforcement", "Correction", "Verification", "Closure"],
+          caption: "A complaint counts. People entered the system. It does not tell us what the system did." },
+        { type: "sub", label: "Not The Same As", text: "Oversight · monitoring · renter representation" }
+      ],
+      closing: "Can the record follow the chain from intake to verified outcome?",
+      link: { text: "Open administrative chain", href: "findings/index.html" }
+    },
+    {
+      trigger: "Monitoring", eyebrow: "Measurement", heading: "Monitoring",
+      blocks: [
+        { type: "lead", text: "What was supposed to be measured?" },
+        { type: "quote", tag: "2016", text: "“You measure what’s important to you or what you measure is important.”" },
+        { type: "body", text: "Seattle discussed recurring rental-market information for program evaluation and policy decisions." },
+        { type: "sub", label: "Contextual Precedent — Not Enforcement Data",
+          text: "Dupre + Scott → data gap → alternatives including CoStar → replacement problem remains documented." },
+        { type: "note", tag: "2017", text: "Annual reporting obligation begins under Ordinance 125054 §9." }
+      ],
+      closing: "Where is the comparable recurring performance picture for renter-protection enforcement?",
+      link: { text: "View source", href: "reports/index.html" }
+    },
+    {
+      trigger: "Renter Oversight", eyebrow: "The Independent Renter Voice", heading: "Renter Oversight",
+      blocks: [
+        { type: "lead", text: "Seattle Renters’ Commission" },
+        { type: "quote", tag: "2017", text: "“monitor the enforcement and effectiveness of legislation related to renters and rental protections”" },
+        { type: "twoCol", items: [
+          { tag: "2018 · Renter Protection Laws", text: "Baseline information → workgroup review → recommendations → follow-up" },
+          { tag: "2018 · Outreach Strategies", text: "A separate branch — not a substitute for monitoring enforcement and effectiveness." }
+        ]},
+        { type: "note", tag: "By 2023", text: "Commissioners were themselves raising enforcement concerns." }
+      ],
+      closing: "The monitoring role remained part of the Commission’s statutory architecture.",
+      link: { text: "View commission record", href: "reports/index.html" }
+    },
+    {
+      trigger: "Council Accountability", eyebrow: "The Governing Feedback Loop", heading: "Council Accountability",
+      blocks: [
+        { type: "lead", text: "Oversight only closes the loop if results can be measured." },
+        { type: "map", items: [
+          { k: "SDCI", v: "enforcement results" },
+          { k: "Monitoring", v: "Commission / reporting" },
+          { k: "Council", v: "review + questioning" },
+          { k: "Action", v: "policy / budget / correction" }
+        ]},
+        { type: "sub", label: "2019 Record Moment",
+          text: "Asked about renter reach and social-media reach: “I don’t think we have any statistics.” / “I don’t think we have a way of knowing.”" }
+      ],
+      closing: "Council can ask the question. The underlying system still has to produce an answer.",
+      link: { text: "View council record", href: "reports/index.html" }
+    },
+    {
+      trigger: "Education + Access", eyebrow: "Help People Enter The System", heading: "Education + Access",
+      blocks: [
+        { type: "lead", text: "Renting in Seattle / outreach / navigation" },
+        { type: "list", items: ["Know your rights", "Find forms and notices", "Contact City resources", "Navigate landlord/tenant services", "Translated outreach + education"] },
+        { type: "sub", label: "The Distinction", lines: ["Education ≠ Inspection", "Outreach ≠ Finding", "Navigation ≠ Correction", "Information ≠ Verified compliance"] }
+      ],
+      closing: "Access helps people enter the system. It is not evidence of the enforcement outcome.",
+      link: { text: "View access / outreach record", href: "reports/index.html" }
+    }
+  ];
+
+  function block(b) {
+    switch (b.type) {
+      case "lead": return '<p class="lead">' + esc(b.text) + "</p>";
+      case "body": return '<p class="body">' + esc(b.text) + "</p>";
+      case "timeline":
+        return '<ul class="timeline">' + b.items.map(function (i) {
+          return "<li><div class=\"tag\">" + esc(i.y) + (i.code ? "<small>" + esc(i.code) + "</small>" : "") +
+            "</div><div>" + esc(i.text) + "</div></li>";
+        }).join("") + "</ul>";
+      case "quote":
+        return '<div class="quote"><div class="tag">' + esc(b.tag) + "</div><div>" + esc(b.text) + "</div></div>";
+      case "note":
+        return '<div class="note"><div class="tag">' + esc(b.tag) + "</div><div>" + esc(b.text) + "</div></div>";
+      case "twoCol":
+        return '<div class="twocol">' + b.items.map(function (i) {
+          return "<div><span class=\"tag\">" + esc(i.tag) + "</span><p>" + esc(i.text) + "</p></div>";
+        }).join("") + "</div>";
+      case "pipeline":
+        return '<ol class="pipeline">' + b.items.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") +
+          '</ol><p class="pipeline-caption">' + esc(b.caption) + "</p>";
+      case "map":
+        return '<ul class="map">' + b.items.map(function (i) {
+          return "<li><div class=\"k\">" + esc(i.k) + "</div><div>" + esc(i.v) + "</div></li>";
+        }).join("") + "</ul>";
+      case "list":
+        return '<ul class="list">' + b.items.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>";
+      case "sub":
+        var inner = b.text ? "<p>" + esc(b.text) + "</p>" :
+          "<ul>" + (b.lines || []).map(function (l) { return "<li>" + esc(l) + "</li>"; }).join("") + "</ul>";
+        return '<div class="sub"><span class="sublabel">' + esc(b.label) + "</span>" + inner + "</div>";
+      default: return "";
+    }
+  }
+
+  function cardHtml(s) {
+    return '<div class="eyebrow">' + esc(s.eyebrow) + '</div>' +
+      '<h3 class="cardhead">' + esc(s.heading) + "</h3>" +
+      s.blocks.map(block).join("") +
+      '<p class="closer">' + esc(s.closing) + "</p>" +
+      '<a class="cta" href="' + esc(s.link.href) + '">' + esc(s.link.text) + " →</a>";
+  }
+
+  var nav = document.getElementById("nav"), card = document.getElementById("card"), active = 0;
+
+  function render() {
+    card.innerHTML = cardHtml(STATES[active]);
+    Array.prototype.forEach.call(nav.children, function (btn, i) {
+      btn.setAttribute("aria-pressed", i === active ? "true" : "false");
+    });
+  }
+
+  nav.innerHTML = STATES.map(function (s, i) {
+    return '<button type="button" class="navbtn" aria-pressed="false" data-i="' + i + '">' + esc(s.trigger) + "</button>";
+  }).join("");
+
+  function activate(ev) {
+    var btn = ev.target.closest ? ev.target.closest(".navbtn") : null;
+    if (!btn) return;
+    var i = Number(btn.getAttribute("data-i"));
+    if (i === active) return;
+    active = i;
+    render();
+  }
+
+  /* Figma spec: "DESKTOP HOVER / MOBILE TAP" — the card opens as the
+     reader's pointer crosses each title, not only on click. Click and
+     keyboard focus still work, since touch and keyboard users never
+     fire a hover event. */
+  nav.addEventListener("mouseover", activate);
+  nav.addEventListener("focusin", activate);
+  nav.addEventListener("click", activate);
+
+  render();
+})();
+</script>
+</body>
+</html>

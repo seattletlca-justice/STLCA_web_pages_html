@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboards — STLCA</title>
+<meta name="description" content="Charts built directly on the landlord-tenant record: citywide KPIs, the NOV-to-complaint record ratio over time, and inspection completeness by district.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="screen" data-page="dashboards/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → Dashboards</div>
+
+  <div class="page-head">
+    <div class="eyebrow">Dashboards</div>
+    <h1>The record, plotted</h1>
+    <p class="lede">
+      Three screen-first surfaces. Every mark on every chart reads from the same data layer as the
+      findings pages, so a dashboard and a finding cannot disagree. Each chart carries its
+      denominator, and each has a data table behind it.
+    </p>
+  </div>
+
+  <div class="grid g3">
+    <a class="card" href="citywide-kpi.html">
+      <h3>Landlord-Tenant KPI</h3>
+      <p>The headline measures of the landlord-tenant universe, with the denominator each one uses.</p>
+    </a>
+    <a class="card" href="enforcement-gap.html">
+      <h3>NOV-to-Complaint Record Ratio</h3>
+      <p>Violation records against complaint records, by year, 2003–2025 — a record ratio, not a conversion rate.</p>
+    </a>
+    <a class="card" href="inspection-completeness.html">
+      <h3>Inspection Completeness</h3>
+      <p>Where the documentation gap sits across districts, record types and time.</p>
+    </a>
+  </div>
+
+  <div class="notice">
+    <b>Dashboards and dossiers are the same house style, on purpose.</b>
+    Dark navy is for screen reading and scanning. The findings, case studies and methodology pages
+    are white and print-first, because they are built to be printed and attached to a records request
+    or a letter to an oversight body. The two styles are held apart deliberately.
+  </div>
+
+  <div class="notice">
+    <b>Unresolved: dossier versus dashboard.</b>
+    The build direction records an open question — each district was to have both a dossier and a
+    dashboard, reading the same data, with the split between them never defined. Rather than build
+    fourteen pages against an undefined split, this site ships one district page per district. That
+    decision is flagged for review, not settled.
+  </div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings;
+  document.getElementById("prov").innerHTML =
+    "<b>Source</b> " + S.esc(f.source.file) + "<br><b>SHA-256</b> " + f.source.sha256 +
+    "<br><b>Universe</b> " + S.num(f.universe.records) +
+    " landlord-tenant candidate records through " + f.universe.through +
+    "<br><b>Data layer built</b> " + D.generated + " · <b>QA</b> " + D.reconciliation.status;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Study — The Addison on 4th — STLCA</title>
+<meta name="description" content="One building's full code-complaint record, and what the LastInspDate field actually contained in the May 2025 export.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="paper" data-page="case-studies/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → <a href="index.html">Case Studies</a> → Addison on 4th</div>
+
+  <div class="page-head">
+    <div class="eyebrow">Case study</div>
+    <h1 id="title"></h1>
+    <p class="lede" id="lede"></p>
+  </div>
+
+  <section class="grid g4" id="tiles"></section>
+
+  <h2>What the inspection-date field contained</h2>
+  <p style="max-width:66ch">
+    Finding 01 rests on a documented defect in the <code>LastInspDate</code> field: before 2025 it was
+    not functioning as a historical inspection-date field, and carried point geometry or was left
+    blank. That is normally an argument made at the scale of tens of thousands of records. This
+    building shows it in a form anyone can check by opening one CSV.
+  </p>
+
+  <div class="notice" id="geom" style="border-left-color:var(--red)"></div>
+
+  <p style="max-width:66ch">
+    Every value in that column, for this address, is a coordinate pair — the same coordinate pair,
+    repeated, because it is the location of the building rather than the date of anything. The field
+    is not sparsely populated here. It is fully populated with the wrong kind of data.
+  </p>
+
+  <div class="scroll-x"><table class="data" id="field-table">
+    <thead><tr><th>LastInspDate field state</th><th>Records</th><th>Share</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+
+  <h2>The building's record over time</h2>
+  <div id="by-year"></div>
+
+  <h2>What kind of records they are</h2>
+  <div class="grid g2">
+    <div id="by-type"></div>
+    <div id="by-status"></div>
+  </div>
+
+  <div class="bounds">
+    <div class="yes"><b>What this supports</b><p id="yes"></p></div>
+    <div class="no"><b>What this does not support</b><p id="no"></p></div>
+  </div>
+
+  <h2>Scope of this case study</h2>
+  <p style="max-width:66ch">
+    This page is built only from the SDCI code-complaint and violation record for this address. Other
+    material about this property exists in the project archive, including narrative documents that
+    assert causation and institutional fault. Those claims are not established by the record analysed
+    here, are not repeated on this page, and are held for separate human review before any
+    publication. The discipline is the same one applied everywhere on this site: the record supports
+    what it supports.
+  </p>
+
+  <div class="limitation">
+    <b>One building is an illustration, not a population</b>
+    Nothing about this property's record generalises to other properties. Its value is that it makes
+    a field-level defect concrete and independently checkable, not that it is representative.
+  </div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, a = D.addison, fi = a.field_integrity, t = a.totals;
+
+  document.getElementById("title").textContent = a.title;
+  document.getElementById("lede").textContent =
+    S.num(t.records_at_address) + " code-complaint and violation records at " + a.address +
+    ", spanning " + t.unique_years + " years. In the " + a.source.export_date +
+    " public export, not one of them carried a usable inspection date.";
+  document.getElementById("yes").textContent = a.supports;
+  document.getElementById("no").textContent = a.does_not_support;
+
+  document.getElementById("tiles").innerHTML = [
+    { v: S.num(t.records_at_address), k: "Records at this address", d: "export of " + a.source.export_date },
+    { v: S.num(fi.lastinspdate_usable_dates), k: "Records with a usable inspection date",
+      d: "out of " + S.num(t.records_at_address) },
+    { v: S.pct(fi.lastinspdate_geometry_pct), k: "LastInspDate values holding point geometry",
+      d: S.num(fi.lastinspdate_containing_geometry) + " records" },
+    { v: S.pct(fi.lastinspresult_blank_pct), k: "Records with no inspection result",
+      d: S.num(fi.lastinspresult_blank) + " of " + S.num(t.records_at_address) }
+  ].map(function (x) {
+    return '<div class="tile"><div class="v">' + x.v + '</div><div class="k">' + S.esc(x.k) +
+      '</div><div class="d">' + S.esc(x.d) + "</div></div>";
+  }).join("");
+
+  document.getElementById("geom").innerHTML =
+    "<b>Of " + S.num(t.records_at_address) + " records at this address, " +
+    S.num(fi.lastinspdate_containing_geometry) + " carry <code>POINT (longitude latitude)</code> " +
+    "in the <code>LastInspDate</code> column, " + S.num(fi.lastinspdate_blank) +
+    " are blank, and " + S.num(fi.lastinspdate_usable_dates) + " carry a date.</b>";
+
+  var states = [
+    ["Point geometry — POINT (lon lat)", fi.lastinspdate_containing_geometry],
+    ["Blank", fi.lastinspdate_blank],
+    ["A usable inspection date", fi.lastinspdate_usable_dates]
+  ];
+  document.querySelector("#field-table tbody").innerHTML = states.map(function (r) {
+    return '<tr><td style="text-align:left">' + S.esc(r[0]) + "</td><td>" + S.num(r[1]) +
+      "</td><td>" + S.pct(r[1] / t.records_at_address * 100) + "</td></tr>";
+  }).join("");
+
+  var years = Object.keys(a.by_year).sort();
+  S.barChart(document.getElementById("by-year"), {
+    title: "Records opened per year at " + a.address,
+    sub: "SDCI code-complaint and violation records · " + S.num(t.records_at_address) + " total",
+    cats: years, catLabel: "Year",
+    series: [{ name: "Records opened", values: years.map(function (y) { return a.by_year[y]; }) }],
+    height: 260, labelEvery: 1,
+    caption: "Record volume at one address reflects tenancy, reporting behaviour and building size " +
+             "as much as building condition."
+  });
+
+  var types = Object.keys(a.by_record_type).sort(function (x, y) { return a.by_record_type[y] - a.by_record_type[x]; });
+  S.barChartH(document.getElementById("by-type"), {
+    title: "By record type", sub: "SDCI RecordType",
+    cats: types, values: types.map(function (k) { return a.by_record_type[k]; }),
+    labelW: 160, rowH: 34, unit: "records", seriesName: "Records", catLabel: "Record type",
+    notes: types.map(function (k) { return S.pct(a.by_record_type[k] / t.records_at_address * 100) + " of records"; })
+  });
+
+  var st = Object.keys(a.by_status).sort(function (x, y) { return a.by_status[y] - a.by_status[x]; });
+  S.barChartH(document.getElementById("by-status"), {
+    title: "By current status", sub: "SDCI StatusCurrent",
+    cats: st.map(function (k) { return k.charAt(0) + k.slice(1).toLowerCase(); }),
+    values: st.map(function (k) { return a.by_status[k]; }),
+    labelW: 160, rowH: 34, unit: "records", seriesName: "Records", catLabel: "Status",
+    notes: st.map(function (k) { return S.pct(a.by_status[k] / t.records_at_address * 100) + " of records"; })
+  });
+
+  document.getElementById("prov").innerHTML =
+    "<b>Source</b> " + S.esc(a.source.file) + "<br><b>SHA-256</b> " + a.source.sha256 +
+    "<br><b>Location</b> " + S.esc(a.source.location) +
+    "<br><b>Export date</b> " + a.source.export_date +
+    " — a pre-July-2025 export, which is why the field defect is visible in it<br>" +
+    "<b>Universe</b> " + S.num(t.records_at_address) + " records at " + S.esc(a.address) +
+    "; " + S.num(t.rows_excluded_other_address) + " row in the export carries a different address and is excluded<br>" +
+    "<b>Computation</b> figures on this page are computed from the CSV at build time by build.py, " +
+    "not transcribed<br><b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

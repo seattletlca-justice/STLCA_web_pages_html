@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inspection Completeness — STLCA</title>
+<meta name="description" content="Where the inspection-documentation gap sits across districts and record descriptions in the landlord-tenant universe.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="screen" data-page="dashboards/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → <a href="index.html">Dashboards</a> → Completeness</div>
+
+  <div class="page-head">
+    <div class="eyebrow">Dashboard</div>
+    <h1>Inspection completeness</h1>
+    <p class="lede" id="lede"></p>
+  </div>
+
+  <section class="grid g4" id="tiles"></section>
+
+  <h2>Blank inspection date, by district</h2>
+  <div id="by-district"></div>
+
+  <h2>Blank inspection date against blank inspection result</h2>
+  <p style="max-width:66ch">
+    The two fields track each other closely in every district. Where a date is missing, the result is
+    almost always missing too — the gap is in the inspection record as a unit, not in one field of it.
+  </p>
+  <div id="paired"></div>
+
+  <h2>SDCI's own description field</h2>
+  <p style="max-width:66ch">
+    A separate completeness question, on a different field. These records are already confirmed
+    landlord-tenant cases through <code>RECORDTYPE</code>. The share below is how often SDCI's own
+    <code>RECORDTYPEDESC</code> description is blank on them.
+  </p>
+  <div id="desc"></div>
+
+  <div class="limitation">
+    <b>Inspection-date limitation — reproduced verbatim</b>
+    <span id="verbatim"></span>
+  </div>
+
+  <div class="notice">
+    <b>See this at building level.</b>
+    The <a href="../case-studies/addison-on-4th.html">Addison on 4th case study</a> shows what the
+    <code>LastInspDate</code> field actually contained in a pre-July-2025 export, across one
+    property's entire record history.
+  </div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings, u = f.universe;
+  var ids = Object.keys(D.districts).sort();
+  var pcts = ids.map(function (i) { return D.districts[i].inspection_completeness.no_lastinspdate_pct; });
+  var lo = Math.min.apply(null, pcts), hi = Math.max.apply(null, pcts);
+
+  document.getElementById("lede").textContent =
+    "Across the landlord-tenant universe, " + S.pct(f.findings[0].headline_pct) +
+    " of records have no recorded inspection date. Every district sits between " + S.pct(lo) +
+    " and " + S.pct(hi) + ". No district is an exception, and the range is narrower than the gap itself.";
+
+  document.getElementById("verbatim").textContent = f.inspection_date_limitation;
+
+  var totalBlank = ids.reduce(function (s, i) { return s + D.districts[i].inspection_completeness.no_lastinspdate; }, 0);
+  document.getElementById("tiles").innerHTML = [
+    { v: S.pct(f.findings[0].headline_pct), k: "No recorded LastInspDate, full universe",
+      d: S.num(f.findings[0].headline_value) + " ÷ " + S.num(f.findings[0].headline_denominator) },
+    { v: S.pct(lo), k: "Lowest district share", d: "District " + ids[pcts.indexOf(lo)] },
+    { v: S.pct(hi), k: "Highest district share", d: "District " + ids[pcts.indexOf(hi)] },
+    { v: S.num(totalBlank), k: "Blank-date records in district-assigned data",
+      d: "of " + S.num(D.reconciliation.districts_sum) + " assigned" }
+  ].map(function (t) {
+    return '<div class="tile"><div class="v">' + t.v + '</div><div class="k">' + S.esc(t.k) +
+      '</div><div class="d">' + S.esc(t.d) + "</div></div>";
+  }).join("");
+
+  S.barChartH(document.getElementById("by-district"), {
+    title: "Share of records with no recorded LastInspDate",
+    sub: "Each district against its own record count",
+    cats: ids.map(function (i) { return "D" + i + " · " + D.districts[i].name; }),
+    values: pcts, max: 100,
+    notes: ids.map(function (i) {
+      var d = D.districts[i];
+      return S.num(d.inspection_completeness.no_lastinspdate) + " of " + S.num(d.totals.record_count);
+    }),
+    fmt: function (v) { return v.toFixed(1) + "%"; },
+    unit: "blank LastInspDate", seriesName: "% blank", catLabel: "District",
+    caption: "A blank field does not establish that no inspection occurred."
+  });
+
+  S.barChart(document.getElementById("paired"), {
+    title: "Records missing the inspection date vs. missing the inspection result",
+    sub: "Counts per district · both series are record counts, so they share one axis",
+    cats: ids.map(function (i) { return "D" + i; }), catLabel: "District",
+    series: [
+      { name: "No LastInspDate", values: ids.map(function (i) { return D.districts[i].inspection_completeness.no_lastinspdate; }) },
+      { name: "No LastInspResult", values: ids.map(function (i) { return D.districts[i].inspection_completeness.no_lastinspresult; }) }
+    ],
+    height: 280, labelEvery: 1,
+    caption: "The two series are nearly identical in every district — the record is missing as a unit."
+  });
+
+  S.barChartH(document.getElementById("desc"), {
+    title: "Share of confirmed landlord-tenant records with a blank RECORDTYPEDESC",
+    sub: "SDCI's own description field, on records already confirmed via RECORDTYPE",
+    cats: ids.map(function (i) { return "D" + i + " · " + D.districts[i].name; }),
+    values: ids.map(function (i) { return D.districts[i].recordtypedesc_composition.blank_pct; }),
+    max: 100,
+    notes: ids.map(function (i) {
+      var d = D.districts[i];
+      return S.num(d.recordtypedesc_composition.blank) + " of " + S.num(d.totals.record_count);
+    }),
+    fmt: function (v) { return v.toFixed(1) + "%"; },
+    unit: "blank RECORDTYPEDESC", seriesName: "% blank", catLabel: "District",
+    caption: "This documents SDCI's descriptive completeness. It is not a reclassification, and a " +
+             "blank description does not make a record less of a landlord-tenant case."
+  });
+
+  document.getElementById("prov").innerHTML =
+    "<b>Source</b> " + S.esc(f.source.file) + "<br><b>SHA-256</b> " + f.source.sha256 +
+    "<br><b>Universe</b> " + S.num(u.records) + " landlord-tenant candidate records; district charts " +
+    "use the " + S.num(D.reconciliation.districts_sum) + " district-assigned subset<br>" +
+    "<b>Fields</b> LASTINSPDATE, LASTINSPRESULT, RECORDTYPEDESC · <b>Date scope</b> through " +
+    u.through + "<br><b>QA</b> " + D.reconciliation.status +
+    " · <b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

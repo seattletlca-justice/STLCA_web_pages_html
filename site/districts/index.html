@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Districts — STLCA</title>
+<meta name="description" content="Seattle's seven Council districts, each with its own landlord-tenant record count, inspection completeness and closure documentation.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="screen" data-page="districts/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → Districts</div>
+
+  <div class="page-head">
+    <div class="eyebrow">Districts</div>
+    <h1>The same record, cut seven ways</h1>
+    <p class="lede" id="lede"></p>
+  </div>
+
+  <section class="grid g4" id="tiles"></section>
+
+  <h2>Open a district</h2>
+  <div class="grid g3" id="cards"></div>
+
+  <h2>Records by district</h2>
+  <div id="counts"></div>
+
+  <h2>Inspection completeness by district</h2>
+  <div id="completeness"></div>
+
+  <div class="limitation">
+    <b>Read these as seven separate denominators</b>
+    Each district's percentage uses that district's own record count. A district with more records is
+    not thereby worse documented, and these bars must not be read as shares of a citywide total.
+    The district-assigned records sum to <span id="sum"></span>; a further <span id="unassigned"></span>
+    records carry no district assignment and appear on none of these pages.
+  </div>
+
+  <div class="notice">
+    <b>The geographic map is not built.</b>
+    The build direction is for a map to act as the entrance, with hover previews routing into these
+    pages. That requires Council-district boundary geometry, which is not present in this repository.
+    Until it is, this index is the routing surface. No page here displays a district shape or implies
+    a spatial boundary it cannot source.
+  </div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings;
+  var ids = Object.keys(D.districts).sort();
+  var recs = ids.map(function (i) { return D.districts[i].totals.record_count; });
+  var pcts = ids.map(function (i) { return D.districts[i].inspection_completeness.no_lastinspdate_pct; });
+  var addrs = ids.map(function (i) { return D.districts[i].totals.unique_addresses; });
+
+  document.getElementById("lede").textContent =
+    "Seven Council districts hold " + S.num(D.reconciliation.districts_sum) +
+    " district-assigned landlord-tenant records across " +
+    S.num(addrs.reduce(function (a, b) { return a + b; }, 0)) +
+    " address entries. The documentation gap appears in every one of them — the size of the record " +
+    "differs, the pattern does not.";
+
+  var lo = Math.min.apply(null, pcts), hi = Math.max.apply(null, pcts);
+  document.getElementById("tiles").innerHTML = [
+    { v: S.num(D.reconciliation.districts_sum), k: "District-assigned records", d: "of " + S.num(f.universe.records) + " in the universe" },
+    { v: S.num(Math.max.apply(null, recs)), k: "Largest district record count", d: "District " + ids[recs.indexOf(Math.max.apply(null, recs))] },
+    { v: S.pct(lo) + " – " + S.pct(hi), k: "Range: no recorded LastInspDate", d: "lowest to highest district" },
+    { v: S.num(f.universe.unassigned), k: "Records with no district assigned", d: "not shown on any district page" }
+  ].map(function (t) {
+    return '<div class="tile"><div class="v">' + t.v + '</div><div class="k">' + S.esc(t.k) +
+      '</div><div class="d">' + S.esc(t.d) + "</div></div>";
+  }).join("");
+
+  document.getElementById("cards").innerHTML = ids.map(function (i) {
+    var d = D.districts[i];
+    return '<a class="card" href="district-' + i + '.html">' +
+      '<div class="eyebrow">District ' + i + "</div><h3>" + S.esc(d.name) + "</h3>" +
+      '<div style="font-size:27px;font-weight:680;letter-spacing:-.02em">' +
+      S.num(d.totals.record_count) + "</div>" +
+      '<div style="font-family:var(--mono);font-size:11.5px;color:#8496b3;margin:2px 0 9px">records · ' +
+      S.num(d.totals.unique_addresses) + " addresses</div>" +
+      "<p>" + S.pct(d.inspection_completeness.no_lastinspdate_pct) +
+      " have no recorded inspection date.</p></a>";
+  }).join("");
+
+  S.barChart(document.getElementById("counts"), {
+    title: "Landlord-tenant records by Council district",
+    sub: "District-assigned records through " + f.universe.through,
+    cats: ids.map(function (i) { return "D" + i; }), catLabel: "District",
+    series: [{ name: "Records", values: recs }],
+    height: 250, labelEvery: 1,
+    caption: "Record volume reflects housing stock, tenure mix and complaint behaviour as well as " +
+             "enforcement activity. It is not by itself a measure of anything going wrong."
+  });
+
+  S.barChartH(document.getElementById("completeness"), {
+    title: "Share of records with no recorded LastInspDate",
+    sub: "Each district against its own record count",
+    cats: ids.map(function (i) { return "D" + i + " · " + D.districts[i].name; }),
+    values: pcts, max: 100,
+    notes: ids.map(function (i) {
+      var d = D.districts[i];
+      return S.num(d.inspection_completeness.no_lastinspdate) + " of " + S.num(d.totals.record_count);
+    }),
+    fmt: function (v) { return v.toFixed(1) + "%"; },
+    unit: "blank LastInspDate", seriesName: "% blank", catLabel: "District",
+    caption: "A blank field does not establish that no inspection occurred."
+  });
+
+  document.getElementById("sum").textContent = S.num(D.reconciliation.districts_sum);
+  document.getElementById("unassigned").textContent = S.num(f.universe.unassigned);
+
+  document.getElementById("prov").innerHTML =
+    "<b>Source</b> " + S.esc(f.source.file) + "<br><b>SHA-256</b> " + f.source.sha256 +
+    "<br><b>Per-district extracts</b> District_1_SUMMARY.json … District_7_SUMMARY.json, " +
+    "all declaring the same source hash<br>" +
+    "<b>Method</b> " + S.esc(D.districts["1"].source.methodology) + "<br>" +
+    "<b>Reconciliation</b> district counts sum to " + S.num(D.reconciliation.districts_sum) +
+    ", matching the published district-assigned total — " + D.reconciliation.status +
+    "<br><b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

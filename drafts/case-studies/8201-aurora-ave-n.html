@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8201 Aurora Ave N</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1628; --navy-2:#101d33; --navy-3:#17284a;
+  --gold:#f5a623; --gold-dim:#c17f00;
+  --ink:#eef2f9; --ink-2:#aebbd0; --ink-3:#8496b3;
+  --rule:#223252; --rule-2:#2c3c60;
+  --verified:#5fb88a; --hold:#f5a623; --none:#5b6b85; --blocked:#e2604f;
+  --serif:"Newsreader",ui-serif,Georgia,"Iowan Old Style","Times New Roman",serif;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--sans);line-height:1.6;background:var(--navy);color:var(--ink);}
+::selection{background:var(--gold);color:var(--navy)}
+a{color:var(--gold)}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:44px 90px}
+.tiny{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:650;color:var(--gold)}
+
+/* ---------- masthead ---------- */
+.masthead{border-bottom:1px solid var(--rule);padding-bottom:28px;margin-bottom:34px}
+.crumb{font-size:13px;color:var(--ink-3);text-decoration:none;margin-bottom:22px;display:inline-block}
+.crumb:hover{color:#fff}
+.badgerow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.badge{font-family:var(--mono);font-size:11px;letter-spacing:.03em;padding:4px 10px;border-radius:20px;border:1px solid var(--rule-2);color:var(--ink-2)}
+.badge b{color:inherit}
+.badge.pass{border-color:rgba(95,184,138,.4);color:var(--verified)}
+.badge.hold{border-color:rgba(245,166,35,.4);color:var(--hold)}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(32px,5.2vw,52px);line-height:1.05;letter-spacing:-.01em;margin:0 0 6px;color:#fff;text-wrap:balance}
+.knownas{font-family:var(--serif);font-style:italic;font-size:clamp(16px,2.2vw,20px);color:var(--ink-2);margin:0 0 22px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+@media (max-width:700px){.stats{grid-template-columns:1fr 1fr}}
+.stat{background:var(--navy-2);padding:18px 20px}
+.stat .n{font-family:var(--serif);font-variant-numeric:tabular-nums;font-size:clamp(24px,3vw,30px);font-weight:600;color:var(--gold);line-height:1}
+.stat .l{font-size:12px;color:var(--ink-3);margin-top:7px;line-height:1.4}
+
+/* ---------- owner strip ---------- */
+.ownerstrip{display:flex;flex-wrap:wrap;gap:28px;margin-top:22px;font-size:13.5px}
+.ownerstrip dt{color:var(--gold);font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:650;margin-bottom:3px}
+.ownerstrip dd{margin:0;color:var(--ink-2)}
+.ownerstrip .u{color:var(--ink-3);font-family:var(--mono);font-size:11.5px}
+
+/* ---------- narrative ---------- */
+.narrative{margin-top:36px;max-width:680px}
+.narrative .dek{font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(17px,2.2vw,20px);line-height:1.5;color:var(--ink);margin:0 0 26px;text-wrap:balance}
+.narrative p{font-size:15.5px;line-height:1.75;color:var(--ink-2);margin:0 0 18px}
+.narrative strong{color:#fff;font-weight:650}
+.narrative blockquote{margin:24px 0;padding:4px 0 4px 20px;border-left:2px solid var(--gold);font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.55;color:#fff}
+.narrative blockquote cite{display:block;margin-top:6px;font-family:var(--sans);font-style:normal;font-size:12px;color:var(--ink-3)}
+.narrative .lawbox{background:var(--navy-3);border-left:2px solid var(--rule-2);border-radius:0 8px 8px 0;padding:14px 18px;margin:22px 0;font-size:13.5px;color:var(--ink-2)}
+.narrative .lawbox b{color:var(--gold);font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:6px}
+.narrative .argument{font-size:13px;color:var(--ink-3);font-style:italic;margin:0 0 18px}
+.bylines{display:flex;flex-wrap:wrap;gap:18px;margin-top:8px;padding-top:18px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink-3);font-family:var(--mono)}
+
+/* ---------- section rhythm ---------- */
+.era{margin:52px 0 0}
+.era-head{display:flex;align-items:baseline;gap:16px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.era-year{font-family:var(--serif);font-size:22px;font-weight:600;color:#fff;white-space:nowrap}
+.era-sub{font-size:13.5px;color:var(--ink-3)}
+.era-note{font-family:var(--serif);font-style:italic;font-size:14.5px;color:var(--ink-2);margin:0 0 20px;max-width:62ch}
+
+/* ---------- single-record note (2018) ---------- */
+.singlecard{background:var(--navy-2);border:1px solid var(--rule);border-radius:10px;padding:20px 22px}
+.singlecard .id{font-family:var(--mono);font-size:12px;color:var(--gold);margin-bottom:6px}
+.singlecard p{margin:0;font-size:14px;color:var(--ink-2)}
+.singlecard .gap{margin-top:10px;font-size:12.5px;color:var(--none)}
+
+/* ---------- cluster table ---------- */
+.clustertable{border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.crow{border-top:1px solid var(--rule)}
+.crow:first-child{border-top:none}
+.csum{list-style:none;display:grid;grid-template-columns:100px 84px 1fr 140px 56px;gap:14px;align-items:center;padding:13px 18px;cursor:pointer;font-size:13px}
+.csum::-webkit-details-marker{display:none}
+.csum::marker{content:""}
+.crow[open] .csum{background:var(--navy-3)}
+.csum:hover{background:var(--navy-2)}
+@media (max-width:700px){.csum{grid-template-columns:1fr;gap:4px}}
+.csum .rid{font-family:var(--mono);color:var(--gold);font-size:12px}
+.csum .rdate{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink-3);font-size:12px}
+.csum .rtext{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.csum .routcome{font-size:12px}
+.csum .routcome.admin{color:var(--ink-2)}
+.csum .rinsp{font-size:11.5px;color:var(--none);text-align:right}
+.cdetail{padding:4px 18px 20px;background:var(--navy-2)}
+.cfields{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+@media (max-width:560px){.cfields{grid-template-columns:1fr}}
+.cfields li{padding:9px 0;border-top:1px solid var(--rule);font-size:13px}
+.cfields li:first-child,.cfields li:nth-child(2){border-top:none}
+.cfields .k{color:var(--gold);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;font-weight:650;display:block;margin-bottom:3px}
+.cfields .v{color:var(--ink-2)}
+.cfields .v.quote{font-family:var(--serif);font-style:italic;color:#fff}
+.cfields .v.none{color:var(--none)}
+.csrc{margin-top:12px;padding-top:12px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+
+/* ---------- NOV click-through ---------- */
+.panel{display:grid;grid-template-columns:230px 1fr;gap:28px;align-items:start}
+@media (max-width:760px){.panel{grid-template-columns:1fr}}
+.nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:16px}
+@media (max-width:760px){.nav{position:static;flex-direction:row;flex-wrap:wrap;gap:8px}}
+.navbtn{font:inherit;font-family:var(--sans);text-align:left;cursor:pointer;background:none;border:none;border-left:3px solid transparent;padding:9px 14px;font-size:13.5px;font-weight:600;color:var(--ink-3);border-radius:0 6px 6px 0}
+.navbtn:hover{background:var(--navy-2);color:#fff}
+.navbtn[aria-pressed="true"]{color:#fff;background:var(--navy-2);border-left-color:var(--gold)}
+@media (max-width:760px){.navbtn{border-left:none;border-bottom:2px solid transparent;border-radius:6px 6px 0 0;padding:7px 10px}.navbtn[aria-pressed="true"]{border-bottom-color:var(--gold);background:none}}
+.card{background:var(--navy-2);border:1px solid var(--rule);border-radius:12px;padding:28px 30px 24px}
+.cardhead{font-family:var(--serif);font-size:clamp(21px,2.6vw,26px);font-weight:600;margin:0 0 14px;color:#fff;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.fields{list-style:none;margin:0 0 14px;padding:0}
+.fields li{display:grid;grid-template-columns:170px 1fr;gap:14px;padding:9px 0;border-top:1px solid var(--rule);font-size:13.5px}
+.fields li:first-child{border-top:none}
+@media (max-width:560px){.fields li{grid-template-columns:1fr}}
+.fields .k{color:var(--gold);font-weight:650;font-size:11.5px;letter-spacing:.03em;text-transform:uppercase}
+.fields .v{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+.fields .v.none{color:var(--none)}
+.closer{font-family:var(--serif);font-style:italic;font-size:14.5px;color:var(--ink-2);border-top:1px solid var(--rule);padding-top:14px;margin:4px 0 0;line-height:1.6}
+
+/* ---------- pattern + held-for-review ---------- */
+.twobox{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:52px}
+@media (max-width:700px){.twobox{grid-template-columns:1fr}}
+.box{background:var(--navy-2);border:1px solid var(--rule);border-radius:10px;padding:22px 24px}
+.box h3{font-family:var(--serif);font-weight:600;font-size:18px;color:#fff;margin:0 0 12px}
+.box ul{margin:0;padding-left:18px}
+.box li{font-size:13.5px;color:var(--ink-2);margin-bottom:9px;line-height:1.55}
+.box.hold{border-color:rgba(245,166,35,.35)}
+.box.hold h3{color:var(--hold)}
+
+/* ---------- evidence index ---------- */
+.evidence{margin-top:52px}
+.eitem{display:grid;grid-template-columns:170px 1fr 90px;gap:16px;padding:11px 0;border-top:1px solid var(--rule);font-size:12.5px;align-items:baseline}
+.eitem:first-child{border-top:none}
+@media (max-width:640px){.eitem{grid-template-columns:1fr;gap:3px}}
+.eitem .f{font-family:var(--mono);color:var(--ink);}
+.eitem .d{color:var(--ink-3)}
+.eitem .s{font-family:var(--mono);font-size:11px;text-align:right}
+.eitem .s.doc{color:var(--verified)}
+.eitem .s.pending{color:var(--none)}
+.evnote{font-size:12.5px;color:var(--ink-3);margin-top:14px;font-style:italic}
+
+footer{text-align:center;padding-top:54px;margin-top:54px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <a class="crumb" href="../index.html">&larr; District 6</a>
+    <div class="badgerow">
+      <span class="badge pass">R.A.R.E. run &middot; <b>QA PASS</b></span>
+      <span class="badge hold">stlca-verify &middot; <b>2 items held</b></span>
+      <span class="badge">stlca-redteam &middot; <b>not yet run</b></span>
+    </div>
+    <h1>8201 Aurora Ave&nbsp;N</h1>
+    <p class="knownas">&ldquo;Everspring Inn&rdquo; &middot; Seattle, WA 98103 &middot; District 6</p>
+
+    <div class="stats">
+      <div class="stat"><div class="n">18</div><div class="l">SDCI records reviewed, 2018&ndash;2021</div></div>
+      <div class="stat"><div class="n">14</div><div class="l">complaints in one 7-week window, zero captured inspections (+1 more, unreadable)</div></div>
+      <div class="stat"><div class="n">148</div><div class="l">code violations, one Notice of Violation</div></div>
+      <div class="stat"><div class="n">$663.68</div><div class="l">unpaid elevator-certificate balance, unresolved 2024&rarr;2025</div></div>
+    </div>
+
+    <dl class="ownerstrip">
+      <div><dt>Owner of record</dt><dd>Next Wave Investments LLC <span class="u">UBI 604-168-802, WA Dept. of Revenue</span></dd></div>
+      <div><dt>Registered agent</dt><dd>Myung Ha Kang <span class="u">consistent 2021&rarr;2026</span></dd></div>
+      <div><dt>APN</dt><dd><span class="u">6430000810</span></dd></div>
+    </dl>
+  </div>
+
+  <!-- ================= narrative ================= -->
+  <div class="narrative">
+    <p class="dek">A month before the eviction, the City already had notice. The eviction happened anyway, and the complaints it generated were closed the way most of this property&rsquo;s complaints were closed &mdash; without an inspection.</p>
+
+    <p>On July 20, 2020, Seattle Police Chief Carmen Best signed a Notice of Declaration of Chronic Nuisance Property for 8201 Aurora Ave N, addressed to the registered owner, Next Wave Investments LLC, attention Myung Ha Kang. The letter lists 25 documented incidents at the property over the preceding twelve months, each with its own SPD incident number: <strong>five reported rapes, seven assaults, drug activity, promoting prostitution, and one homicide</strong> on May 26, 2020.</p>
+
+    <div class="lawbox"><b>What the ordinance actually does &mdash; SMC 10.09</b>A chronic nuisance declaration triggers a Correction Agreement between the property owner and police, with penalties of up to $500 a day against the person in charge and up to $25,000 against the owner for non-cooperation. The statute governs the owner&rsquo;s obligation to abate the nuisance. It does not authorize, require, or mention evicting tenants.</div>
+
+    <p>Five days after the owner posted notices telling residents they had 24 hours to leave, SPD signed that Correction Agreement &mdash; after the evictions had already started, not before them. An attorney quoted by PubliCola at the time called the sequence &ldquo;incredibly problematic.&rdquo;</p>
+
+    <p>Fourteen tenants filed complaints with SDCI describing what was happening to them in real time, during an active COVID-19 eviction moratorium:</p>
+
+    <blockquote>&ldquo;Mass eviction taking place landlord has shut off water, hired security to stop tenants form entering, boarding up windows &ndash; everyone need to be out in 24 hrs.&rdquo;<cite>007155-20CP, filed 08/18/2020</cite></blockquote>
+
+    <p>Every one of the fourteen was closed &ldquo;Admin Closure.&rdquo; None has a captured inspection in the record. The inspector of record on several of them, per the same-day status changes in SDCI&rsquo;s own timeline, was Stella Washington.</p>
+
+    <p class="argument">What follows is argument, not record: the City had its own documented notice &mdash; SPD&rsquo;s nuisance declaration &mdash; a full month before the eviction began. SDCI had fourteen of its own complaint records describing the eviction as it happened. Nothing in the record shows either agency intervening to stop it while it was still happening. The full argument, and its limits, belong to a reader who has already seen the fourteen records below &mdash; not to a summary above them.</p>
+
+    <p>Two years earlier, in 2018, Everspring Inn had been the single largest recipient of Rapid Rehousing funds paid to any landlord or vendor in the city that year &mdash; at least $164,000, city-funded money meant to move homeless residents indoors.</p>
+
+    <p>The habitability enforcement came a year after the eviction, not during it. A Notice of Violation issued July 27, 2021 cites 148 separate code violations &mdash; not the 113 an earlier pass at this same document undercounted, a parsing gap corrected the same day this page was built. Compliance was claimed five days before the deadline, a status entry in SDCI&rsquo;s portal, not a separately documented re-inspection. The elevator&rsquo;s certificate shows an unresolved $663.68 balance as recently as the 2025 notice.</p>
+
+    <div class="bylines">
+      <span>STLCA &middot; R.A.R.E. property record</span>
+      <span>Compiled 2026-09-14</span>
+      <span>18 SDCI records &middot; 6 independent sources</span>
+      <span style="color:var(--hold)">DRAFT &mdash; held for review, not yet redteamed</span>
+    </div>
+  </div>
+
+  <!-- ================= 2018 ================= -->
+  <div class="era">
+    <div class="era-head"><span class="era-year">2018</span><span class="era-sub">One isolated inquiry</span></div>
+    <div class="singlecard">
+      <div class="id">004980-18CP &middot; opened 05/25/2018 &middot; closed 06/07/2018 (13 days)</div>
+      <p>&ldquo;POTA &ndash; Tenant rights inquiry.&rdquo;</p>
+      <div class="gap">Source PDF is a scanned image with no text layer &mdash; outcome not established by this dataset. Not assumed either direction.</div>
+    </div>
+  </div>
+
+  <!-- ================= 2020 cluster ================= -->
+  <div class="era" id="cluster2020">
+    <div class="era-head"><span class="era-year">Aug&ndash;Oct 2020</span><span class="era-sub">15 records, one 7-week window</span></div>
+    <p class="era-note">Fourteen complaints, each independently substantive, each closed &ldquo;Admin Closure,&rdquo; none with a captured inspection. A fifteenth &mdash; a Unit 305 resident&rsquo;s displacement account &mdash; could not be read by automated extraction. Click a row for the full record.</p>
+
+    <div class="clustertable">
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007153-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">&ldquo;mass eviction taking place&hellip;need to be out in 24 hrs&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;mass eviction taking place landlord has told tenant need to be out in 24 hrs&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/01/2020 &middot; 14 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007155-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">&ldquo;&hellip;shut off water, hired security&hellip;boarding up windows&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;mass eviction taking place landlord has shut off water, hired security to stop tenants form entering, boarding up windows &ndash; everyone need to be out in 24 hrs&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/08/2020 &middot; 21 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007158-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">&ldquo;eviction in place out in 24hrs&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;eviction in place out in 24hrs&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/01/2020 &middot; 14 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007159-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">&ldquo;Unlawful eviction. Lock-out (and common area lock-in)&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;Unlawful eviction. Lock-out (and common area lock-in)&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/01/2020 &middot; 14 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007163-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">&ldquo;Unlawful eviction&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;Unlawful eviction&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/01/2020 &middot; 14 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007164-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">&ldquo;Unlawful eviction&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;Unlawful eviction&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/01/2020 &middot; 14 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007175-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">&ldquo;eviction notice posted&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;eviction notice posted&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/08/2020 &middot; 21 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007180-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">Unit 305, resident since Aug 2019 &mdash; displacement account</span>
+        <span class="routcome" style="color:var(--none)">Not established</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;I am a long term resident at Everspring Inn&hellip;Unit Room 305&hellip;I moved into Everspring Inn last August, 2019; I pay daily rental fee amount of $60.00 to secure Room-Unit #305&hellip;&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/01/2020 &middot; 14 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v none">Not established &mdash; findings PDF is a scanned image, no text layer</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf (parse failure &mdash; scanned image) &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007945-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">&ldquo;Locked out, door boarded.&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;Locked out, door boarded.&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/16/2020 &middot; 29 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007946-20CP</span><span class="rdate">09/09/20</span>
+        <span class="rtext">&ldquo;Boarded room, no hot water&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp" style="color:var(--blocked)">same-day</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;Boarded room, no hot water&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v" style="color:var(--blocked)">09/09/2020 &middot; same day &mdash; opened and closed in one day</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; &mdash; pipeline verdict signal: <em>concerning</em> (substantive complaint, zero inspections, same-day)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007947-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">&ldquo;Locked out&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;Locked out&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/09/2020 &middot; 22 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007948-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">&ldquo;Boarded windows, exit blocked, intimidation&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;Boarded windows, exit blocked, intimidation&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/09/2020 &middot; 22 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007949-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">&ldquo;&hellip;concerned about leaving with Covid-19. Boyfriend is sick&hellip;&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;In Room. Fenced in area; being told to leave; no hot water; concerned about leaving with Covid-19. Boyfriend is sick and unable to move.&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">09/09/2020 &middot; 22 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">008146-20CP</span><span class="rdate">09/14/20</span>
+        <span class="rtext">&ldquo;HOT WATER OFF DAY AFTER INSPECTION&hellip;ABUSIVE SECURITY STAFF&rdquo;</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp">0 insp.</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;HOT WATER OFF DAY AFTER INSPECTION. RIGHTS GUIDANCE REGARDING ABUSIVE SECURITY STAFF&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded in this record (the complaint text references &ldquo;after inspection&rdquo; &mdash; no separate inspection event captured)</span></li>
+        <li><span class="k">Closed</span><span class="v">10/28/2020 &middot; 44 days open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14</div></div></details>
+
+      <details class="crow"><summary class="csum">
+        <span class="rid">007177-20CP</span><span class="rdate">08/18/20</span>
+        <span class="rtext">Unit 305, resident since Aug 2019 &mdash; parsed</span>
+        <span class="routcome admin">Admin Closure</span><span class="rinsp" style="color:var(--blocked)">1-day close</span>
+      </summary><div class="cdetail"><ul class="cfields">
+        <li><span class="k">Source record</span><span class="v quote">&ldquo;I am a long term resident at Everspring Inn at 8201 Aurora Ave N. Unit Room 305&hellip;I moved into Everspring Inn last August, 2019; I pay daily rental fee amount of $60.00 to secure Room-Unit #305. I pay cash and receive receipts for each payment date&hellip;&rdquo;</span></li>
+        <li><span class="k">Inspection</span><span class="v none">None recorded</span></li>
+        <li><span class="k">Closed</span><span class="v">08/19/2020 &middot; 1 day open</span></li>
+        <li><span class="k">Closure basis</span><span class="v">&ldquo;Complaint Outcome: Admin Closure&rdquo; (verbatim)</span></li>
+      </ul><div class="csrc">Source: Complaint Report of Findings.pdf &middot; retrieved 2026-09-14 &middot; companion record 007180-20CP (above) covers the same tenant, unreadable</div></div></details>
+
+    </div>
+  </div>
+
+  <!-- ================= 2021 NOV chain ================= -->
+  <div class="era" id="nov2021">
+    <div class="era-head"><span class="era-year">Jul&ndash;Aug 2021</span><span class="era-sub">Complaint 005798-21CP &rarr; Notice of Violation 1052482-VI</span></div>
+    <p class="era-note">The one record in this set with a documented chain all the way through &mdash; a real inspector, a real 148-item Notice of Violation, a real correction deadline, and a portal status claiming compliance. Shown in full because there's enough here to show in full.</p>
+
+    <div class="panel" id="novpanel">
+      <nav class="nav" id="novnav" aria-label="NOV record stages"></nav>
+      <div class="card" id="novcard" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="twobox">
+    <div class="box">
+      <h3>Property History &mdash; The Pattern</h3>
+      <ul>
+        <li><strong>2018:</strong> one tenant-rights inquiry, outcome not established.</li>
+        <li><strong>Aug&ndash;Sep 2020:</strong> 15 records, one 7-week window, 14 substantive complaints describing eviction / lockout / water shutoff / boarding &mdash; every one closed Admin Closure, none with a captured inspection.</li>
+        <li><strong>Jul&ndash;Aug 2021:</strong> a 148-violation Notice of Violation, the only record in the set with a documented inspector, deadline, and status-claimed closure.</li>
+      </ul>
+      <p style="font-size:13px;color:var(--ink-3);font-style:italic;margin-top:14px">Did enforcement interrupt the pattern? Not until 2021 &mdash; nothing in the 2020 cluster shows an inspection or enforcement action of any kind.</p>
+    </div>
+    <div class="box hold">
+      <h3>Held for Human Review</h3>
+      <ul>
+        <li>Relationship between &ldquo;Ryan Kang&rdquo; (named on the NOV&rsquo;s own mailing block) and &ldquo;Myung Ha Kang&rdquo; (WA DOR / SPD letter, 5 years of independent corroboration) &mdash; not established.</li>
+        <li>SDCI Status-tab timeline vs. per-complaint findings-document outcome labels showed a discrepancy in an earlier pass; not yet traced to a specific, citable cause.</li>
+        <li>Compliance-achieved closure on the NOV rests on a portal status claim (&ldquo;All HBMC violations have been remedied&rdquo;) &mdash; no separately captured re-inspection document in this dataset.</li>
+        <li>Nothing on this page has been through an actual <code>stlca-redteam</code> pass. Publication hold remains.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="evidence">
+    <div class="era-head"><span class="era-year" style="font-size:18px">Evidence Index</span><span class="era-sub">Can the reader trace the claim?</span></div>
+    <div class="eitem"><span class="f">1052482-VI</span><span class="d">Notice of Violation &mdash; 148 violations, 12 pages</span><span class="s doc">PDF in hand</span></div>
+    <div class="eitem"><span class="f">005798-21CP</span><span class="d">Complaint Report of Findings &mdash; &ldquo;Violation Confirmed&rdquo;</span><span class="s doc">PDF in hand</span></div>
+    <div class="eitem"><span class="f">nov_enforcement_ledger.csv</span><span class="d">R.A.R.E. pipeline output, run D6_8201 AURORA AVE N_20260914_073553</span><span class="s doc">in hand</span></div>
+    <div class="eitem"><span class="f">complaint_findings_outcome_ledger.json</span><span class="d">All 18 records, outcome + source-label detail</span><span class="s doc">in hand</span></div>
+    <div class="eitem"><span class="f">WA DOR business lookup</span><span class="d">Everspring Inn &rarr; Next Wave Investments LLC, UBI 604-168-802</span><span class="s doc">screenshot in hand</span></div>
+    <div class="eitem"><span class="f">14&times; Complaint Report of Findings</span><span class="d">One PDF per 2020-cluster record (see rows above)</span><span class="s doc">PDFs in hand</span></div>
+    <div class="eitem"><span class="f">007180-20CP source PDF</span><span class="d">Scanned image, no text layer</span><span class="s pending">unreadable</span></div>
+    <div class="eitem"><span class="f">004980-18CP source PDF</span><span class="d">Scanned image, no text layer</span><span class="s pending">unreadable</span></div>
+    <p class="evnote">Live links to source files pending a decision on where evidence gets hosted for the public site. Every record above is a real file already on disk, not a placeholder.</p>
+  </div>
+
+  <footer>R.A.R.E. property record &middot; 8201 Aurora Ave N &middot; run 2026-09-14 &middot; qa_pass: true &middot; DRAFT &mdash; not yet redteamed, not approved for publication</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+
+  var NOV_STATES = [
+    { trigger:"1. Complaint Intake", eyebrow:"What Entered The System", heading:"Complaint Intake",
+      fields:[
+        {k:"Source record",v:"“HBMC Violations – How many residential units exist on the property? 33”"},
+        {k:"Complaint ID",v:"005798-21CP"},
+        {k:"Opened",v:"07/21/2021"},
+        {k:"Address / unit",v:"8201 Aurora Ave N – building-wide referral"},
+        {k:"Reported condition",v:"Housing & Building Maintenance Code referral"}
+      ], closing:"The complaint proves what was reported and when it entered the system — not that a violation occurred." },
+    { trigger:"2. Inspection", eyebrow:"Did The City Look?", heading:"Inspection",
+      fields:[
+        {k:"Inspection date",v:"Not separately recorded — falls between 07/21/2021 (complaint open) and 07/27/2021 (NOV issued)",none:true},
+        {k:"Inspector",v:"Stephen Hinch, Senior Housing & Zoning Inspector — 206-386-1987"},
+        {k:"Scope",v:"Building-wide — units 201–217, 301–317, boiler room, exterior, general building"},
+        {k:"Access",v:"Entered"},
+        {k:"Attachments",v:"None captured beyond the NOV / findings documents themselves",none:true}
+      ], closing:"No recorded inspection date is a documentation finding. It is not proof that nobody ever visited the property." },
+    { trigger:"3. Finding", eyebrow:"What Did The Inspector Establish?", heading:"Finding",
+      fields:[
+        {k:"Result",v:"Violation Confirmed (verbatim, printed on the linked Complaint Report of Findings)"},
+        {k:"Code / rule",v:"Seattle Housing & Building Maintenance Code, SMC Ch. 22.206"},
+        {k:"Finding text",v:"“Investigated and found a violation or violations of the Seattle Housing and Building Maintenance Code, Chapter 22.206”"},
+        {k:"Finding date",v:"07/27/2021"},
+        {k:"Linked inspection",v:"Stephen Hinch, 005798-21CP"}
+      ], closing:"A complaint is not a finding. A finding is the point where the City record says what it observed or concluded." },
+    { trigger:"4. Enforcement", eyebrow:"What Formal Action Followed?", heading:"Enforcement",
+      fields:[
+        {k:"Instrument",v:"Notice of Violation, Case No. 1052482-VI"},
+        {k:"Issued",v:"07/27/2021"},
+        {k:"Correction deadline",v:"Monday, 08/30/2021"},
+        {k:"Penalty / referral",v:"Modeled exposure $0.00 — compliance achieved before the deadline; schedule was $150/day (first 10 days) then $500/day, per violation, if triggered"},
+        {k:"Related document",v:"12-page NOV, 148 numbered violations, units 201–217 & 301–317, boiler room, exterior, general building"}
+      ], closing:"The absence of a located NOV or citation should stay exactly that: none located in the reviewed record. Here, one was." },
+    { trigger:"5. Correction + Follow-up", eyebrow:"What Happened After The Deadline?", heading:"Correction + Follow-up",
+      fields:[
+        {k:"Deadline",v:"08/30/2021"},
+        {k:"Extension",v:"None recorded",none:true},
+        {k:"Follow-up event",v:"Follow-up investigation, status “Enforced Compliance”"},
+        {k:"Owner response",v:"Portal comment: “All HBMC violations have been remedied”"},
+        {k:"Status change",v:"08/25/2021 · Compliance Achieved · source: portal status timeline"}
+      ], closing:"Time passing is part of the record. The deadline was 08/30 — compliance is dated 5 days before it." },
+    { trigger:"6. Verification + Closure", eyebrow:"How Did The Record End?", heading:"Verification + Closure",
+      fields:[
+        {k:"Verification",v:"Portal status claim only — no separately captured re-inspection document in this dataset",none:true},
+        {k:"Reinspection",v:"08/25/2021 · Compliance Achieved"},
+        {k:"Closed",v:"08/26/2021"},
+        {k:"Closure basis",v:"“Status: Follow-up Investigation – Enforced Compliance” (verbatim)"},
+        {k:"Elapsed time",v:"36 days (07/21/2021 → 08/26/2021)"}
+      ], closing:"A closed case tells us where the record ended. Whether it proves how it got there is the one item held above." }
+  ];
+
+  function fieldsHtml(items){
+    return '<ul class="fields">' + items.map(function(i){
+      return '<li><span class="k">'+esc(i.k)+'</span><span class="v'+(i.none?' none':'')+'">'+esc(i.v)+'</span></li>';
+    }).join("") + "</ul>";
+  }
+  function cardHtml(s){
+    return '<div class="tiny" style="margin-bottom:8px">'+esc(s.eyebrow)+'</div>'
+      + '<h3 class="cardhead">'+esc(s.heading)+"</h3>"
+      + fieldsHtml(s.fields)
+      + '<p class="closer">'+esc(s.closing)+"</p>";
+  }
+
+  var nav=document.getElementById("novnav"), card=document.getElementById("novcard"), active=0;
+  function render(){
+    card.innerHTML=cardHtml(NOV_STATES[active]);
+    Array.prototype.forEach.call(nav.children,function(b,i){b.setAttribute("aria-pressed", i===active?"true":"false");});
+  }
+  nav.innerHTML = NOV_STATES.map(function(s,i){
+    return '<button type="button" class="navbtn" aria-pressed="false" data-i="'+i+'">'+esc(s.trigger)+"</button>";
+  }).join("");
+  function activate(ev){
+    var btn = ev.target.closest ? ev.target.closest(".navbtn") : null;
+    if(!btn) return;
+    var i=Number(btn.getAttribute("data-i"));
+    if(i===active) return;
+    active=i; render();
+  }
+  nav.addEventListener("mouseover",activate);
+  nav.addEventListener("focusin",activate);
+  nav.addEventListener("click",activate);
+  render();
+})();
+</script>
+</body>
+</html>

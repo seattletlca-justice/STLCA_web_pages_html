@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Findings — STLCA</title>
+<meta name="description" content="Three fixed core findings from the focused landlord-tenant record universe, each bounded by what the evidence does and does not establish.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="paper" data-page="findings/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → Findings</div>
+
+  <div class="page-head">
+    <div class="eyebrow">Findings</div>
+    <h1>Three fixed core findings</h1>
+    <p class="lede">
+      These findings are not placeholders. Each states what the evidence establishes, what it does
+      not establish, the universe and date scope it was drawn from, and the limitations that travel
+      with it. The language is frozen; strengthening it does not strengthen the evidence behind it.
+    </p>
+  </div>
+
+  <section id="cards" class="grid g3"></section>
+
+  <h2>The feature story is separate</h2>
+  <div id="feature"></div>
+
+  <h2>Denominator discipline</h2>
+  <p style="max-width:66ch">
+    The most common way housing-enforcement analysis goes wrong is reusing one number as two
+    different things. Every metric on this site names one denominator, on the page where it appears.
+  </p>
+  <div class="scroll-x"><table class="data" id="denoms">
+    <thead><tr><th>Metric</th><th>Definition</th><th>Must not be called</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+
+  <h2>Three landlord-tenant universes coexist</h2>
+  <p style="max-width:66ch">
+    A page must never present one of these denominators where a reader could take it for another.
+  </p>
+  <div class="scroll-x"><table class="data" id="universes">
+    <thead><tr><th>Count</th><th>Definition</th><th>Permitted use</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings;
+
+  document.getElementById("cards").innerHTML = f.findings.map(function (x) {
+    var big = x.headline_pct != null ? S.pct(x.headline_pct) : "—";
+    var sub = x.headline_pct != null
+      ? S.num(x.headline_value) + " of " + S.num(x.headline_denominator)
+      : "No complete series located in the record searched";
+    return '<a class="card" href="' + x.id + '.html">' +
+      '<div class="eyebrow">Finding ' + x.number + "</div>" +
+      "<h3>" + S.esc(x.title) + "</h3>" +
+      '<div class="v" style="font-size:31px;font-weight:680;letter-spacing:-.02em">' + big + "</div>" +
+      '<div class="d" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3);margin:2px 0 9px">' +
+      S.esc(sub) + "</div>" +
+      "<p>" + S.esc(x.headline_label) + "</p></a>";
+  }).join("");
+
+  var fs = f.feature_story;
+  document.getElementById("feature").innerHTML =
+    '<a class="card" href="rrio-loop.html"><span class="pill feature">Feature story</span>' +
+    '<h3 style="margin-top:10px">' + S.esc(fs.title) + "</h3>" +
+    "<p>" + S.esc(fs.status) + ". " + S.esc(fs.scope) + " — " + S.num(fs.matched_complaints) +
+    " matched complaints, " + S.pct(fs.with_documented_inspection_pct) +
+    " with a documented inspection.</p></a>";
+
+  document.querySelector("#denoms tbody").innerHTML = f.denominator_rules.map(function (d) {
+    return "<tr><td>" + S.esc(d.metric) + "</td><td>" + S.esc(d.formula) +
+      "</td><td>" + S.esc(d.must_not_be_called) + "</td></tr>";
+  }).join("");
+
+  document.querySelector("#universes tbody").innerHTML = f.coexisting_universes.map(function (u) {
+    var retired = u.permitted_use.indexOf("Retired") !== -1;
+    return "<tr><td>" + S.num(u.count) + "</td><td>" + S.esc(u.definition) + "</td><td" +
+      (retired ? ' style="color:#b91c1c;font-weight:600"' : "") + ">" +
+      S.esc(u.permitted_use) + "</td></tr>";
+  }).join("");
+
+  document.getElementById("prov").innerHTML =
+    "<b>Source</b> " + S.esc(f.source.file) + "<br><b>SHA-256</b> " + f.source.sha256 +
+    " <em>(verified against every district extract at build time)</em><br>" +
+    "<b>Universe</b> " + S.num(f.universe.records) + " landlord-tenant candidate records through " +
+    f.universe.through + "<br><b>Enriched</b> " + f.source.enriched +
+    " · <b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

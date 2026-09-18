@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How a Complaint Moves Through the Record — STLCA</title>
+<meta name="description" content="The eight-stage complaint click-through template: what the record has to show at intake, inspection, finding, enforcement, correction, verification, property history, and source provenance.">
+<style>
+  :root {
+    --navy: #0a1628; --navy-2: #12203a; --gold: #f59e0b; --gold-dim: #c17f00;
+    --screen-ink: #e9eef7; --screen-ink-2: #aebbd0; --screen-rule: #24365a;
+    --cream: #f2ece0; --cream-2: #e9e0cd;
+    --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --serif: ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; font-family: var(--font); line-height: 1.6; background: var(--navy); color: var(--screen-ink); }
+
+  .back { display: inline-block; font-size: 13px; color: var(--screen-ink-2); text-decoration: none; margin-bottom: 28px; }
+  .back:hover { color: #fff; }
+
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 20px 80px; }
+
+  .eyebrow { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; font-weight: 650; }
+  h1 {
+    font-family: var(--serif); font-weight: 700; letter-spacing: -.01em; line-height: 1.2;
+    font-size: clamp(24px, 3.6vw, 36px); margin: 0 0 14px; color: #fff;
+  }
+  .lede { font-family: var(--serif); font-size: clamp(16px, 1.9vw, 19px); line-height: 1.55; max-width: 62ch; color: var(--screen-ink-2); margin: 0; }
+
+  /* ------------------------------------------------------------ panel */
+  .panel { display: grid; grid-template-columns: 260px 1fr; gap: 32px; margin-top: 34px; align-items: start; }
+  @media (max-width: 760px) { .panel { grid-template-columns: 1fr; } }
+
+  .nav { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 16px; }
+  @media (max-width: 760px) { .nav { position: static; flex-direction: row; flex-wrap: wrap; gap: 8px; } }
+
+  .navbtn {
+    font: inherit; text-align: left; cursor: pointer; background: none; border: none;
+    border-left: 3px solid transparent; padding: 9px 14px; font-size: 14px; font-weight: 600;
+    color: var(--screen-ink-2); border-radius: 0 6px 6px 0; transition: background .12s, color .12s;
+  }
+  .navbtn:hover { background: var(--navy-2); color: #fff; }
+  .navbtn[aria-pressed="true"] { color: #fff; background: var(--navy-2); border-left-color: var(--gold); }
+  @media (max-width: 760px) {
+    .navbtn { border-left: none; border-bottom: 2px solid transparent; border-radius: 6px 6px 0 0; padding: 7px 4px; }
+    .navbtn[aria-pressed="true"] { border-bottom-color: var(--gold); background: none; }
+  }
+
+  .card { background: var(--navy-2); color: var(--screen-ink); border: 1px solid var(--screen-rule); border-radius: 12px; padding: 30px 32px 26px; }
+  .card .eyebrow { color: var(--gold); }
+  .cardhead {
+    font-family: var(--serif); font-size: clamp(24px, 3vw, 30px); font-weight: 700; margin: 0 0 16px; color: #fff;
+    padding-bottom: 14px; border-bottom: 1px solid var(--screen-rule);
+  }
+
+  .fields { list-style: none; margin: 0 0 16px; padding: 0; }
+  .fields li { display: grid; grid-template-columns: 160px 1fr; gap: 14px; padding: 9px 0; border-top: 1px solid var(--screen-rule); font-size: 13.5px; }
+  .fields li:first-child { border-top: none; }
+  .fields .k { color: var(--gold); font-weight: 650; font-size: 12px; letter-spacing: .03em; text-transform: uppercase; }
+  .fields .v { font-family: var(--mono); font-size: 12.5px; color: var(--screen-ink-2); }
+
+  .sub { margin: 4px 0 16px; }
+  .sub .sublabel { display: block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); font-weight: 650; margin-bottom: 5px; }
+  .sub p { font-size: 13.5px; color: var(--screen-ink-2); margin: 0; line-height: 1.6; }
+
+  .closer { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--screen-ink-2); border-top: 1px solid var(--screen-rule); padding-top: 16px; margin: 6px 0 16px; line-height: 1.6; }
+
+  .cta { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 650; color: var(--gold); text-decoration: none; letter-spacing: .02em; }
+  .cta:hover { color: #fff; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="index.html">&larr; The Record</a>
+
+  <div class="eyebrow">The Complaint Record</div>
+  <h1>How a Complaint Moves Through the Record</h1>
+  <p class="lede">Every state inherits the same rule: show the tenant/source record beside the City record; preserve &ldquo;none recorded&rdquo;; never convert a status into an outcome.</p>
+
+  <div class="panel" id="panel">
+    <nav class="nav" id="nav" aria-label="Complaint record stages"></nav>
+    <div class="card" id="card" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  /* Content transcribed from Figma: STLCA R.A.R.E. Hero Investigation —
+     Editable Design, node 107-2 "COMPLAINT CLICK-THROUGH TEMPLATES — ALL
+     STATES". Per this site's own publication standard ("generated is not
+     delivered", see about.html): this is mockup content, not yet
+     source-QA'd copy. */
+  var STATES = [
+    {
+      trigger: "1. Complaint Intake", eyebrow: "What Entered The System", heading: "Complaint Intake",
+      blocks: [
+        { type: "fields", items: [
+          { k: "Source record", v: "Verbatim complaint narrative / source excerpt" },
+          { k: "Complaint ID", v: "ID / record number" },
+          { k: "Opened", v: "Date + time" },
+          { k: "Address / unit", v: "Canonical address · unit if present" },
+          { k: "Reported condition", v: "Source-based condition tags only" }
+        ]},
+        { type: "sub", label: "Preserve The Words",
+          text: "Severity, exposure, duration and tenant-described conditions stay source-bound. Do not rewrite allegation as a finding." }
+      ],
+      closing: "The complaint proves what was reported and when it entered the system — not that a violation occurred.",
+      link: { text: "Open source record", href: "case-studies/index.html" }
+    },
+    {
+      trigger: "2. Inspection", eyebrow: "Did The City Look?", heading: "Inspection",
+      blocks: [
+        { type: "sub", label: "The Record Should Show",
+          text: "A dated inspection event attributable to an inspector, with enough detail to distinguish an inspection from a status label." },
+        { type: "fields", items: [
+          { k: "Inspection date", v: "Date / none recorded" },
+          { k: "Inspector", v: "Name / ID / none recorded" },
+          { k: "Scope", v: "Unit · common area · system" },
+          { k: "Access", v: "Entered · no access · no contact · unknown" },
+          { k: "Attachments", v: "Photos · notes · none located" }
+        ]}
+      ],
+      closing: "No recorded inspection date is a documentation finding. It is not proof that nobody ever visited the property.",
+      link: { text: "View inspection record", href: "case-studies/index.html" }
+    },
+    {
+      trigger: "3. Finding", eyebrow: "What Did The Inspector Establish?", heading: "Finding",
+      blocks: [
+        { type: "sub", label: "Result",
+          text: "The click-through must preserve the City’s actual result language and separate it from the tenant allegation." },
+        { type: "fields", items: [
+          { k: "Result", v: "Violation · no violation · none recorded" },
+          { k: "Code / rule", v: "Cited provision / none" },
+          { k: "Finding text", v: "Verbatim / source-faithful summary" },
+          { k: "Finding date", v: "Date / none recorded" },
+          { k: "Linked inspection", v: "Source event / none located" }
+        ]}
+      ],
+      closing: "A complaint is not a finding. A finding is the point where the City record says what it observed or concluded.",
+      link: { text: "View finding source", href: "case-studies/index.html" }
+    },
+    {
+      trigger: "4. Enforcement", eyebrow: "What Formal Action Followed?", heading: "Enforcement",
+      blocks: [
+        { type: "sub", label: "Formal Action",
+          text: "Show only enforcement instruments actually present in the record. “Violation found” and “formal enforcement issued” are separate events." },
+        { type: "fields", items: [
+          { k: "Instrument", v: "NOV · order · citation · none located" },
+          { k: "Issued", v: "Date / none recorded" },
+          { k: "Correction deadline", v: "Date / none recorded" },
+          { k: "Penalty / referral", v: "Actual record only · none located" },
+          { k: "Related document", v: "Document ID / attachment" }
+        ]}
+      ],
+      closing: "The absence of a located NOV or citation should stay exactly that: none located in the reviewed record.",
+      link: { text: "View enforcement record", href: "case-studies/index.html" }
+    },
+    {
+      trigger: "5. Correction + Follow-up", eyebrow: "What Happened After The Deadline?", heading: "Correction + Follow-up",
+      blocks: [
+        { type: "sub", label: "The Middle Of The Chain",
+          text: "Deadlines, extensions, reinspections and follow-up contacts show whether the case moved toward correction before closure." },
+        { type: "fields", items: [
+          { k: "Deadline", v: "Date / none recorded" },
+          { k: "Extension", v: "Date · reason / none" },
+          { k: "Follow-up event", v: "Reinspection · contact · note · none" },
+          { k: "Owner response", v: "Documented response / none" },
+          { k: "Status change", v: "Date + status + source" }
+        ]}
+      ],
+      closing: "Time passing is part of the record. Extensions and repeated follow-up should remain visible, not collapse into the final status.",
+      link: { text: "View follow-up chronology", href: "case-studies/index.html" }
+    },
+    {
+      trigger: "6. Verification + Closure", eyebrow: "How Did The Record End?", heading: "Verification + Closure",
+      blocks: [
+        { type: "sub", label: "Do Not Equate These",
+          text: "Closure is an administrative endpoint. Verified compliance requires dated evidence showing correction or a documented basis for concluding the condition was resolved." },
+        { type: "fields", items: [
+          { k: "Verification", v: "Dated correction proof / none located" },
+          { k: "Reinspection", v: "Date + result / none" },
+          { k: "Closed", v: "Date + time" },
+          { k: "Closure basis", v: "Verbatim status / reason" },
+          { k: "Elapsed time", v: "Open → close" }
+        ]}
+      ],
+      closing: "A closed case tells us where the record ended. The click-through must show whether the record also proves how it got there.",
+      link: { text: "View closure record", href: "case-studies/index.html" }
+    },
+    {
+      trigger: "7. Property History", eyebrow: "One Address · Many Complaints", heading: "Property History",
+      blocks: [
+        { type: "sub", label: "The Property Is The Unit Of Accountability",
+          text: "Same address. Different tenants. Repeated reported conditions. Repeated administrative dispositions." },
+        { type: "fields", items: [
+          { k: "Complaint 01", v: "Year · condition · City chronology" },
+          { k: "Complaint 02", v: "Year · condition · City chronology" },
+          { k: "Complaint 03", v: "Year · condition · City chronology" },
+          { k: "Pattern question", v: "Did enforcement interrupt the pattern?" }
+        ]},
+        { type: "sub", label: "Longitudinal Rule",
+          text: "Do not merge separate tenants or complaints into one allegation. The pattern is the recurrence of documented records at the same property." }
+      ],
+      closing: "One complaint may be explainable in isolation. The property history asks what repeated records show over time.",
+      link: { text: "Open property timeline", href: "case-studies/index.html" }
+    },
+    {
+      trigger: "8. Source + Provenance", eyebrow: "Can The Reader Trace The Claim?", heading: "Source + Provenance",
+      blocks: [
+        { type: "sub", label: "Publication Gate",
+          text: "Every complaint excerpt, date, status, inspection, NOV and closure basis must trace to a preserved source before publication." },
+        { type: "fields", items: [
+          { k: "Source file", v: "Original file / portal record / attachment" },
+          { k: "Record ID", v: "Complaint · inspection · violation ID" },
+          { k: "Retrieved", v: "Date / source location" },
+          { k: "Claim status", v: "Documented · derived · not located" },
+          { k: "QA status", v: "Review required · passed · hold" }
+        ]}
+      ],
+      closing: "The source record is part of the finding. If the source cannot support a field, the template leaves that field unresolved.",
+      link: { text: "Open evidence ledger", href: "reports/index.html" }
+    }
+  ];
+
+  function block(b) {
+    switch (b.type) {
+      case "fields":
+        return '<ul class="fields">' + b.items.map(function (i) {
+          return "<li><div class=\"k\">" + esc(i.k) + "</div><div class=\"v\">[ " + esc(i.v) + " ]</div></li>";
+        }).join("") + "</ul>";
+      case "sub":
+        var inner = b.text ? "<p>" + esc(b.text) + "</p>" :
+          "<ul>" + (b.lines || []).map(function (l) { return "<li>" + esc(l) + "</li>"; }).join("") + "</ul>";
+        return '<div class="sub"><span class="sublabel">' + esc(b.label) + "</span>" + inner + "</div>";
+      default: return "";
+    }
+  }
+
+  function cardHtml(s) {
+    return '<div class="eyebrow">' + esc(s.eyebrow) + '</div>' +
+      '<h3 class="cardhead">' + esc(s.heading) + "</h3>" +
+      s.blocks.map(block).join("") +
+      '<p class="closer">' + esc(s.closing) + "</p>" +
+      '<a class="cta" href="' + esc(s.link.href) + '">' + esc(s.link.text) + " →</a>";
+  }
+
+  var nav = document.getElementById("nav"), card = document.getElementById("card"), active = 0;
+
+  function render() {
+    card.innerHTML = cardHtml(STATES[active]);
+    Array.prototype.forEach.call(nav.children, function (btn, i) {
+      btn.setAttribute("aria-pressed", i === active ? "true" : "false");
+    });
+  }
+
+  nav.innerHTML = STATES.map(function (s, i) {
+    return '<button type="button" class="navbtn" aria-pressed="false" data-i="' + i + '">' + esc(s.trigger) + "</button>";
+  }).join("");
+
+  function activate(ev) {
+    var btn = ev.target.closest ? ev.target.closest(".navbtn") : null;
+    if (!btn) return;
+    var i = Number(btn.getAttribute("data-i"));
+    if (i === active) return;
+    active = i;
+    render();
+  }
+
+  /* Figma spec: "DESKTOP HOVER / MOBILE TAP" — the card opens as the
+     reader's pointer crosses each stage, not only on click. Click and
+     keyboard focus still work, since touch and keyboard users never
+     fire a hover event. */
+  nav.addEventListener("mouseover", activate);
+  nav.addEventListener("focusin", activate);
+  nav.addEventListener("click", activate);
+
+  render();
+})();
+</script>
+</body>
+</html>

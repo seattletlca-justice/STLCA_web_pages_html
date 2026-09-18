@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RRIO Compliance Gap — STLCA</title>
+<meta name="description" content="A separate feature story: landlord-tenant complaints at matched RRIO-certified properties, 2017–2025.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="paper" data-page="findings/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → <a href="index.html">Findings</a> → Feature</div>
+
+  <div class="page-head">
+    <span class="pill feature">Feature story</span>
+    <h1 style="margin-top:12px" id="title"></h1>
+    <p class="lede" id="scope"></p>
+  </div>
+
+  <div class="notice" style="border-left-color:var(--gold)">
+    <b id="status-line"></b>
+    <p style="margin:6px 0 0">
+      It is presented alongside the findings because it bears on the same question, not because it
+      carries the same evidentiary weight. It has its own universe, its own matching step, and its
+      own limitations.
+    </p>
+  </div>
+
+  <section class="grid g3" id="tiles"></section>
+
+  <h2>Tenant-reported conditions at certified properties</h2>
+  <p style="max-width:66ch">
+    RRIO — the Rental Registration and Inspection Ordinance — certifies that a rental property met a
+    minimum standard at the time it was inspected. These are the tenant-reported condition
+    categories recorded at properties that matched an RRIO certification, over the same period.
+  </p>
+  <div id="cats"></div>
+
+  <div class="limitation">
+    <b>These are different measures</b>
+    <span id="caution"></span>
+    A certification records a point-in-time result against a defined checklist. A complaint records
+    what a tenant reported at some later date. Neither is a proxy for the other, and the gap between
+    them is the subject of this story rather than its conclusion.
+  </div>
+
+  <div class="bounds">
+    <div class="yes"><b>What this supports</b>
+      <p>That tenant-reported conditions continued to be recorded at properties carrying RRIO
+      certification, and that a documented inspection is recorded for a minority of those complaints.</p></div>
+    <div class="no"><b>What this does not support</b>
+      <p>That RRIO certification was improperly issued, that certified properties are unsafe, or that
+      any specific property failed an obligation. The match is address-level, and an address is not a
+      finding.</p></div>
+  </div>
+
+  <h2>Why this is a story and not a finding</h2>
+  <p style="max-width:66ch">
+    The three core findings rest on field states inside one frozen extract. This analysis joins two
+    different record systems — code complaints and rental registrations — on address. Address
+    matching introduces its own error, in both directions: a certified property whose address is
+    written differently across systems will not match, and a matched address may cover a building
+    whose certification and complaint relate to different units or different years.
+  </p>
+  <p style="max-width:66ch">
+    That is a real limitation, not a hedge. It is why the figures here are described as matched
+    complaints rather than as complaints at certified properties, and why this page carries a feature
+    label rather than a finding number.
+  </p>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings, fs = f.feature_story;
+
+  document.getElementById("title").textContent = fs.title;
+  document.getElementById("scope").textContent = fs.purpose;
+  document.getElementById("status-line").textContent = fs.status + ".";
+  document.getElementById("caution").textContent = fs.caution;
+
+  document.getElementById("tiles").innerHTML = [
+    { v: S.num(fs.matched_complaints), k: "Landlord-tenant complaints at matched RRIO-certified properties",
+      d: fs.scope.replace(/^.*?, /, "") },
+    { v: S.pct(fs.with_documented_inspection_pct), k: "of those with a documented inspection",
+      d: "≈ " + S.num(Math.round(fs.matched_complaints * fs.with_documented_inspection_pct / 100)) + " complaints" },
+    { v: S.num(fs.categories.reduce(function (a, c) { return a + c.value; }, 0)),
+      k: "Complaints in the named condition categories",
+      d: "a record may match more than one category" }
+  ].map(function (t) {
+    return '<div class="tile"><div class="v">' + t.v + '</div><div class="k">' + S.esc(t.k) +
+      '</div><div class="d">' + S.esc(t.d) + "</div></div>";
+  }).join("");
+
+  S.barChartH(document.getElementById("cats"), {
+    title: "Tenant-reported condition categories at matched RRIO-certified properties",
+    sub: fs.scope,
+    cats: fs.categories.map(function (c) { return c.label; }),
+    values: fs.categories.map(function (c) { return c.value; }),
+    notes: fs.categories.map(function (c) {
+      return (c.value / fs.matched_complaints * 100).toFixed(1) + "% of matched complaints";
+    }),
+    labelW: 240, unit: "complaints", seriesName: "Complaints", catLabel: "Category",
+    caption: "Categories are not mutually exclusive — one complaint can match more than one, so the " +
+             "category counts sum to more than the number of distinct complaints they describe."
+  });
+
+  document.getElementById("prov").innerHTML =
+    "<b>Story type</b> feature analysis — not one of the three fixed core findings<br>" +
+    "<b>Universe</b> " + S.num(fs.matched_complaints) +
+    " landlord-tenant complaints at address-matched RRIO-certified properties<br>" +
+    "<b>Date scope</b> 2017–2025 · <b>Join</b> address-level match between code-complaint records " +
+    "and rental registrations<br>" +
+    "<b>Source records</b> SOURCE_RECORDS/rrio/ — registration extract, RRIO annual reports, " +
+    "and the landlord-tenant parser output and its QA report<br>" +
+    "<b>Limitation</b> address matching errs in both directions; categories overlap · " +
+    "<b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

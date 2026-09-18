@@ -1,2 +1,16 @@
+# Bulk data and reference material live on disk but stay out of git.
+# input/ holds multi-GB extracts (one is 2.4 GB); git and GitHub cannot carry them.
+input/*
+# The one extract already committed on 2026-09-13 stays tracked.
+!input/case_nov_MASTER_SOURCE_CITYWIDE_LLT_THRU_20251231_ENRICHED_01272026__PLUS_RECORDLIST-RARE.csv
 
-input/MASTER_SOURCE_CITYWIDE_ALL_THRU_20251231_ENRICHED_01272026__PLUS_RECORDLIST.csv
+# Reference dumps (old site builds, bundled R.A.R.E. site, brand assets) — ~6.4 GB
+_REFERENCE/
+
+# Drop zone: contents are unsorted until they are moved somewhere real
+_INBOX/*
+!_INBOX/README.md
+
+__pycache__/
+desktop.ini
+.~lock*

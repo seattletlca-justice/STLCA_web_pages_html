@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STLCA — Can the City Show Its Own Records?</title>
+<meta name="description" content="Seattle's Council voted to make landlords keep their records. STLCA reviewed SDCI's own landlord-tenant records to test whether the City's record can show enforcement.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1628; --navy-2:#0f1f38;
+  --gold:#f59e0b; --gold-dim:#c17f00; --gold-glow:rgba(245,158,11,.14);
+  --cream:#f2ece0; --ink:#e9eef7; --ink-2:#aebbd0; --ink-3:#8496b3;
+  --rule:#24365a;
+  --serif:"Newsreader", ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --sans:ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono:ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--navy);color:var(--ink);font-family:var(--sans)}
+a{color:inherit}
+.draft{flex:none;font:600 10.5px/1 var(--mono);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--navy);background:var(--gold);padding:6px 9px;border-radius:4px}
+
+.bar{display:flex;align-items:center;gap:28px;padding:18px clamp(20px,5vw,64px);border-bottom:1px solid var(--rule)}
+.brand{text-decoration:none;display:flex;flex-direction:column;margin-right:auto}
+.brand b{font:700 16px/1 var(--sans);letter-spacing:.08em}
+.brand span{font:11px/1.6 var(--mono);color:var(--ink-3);letter-spacing:.12em;text-transform:uppercase}
+.bar nav{display:flex;gap:22px;flex-wrap:wrap}
+.bar nav a{font-size:13.5px;color:var(--ink-2);text-decoration:none}
+.bar nav a:hover{color:var(--gold)}
+
+.hero{position:relative;overflow:hidden;min-height:calc(100vh - 66px);
+  display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,4vw,64px);
+  padding:clamp(28px,4.5vh,56px) clamp(20px,5vw,64px) 26px;align-items:center}
+.hero::before{content:"";position:absolute;inset:-20%;pointer-events:none;
+  background:radial-gradient(40% 40% at 78% 30%, rgba(45,127,249,.10), transparent 70%),
+             radial-gradient(35% 35% at 12% 90%, var(--gold-glow), transparent 70%)}
+.copy{position:relative;z-index:2;max-width:720px}
+
+.hinge{display:inline-flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:22px;
+  font:12px/1.4 var(--mono);color:var(--ink-2);letter-spacing:.02em}
+.hinge .tag{color:var(--navy);background:var(--gold);font-weight:700;padding:3px 7px;border-radius:3px;letter-spacing:.06em}
+.hinge .sep{color:var(--rule)}
+
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,3.9vw,58px);line-height:1.04;
+  letter-spacing:-.015em;margin:0 0 20px;text-wrap:balance}
+h1 .q{display:block;color:var(--gold);font-weight:600;font-style:italic;margin-top:.12em}
+
+blockquote{margin:0 0 24px;padding:8px 0 8px 18px;border-left:3px solid var(--gold);max-width:600px}
+blockquote p{margin:0;font-family:var(--serif);font-size:clamp(16px,1.25vw,18px);line-height:1.45;color:var(--cream)}
+blockquote cite{display:block;margin-top:9px;font:normal 11.5px/1.5 var(--mono);color:var(--ink-3)}
+
+.stat{display:grid;grid-template-columns:auto 1fr;gap:2px 20px;align-items:end;margin:0 0 18px;max-width:660px}
+.stat .n{font:600 clamp(56px,7vw,104px)/.9 var(--serif);letter-spacing:-.03em;color:var(--ink);
+  font-variant-numeric:tabular-nums;grid-row:span 2;min-width:4.6ch}
+.stat .of{font-size:clamp(15px,1.3vw,18px);line-height:1.35;color:var(--ink-2)}
+.stat .of:last-child{padding-bottom:8px}
+.stat .of b{color:var(--ink);font-weight:600}
+.kicker{font-size:clamp(16px,1.35vw,19px);line-height:1.5;color:var(--cream);max-width:600px;margin:0 0 26px}
+.kicker em{font-style:normal;color:var(--gold)}
+
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:18px}
+.btn{display:inline-flex;align-items:center;gap:9px;text-decoration:none;font:600 15px/1 var(--sans);
+  padding:15px 22px;border-radius:6px;transition:transform .15s, background .15s, border-color .15s}
+.btn.primary{background:var(--gold);color:var(--navy)}
+.btn.primary:hover{background:#ffb02e;transform:translateY(-1px)}
+.btn.ghost{color:var(--ink);border:1px solid var(--rule)}
+.btn.ghost:hover{border-color:var(--gold);color:var(--gold)}
+.tagline{font:italic 500 16px/1.4 var(--serif);color:var(--ink-3);margin:0}
+
+.bridge{font-size:13px;line-height:1.55;color:var(--ink-3);max-width:600px;margin:18px 0 0;
+  padding-top:14px;border-top:1px solid var(--rule)}
+
+.ledger{position:relative;z-index:2;border:1px solid var(--rule);border-radius:10px;background:rgba(15,31,56,.72);
+  overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.lhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--rule)}
+.lhead .t{font:600 11.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.lhead .live{display:inline-flex;align-items:center;gap:7px;font:11px/1 var(--mono);color:var(--ink-3)}
+.lhead .live i{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(245,158,11,.6)}70%{box-shadow:0 0 0 8px rgba(245,158,11,0)}100%{box-shadow:0 0 0 0 rgba(245,158,11,0)}}
+.cols,.row{display:grid;grid-template-columns:1.2fr .95fr .9fr 1fr 1.25fr;gap:10px;align-items:center;padding:0 16px}
+.cols{font:600 10px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  padding-top:10px;padding-bottom:10px;border-bottom:1px solid var(--rule);background:rgba(10,22,40,.6)}
+.cols .hot{color:var(--gold)}
+.window{height:min(62vh,560px);overflow:hidden;position:relative;
+  -webkit-mask-image:linear-gradient(transparent,#000 8%,#000 92%,transparent);
+          mask-image:linear-gradient(transparent,#000 8%,#000 92%,transparent)}
+.track{animation:scroll var(--dur,110s) linear infinite}
+.ledger:hover .track,.ledger:focus-within .track{animation-play-state:paused}
+@keyframes scroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+.row{height:40px;font:12.5px/1 var(--mono);color:var(--ink-2);text-decoration:none;border-bottom:1px solid rgba(36,54,90,.45)}
+.row:hover,.row:focus{background:rgba(245,158,11,.07);color:var(--ink);outline:none}
+.row .rec{color:var(--ink);white-space:nowrap}
+.row .typ,.row .st{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slot{height:24px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:11.5px;white-space:nowrap}
+.slot.dated{color:var(--ink-2);background:rgba(36,54,90,.35)}
+.slot.blank{border:1px dashed var(--gold-dim);color:var(--gold);background:var(--gold-glow);
+  font:600 9.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.lfoot{padding:11px 16px;border-top:1px solid var(--rule);font:11px/1.5 var(--mono);color:var(--ink-3)}
+.lfoot b{color:var(--gold);font-weight:600}
+.lfoot .tally{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:4px;color:var(--ink-2)}
+
+.prov{position:relative;z-index:2;grid-column:1/-1;margin-top:10px;padding-top:14px;border-top:1px solid var(--rule);
+  font:11.5px/1.7 var(--mono);color:var(--ink-3);display:flex;flex-wrap:wrap;gap:4px 18px;overflow-wrap:anywhere}
+.prov b{color:var(--ink-2);font-weight:600}
+.prov a{color:var(--gold)}
+
+@media (max-width:980px){
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .window{height:420px}
+  .bar nav{display:none}
+}
+@media (max-width:560px){
+  .brand span{display:none}
+  .hinge .sep{display:none}
+  .draft{font-size:9.5px;padding:5px 7px}
+  .cols,.row{grid-template-columns:1.3fr .8fr 1.25fr;padding:0 12px}
+  .cols>:nth-child(3),.cols>:nth-child(4),.row>:nth-child(3),.row>:nth-child(4){display:none}
+  .stat{grid-template-columns:1fr}.stat .n{grid-row:auto}
+}
+@media (prefers-reduced-motion:reduce){
+  .track{animation:none}.window{overflow-y:auto}.lhead .live i{animation:none}
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="../../site/index.html"><b>STLCA</b><span>Records → Review → Accountability</span></a>
+  <nav>
+    <a href="../../site/findings/index.html">Findings</a>
+    <a href="../../site/districts/index.html">Districts</a>
+    <a href="../../site/dashboards/index.html">Dashboards</a>
+    <a href="../../site/case-studies/index.html">Case Studies</a>
+    <a href="../../site/methodology.html">Methodology</a>
+  </nav>
+  <span class="draft">Draft · redteam fixes applied</span>
+</header>
+
+<main class="hero">
+  <section class="copy">
+    <div class="hinge">
+      <span class="tag">CB 121254</span>
+      <span>Passed by the City Council, August 2026</span><span class="sep">/</span>
+      <span>Takes effect July 1, 2027</span>
+    </div>
+
+    <h1>Seattle’s Council voted to make landlords keep their records.
+      <span class="q">Can the City show its own?</span></h1>
+
+    <blockquote>
+      <p>If a landlord fails to retain the required records, “there shall be a presumption, rebuttable by clear and convincing evidence, that the landlord violated this Chapter.”</p>
+      <cite>CB 121254, new SMC 7.24.045.B · Legistar version 3</cite>
+    </blockquote>
+
+    <div class="stat" aria-live="polite">
+      <div class="n" id="count">0</div>
+      <div class="of">of <b id="universe"></b> SDCI landlord-tenant records, opened 2003–2025,</div>
+      <div class="of">have <b>no recorded inspection date.</b></div>
+    </div>
+
+    <p class="kicker">A blank inspection date doesn’t prove no one showed up.
+      <em>It means the published record doesn’t say when anyone did.</em></p>
+
+    <div class="cta">
+      <a class="btn primary" href="../../site/findings/finding-01.html">Follow the record <span aria-hidden="true">→</span></a>
+      <a class="btn ghost" href="../../site/methodology.html">How we counted</a>
+    </div>
+    <p class="tagline">Don’t take our word for it. Follow the record.</p>
+
+    <p class="bridge">Rental-agreement complaints — deposits and rent increases among them — already appear in SDCI’s
+      landlord-tenant records in all seven Council districts. This is an accountability comparison, not a claim that
+      landlord evidence rules legally apply to the City.</p>
+  </section>
+
+  <aside class="ledger" aria-label="Random sample of real SDCI landlord-tenant records">
+    <div class="lhead">
+      <span class="t">The public record</span>
+      <span class="live"><i></i>real records · click to open</span>
+    </div>
+    <div class="cols" aria-hidden="true">
+      <span>Record</span><span>Opened</span><span>Type</span><span>Status</span><span class="hot">Inspection date</span>
+    </div>
+    <div class="window"><div class="track" id="track"></div></div>
+    <div class="lfoot">
+      <div class="tally"><span><b id="s-blank"></b> blank</span><span id="s-dated"></span><span id="s-pct"></span></div>
+      <span id="method"></span>
+    </div>
+  </aside>
+
+  <footer class="prov">
+    <span><b>Universe</b> <span id="p-universe"></span> SDCI landlord-tenant candidate records, opened 2003–2025</span>
+    <span><b>Source</b> SDCI code complaints &amp; violations export, enriched Jan 27, 2026</span>
+    <span><b>SHA-256</b> <span id="p-sha"></span></span>
+    <span><b>QA</b> reconciled to published totals</span>
+    <span><b>Limit</b> before ~July 2025 the public LastInspDate field held coordinates or blanks, not dates; figures use the later published field · <a href="../../site/findings/finding-01.html">full limitations</a></span>
+  </footer>
+</main>
+
+<script id="ledger-data" type="application/json">{"method": "Seeded random sample (seed 20260914) of 72 rows from the full landlord-tenant universe. Not selected, not sorted by blankness. No addresses or complaint text included.", "universe_rows": 56258, "universe_blank": 36106, "sample_rows": 72, "sample_blank": 43, "source_file": "case_nov_MASTER_SOURCE_CITYWIDE_LLT_THRU_20251231_ENRICHED_01272026__PLUS_RECORDLIST-RARE.csv", "source_sha256": "abe7883a89caae22a7c896d08e3f5d83a5346d15d7c904a18d52b7643347cdeb", "rows": [{"record": "1017797-VI", "opened": "2008-11-05", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1017797-VI"}, {"record": "001142-03CP", "opened": "2003-11-20", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=001142-03CP"}, {"record": "1001684-VI", "opened": "2004-03-08", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2004-03-10", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1001684-VI"}, {"record": "1060739-VI", "opened": "2025-04-22", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2025-06-04", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1060739-VI"}, {"record": "003415-11CP", "opened": "2011-07-21", "type": "Complaint", "status": "Completed", "last_insp_date": "2011-07-26", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=003415-11CP"}, {"record": "005602-21CP", "opened": "2021-07-15", "type": "Complaint", "status": "Completed", "last_insp_date": "2021-07-29", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=005602-21CP"}, {"record": "007006-23CP", "opened": "2023-06-27", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=007006-23CP"}, {"record": "1006932-CT", "opened": "2005-11-21", "type": "Citation", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1006932-CT"}, {"record": "1038664-VI", "opened": "2016-10-17", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2016-10-10", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1038664-VI"}, {"record": "007049-24CP", "opened": "2024-07-01", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=007049-24CP"}, {"record": "002679-23CP", "opened": "2023-03-15", "type": "Complaint", "status": "Under Investigation", "last_insp_date": "2023-07-26", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=002679-23CP"}, {"record": "012713-23CP", "opened": "2023-10-24", "type": "Complaint", "status": "Under Investigation", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=012713-23CP"}, {"record": "001879-23CP", "opened": "2023-02-22", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=001879-23CP"}, {"record": "001242-06CP", "opened": "2006-01-25", "type": "Complaint", "status": "Completed", "last_insp_date": "2006-02-01", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=001242-06CP"}, {"record": "001923-17CP", "opened": "2017-02-28", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=001923-17CP"}, {"record": "1060528-VI", "opened": "2025-03-20", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2025-07-14", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1060528-VI"}, {"record": "010498-24CP", "opened": "2024-09-18", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=010498-24CP"}, {"record": "004034-23CP", "opened": "2023-04-19", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=004034-23CP"}, {"record": "006145-18CP", "opened": "2018-07-03", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=006145-18CP"}, {"record": "002273-13CP", "opened": "2013-04-23", "type": "Complaint", "status": "Completed", "last_insp_date": "2013-05-15", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=002273-13CP"}, {"record": "007182-20CP", "opened": "2020-08-18", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=007182-20CP"}, {"record": "012143-22CP", "opened": "2022-11-07", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=012143-22CP"}, {"record": "005885-22CP", "opened": "2022-06-22", "type": "Complaint", "status": "Completed", "last_insp_date": "2022-06-24", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=005885-22CP"}, {"record": "006221-22CP", "opened": "2022-06-30", "type": "Complaint", "status": "Under Investigation", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=006221-22CP"}, {"record": "011649-19CP", "opened": "2019-12-18", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=011649-19CP"}, {"record": "1029729-VI", "opened": "2013-06-04", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2013-06-13", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1029729-VI"}, {"record": "1052888-CT", "opened": "2021-09-22", "type": "Citation", "status": "Completed", "last_insp_date": "2021-10-27", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1052888-CT"}, {"record": "1044536-VI", "opened": "2018-07-06", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1044536-VI"}, {"record": "1003205-VI", "opened": "2004-08-20", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2006-08-24", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1003205-VI"}, {"record": "012309-22CP", "opened": "2022-11-10", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=012309-22CP"}, {"record": "009501-23CP", "opened": "2023-08-10", "type": "Complaint", "status": "Under Investigation", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=009501-23CP"}, {"record": "008117-17CP", "opened": "2017-11-17", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=008117-17CP"}, {"record": "003795-15CP", "opened": "2015-06-09", "type": "Complaint", "status": "Completed", "last_insp_date": "2015-06-11", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=003795-15CP"}, {"record": "014876-25CP", "opened": "2025-11-24", "type": "Complaint", "status": "Under Investigation", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=014876-25CP"}, {"record": "000697-23CP", "opened": "2023-01-19", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=000697-23CP"}, {"record": "006115-15CP", "opened": "2015-09-17", "type": "Complaint", "status": "Completed", "last_insp_date": "2015-10-06", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=006115-15CP"}, {"record": "1053003-VI", "opened": "2021-10-05", "type": "Notice Of Violation", "status": "Initiated", "last_insp_date": "2021-09-29", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1053003-VI"}, {"record": "010540-18CP", "opened": "2018-11-15", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=010540-18CP"}, {"record": "1039884-VI", "opened": "2017-04-06", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2017-04-07", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1039884-VI"}, {"record": "012911-25CP", "opened": "2025-09-25", "type": "Complaint", "status": "Under Investigation", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=012911-25CP"}, {"record": "1053535-TR", "opened": "2021-12-28", "type": "Tenant Relocation", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1053535-TR"}, {"record": "1006674-VI", "opened": "2005-10-26", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2005-10-26", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1006674-VI"}, {"record": "005080-24CP", "opened": "2024-05-15", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=005080-24CP"}, {"record": "003384-14CP", "opened": "2014-06-20", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=003384-14CP"}, {"record": "012965-25CP", "opened": "2025-10-12", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=012965-25CP"}, {"record": "003865-09CP", "opened": "2009-07-23", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=003865-09CP"}, {"record": "014809-23CP", "opened": "2023-12-26", "type": "Complaint", "status": "Under Investigation", "last_insp_date": "2024-01-18", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=014809-23CP"}, {"record": "1045297-VI", "opened": "2018-10-15", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2019-01-28", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1045297-VI"}, {"record": "002578-04CP", "opened": "2004-05-18", "type": "Complaint", "status": "Completed", "last_insp_date": "2004-06-01", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=002578-04CP"}, {"record": "006731-20CP", "opened": "2020-08-06", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=006731-20CP"}, {"record": "009751-21CP", "opened": "2021-11-22", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=009751-21CP"}, {"record": "001567-25CP", "opened": "2025-02-10", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=001567-25CP"}, {"record": "1051085-VI", "opened": "2020-10-08", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1051085-VI"}, {"record": "004673-23CP", "opened": "2023-05-05", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=004673-23CP"}, {"record": "011958-22CP", "opened": "2022-07-14", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=011958-22CP"}, {"record": "008279-25CP", "opened": "2025-07-07", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=008279-25CP"}, {"record": "005830-09CP", "opened": "2009-12-22", "type": "Complaint", "status": "Completed", "last_insp_date": "2010-01-11", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=005830-09CP"}, {"record": "003421-23CP", "opened": "2023-04-03", "type": "Complaint", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=003421-23CP"}, {"record": "001259-14CP", "opened": "2014-01-23", "type": "Complaint", "status": "Completed", "last_insp_date": "2014-01-30", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=001259-14CP"}, {"record": "002879-23CP", "opened": "2023-03-21", "type": "Complaint", "status": "Completed", "last_insp_date": "2023-04-26", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=002879-23CP"}, {"record": "011497-23CP", "opened": "2023-09-25", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=011497-23CP"}, {"record": "002685-18CP", "opened": "2018-03-13", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=002685-18CP"}, {"record": "006824-22CP", "opened": "2022-07-11", "type": "Complaint", "status": "Completed", "last_insp_date": "2023-01-26", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=006824-22CP"}, {"record": "013039-24CP", "opened": "2024-11-19", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=013039-24CP"}, {"record": "1057234-TR", "opened": "2023-11-21", "type": "Tenant Relocation", "status": "Closed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1057234-TR"}, {"record": "002239-15CP", "opened": "2015-03-23", "type": "Complaint", "status": "Completed", "last_insp_date": "2015-04-10", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=002239-15CP"}, {"record": "005915-14CP", "opened": "2014-11-03", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=005915-14CP"}, {"record": "1013165-VI", "opened": "2007-08-16", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2008-08-19", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1013165-VI"}, {"record": "004211-19CP", "opened": "2019-05-30", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=004211-19CP"}, {"record": "1019167-VI", "opened": "2009-05-01", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2009-05-05", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1019167-VI"}, {"record": "010097-24CP", "opened": "2024-09-10", "type": "Complaint", "status": "Completed", "last_insp_date": null, "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=010097-24CP"}, {"record": "1058646-VI", "opened": "2024-06-20", "type": "Notice Of Violation", "status": "Completed", "last_insp_date": "2025-05-20", "link": "https://services.seattle.gov/portal/customize/linktorecord.aspx?altId=1058646-VI"}]}</script>
+<script>
+(function(){
+  var D = JSON.parse(document.getElementById("ledger-data").textContent);
+  var fmt = function(n){ return n.toLocaleString("en-US"); };
+  var esc = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+
+  // Every figure on this page comes from the embedded sample file.
+  document.getElementById("universe").textContent = fmt(D.universe_rows);
+  document.getElementById("p-universe").textContent = fmt(D.universe_rows);
+  document.getElementById("p-sha").textContent = D.source_sha256.slice(0, 16) + "…";
+  var dated = D.sample_rows - D.sample_blank;
+  document.getElementById("s-blank").textContent = D.sample_blank;
+  document.getElementById("s-dated").textContent = dated + " dated";
+  document.getElementById("s-pct").textContent = (D.sample_blank / D.sample_rows * 100).toFixed(1) +
+    "% blank here · " + (D.universe_blank / D.universe_rows * 100).toFixed(1) + "% across all records";
+  var seed = (D.method.match(/seed (\d+)/) || [0, "?"])[1];
+  document.getElementById("method").textContent = D.sample_rows + " records drawn at random from all " +
+    fmt(D.universe_rows) + " (seed " + seed + "). Not selected, not sorted. No addresses or complaint text shown.";
+
+  // Ledger rows, duplicated for a seamless loop; the copy is hidden from assistive tech.
+  var TYPE = {"Notice Of Violation":"NOV","Tenant Relocation":"Relocation","Unfit Building":"Unfit bldg"};
+  var STAT = {"Under Investigation":"Investigating","Open Duplicate":"Duplicate","Nov Issued":"NOV issued"};
+  var rows = D.rows.map(function(r){
+    var slot = r.last_insp_date
+      ? '<span class="slot dated">' + esc(r.last_insp_date) + '</span>'
+      : '<span class="slot blank">no date on record</span>';
+    return '<a class="row" href="' + esc(r.link) + '" target="_blank" rel="noopener" title="Open ' + esc(r.record) +
+      ' on the City of Seattle portal"><span class="rec">' + esc(r.record) + '</span><span>' + esc(r.opened || "—") +
+      '</span><span class="typ" title="' + esc(r.type) + '">' + esc(TYPE[r.type] || r.type) + '</span><span class="st" title="' + esc(r.status) + '">' + esc(STAT[r.status] || r.status) + '</span>' + slot + '</a>';
+  }).join("");
+  var track = document.getElementById("track");
+  track.innerHTML = rows + rows.replace(/<a class="row"/g, '<a class="row" tabindex="-1" aria-hidden="true"');
+  track.style.setProperty("--dur", (D.rows.length * 1.6) + "s");
+
+  // Count up to the headline figure.
+  var el = document.getElementById("count"), target = D.universe_blank;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) { el.textContent = fmt(target); return; }
+  var t0 = null, dur = 1800;
+  function step(t){
+    if (!t0) t0 = t;
+    var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmt(Math.round(target * e));
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>

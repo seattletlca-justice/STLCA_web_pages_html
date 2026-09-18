@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Landlord-Tenant KPI — STLCA</title>
+<meta name="description" content="Headline measures of the landlord-tenant record universe, each shown with the denominator it uses.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="screen" data-page="dashboards/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → <a href="index.html">Dashboards</a> → KPI</div>
+
+  <div class="page-head">
+    <div class="eyebrow">Dashboard</div>
+    <h1>Landlord-tenant KPI</h1>
+    <p class="lede" id="lede"></p>
+  </div>
+
+  <div class="limitation">
+    <b>This is not the citywide universe</b>
+    <span id="universe-warn"></span>
+  </div>
+
+  <h2>Headline measures</h2>
+  <section class="grid g3" id="tiles"></section>
+
+  <h2>Every figure with its denominator</h2>
+  <p style="max-width:66ch">
+    One denominator per metric, named. Two metrics on this page use different denominators on purpose
+    — the closure findings are computed against the closed/completed subset, not the full universe.
+  </p>
+  <div class="scroll-x"><table class="data" id="metrics">
+    <thead><tr><th>Measure</th><th>Value</th><th>Numerator</th><th>Denominator</th><th>What it is</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+
+  <h2>District contribution to the universe</h2>
+  <div id="contrib"></div>
+
+  <h2>Record type composition</h2>
+  <div id="types"></div>
+
+  <div class="limitation">
+    <b>Composition is not conversion</b>
+    <span id="comp-rule"></span>
+  </div>
+
+  <h2>Limitations that travel with these figures</h2>
+  <div class="limitation">
+    <b>Inspection-date limitation — reproduced verbatim</b>
+    <span id="verbatim"></span>
+  </div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings, u = f.universe;
+  var F = f.findings, f01 = F[0], f03 = F[2];
+  var ids = Object.keys(D.districts).sort();
+
+  document.getElementById("lede").textContent =
+    "The focused landlord-tenant candidate universe holds " + S.num(u.records) +
+    " records through " + u.through + ". Every measure below is a count of field states inside that " +
+    "universe. None of them is a conclusion about intent, and each names the denominator it uses.";
+
+  document.getElementById("universe-warn").textContent = u.warning +
+    " The citywide universe holds " + S.num(u.citywide_all_records).replace(/^/, "") +
+    " records; nothing on this page describes it.";
+
+  var comp = f.denominator_rules[1];
+  document.getElementById("comp-rule").textContent =
+    comp.why + " " + S.pct(comp.value_pct) + " is the NOV share of the landlord-tenant universe by " +
+    "composition. It must not be called a " + comp.must_not_be_called + ".";
+
+  document.getElementById("verbatim").textContent = f.inspection_date_limitation;
+
+  document.getElementById("tiles").innerHTML = [
+    { v: S.num(u.records), k: "Landlord-tenant candidate records", d: "through " + u.through },
+    { v: S.pct(f01.headline_pct), k: f01.headline_label,
+      d: S.num(f01.headline_value) + " ÷ " + S.num(f01.headline_denominator) },
+    { v: S.pct(f03.headline_pct), k: f03.headline_label,
+      d: S.num(f03.headline_value) + " ÷ " + S.num(f03.headline_denominator) },
+    { v: S.num(u.assigned_to_district), k: "Assigned to a Council district",
+      d: S.pct(u.assigned_to_district / u.records * 100) + " of the universe" },
+    { v: S.num(u.unassigned), k: "Carrying no district assignment",
+      d: S.pct(u.unassigned / u.records * 100) + " of the universe" },
+    { v: S.pct(f03.secondary_pct), k: f03.secondary_label,
+      d: S.num(f03.secondary_value) + " ÷ " + S.num(f03.headline_denominator) }
+  ].map(function (t) {
+    return '<div class="tile"><div class="v">' + t.v + '</div><div class="k">' + S.esc(t.k) +
+      '</div><div class="d">' + S.esc(t.d) + "</div></div>";
+  }).join("");
+
+  var rows = [
+    [f01.headline_label, S.pct(f01.headline_pct), S.num(f01.headline_value),
+     S.num(f01.headline_denominator) + " (full universe)", "Documentation / traceability"],
+    [f03.headline_label, S.pct(f03.headline_pct), S.num(f03.headline_value),
+     S.num(f03.headline_denominator) + " (closed or completed only)", "Documentation at closure"],
+    [f03.secondary_label, S.pct(f03.secondary_pct), S.num(f03.secondary_value),
+     S.num(f03.headline_denominator) + " (closed or completed only)", "Documentation at closure"],
+    ["District-assigned records", S.pct(u.assigned_to_district / u.records * 100),
+     S.num(u.assigned_to_district), S.num(u.records) + " (full universe)", "Coverage"],
+    ["NOV share by composition", S.pct(f.denominator_rules[1].value_pct), "—",
+     S.num(u.records) + " (full universe)", "Composition — not a conversion rate"]
+  ];
+  document.querySelector("#metrics tbody").innerHTML = rows.map(function (r) {
+    return "<tr>" + r.map(function (c, i) {
+      return "<td" + (i === 0 || i === 4 ? ' style="text-align:left"' : "") + ">" + S.esc(c) + "</td>";
+    }).join("") + "</tr>";
+  }).join("");
+
+  S.barChartH(document.getElementById("contrib"), {
+    title: "Records by Council district",
+    sub: "District-assigned records · " + S.num(D.reconciliation.districts_sum) + " total",
+    cats: ids.map(function (i) { return "D" + i + " · " + D.districts[i].name; }),
+    values: ids.map(function (i) { return D.districts[i].totals.record_count; }),
+    notes: ids.map(function (i) {
+      return (D.districts[i].totals.record_count / D.reconciliation.districts_sum * 100).toFixed(1) +
+        "% of district-assigned records";
+    }),
+    unit: "records", seriesName: "Records", catLabel: "District",
+    caption: "Shares here are of the district-assigned total, which excludes the " +
+             S.num(u.unassigned) + " unassigned records."
+  });
+
+  var cp = 0, vi = 0, ct = 0, all = 0;
+  ids.forEach(function (i) {
+    var t = D.districts[i].totals;
+    cp += t.cp_count; vi += t.vi_count; ct += t.ct_count; all += t.record_count;
+  });
+  S.barChartH(document.getElementById("types"), {
+    title: "Record types across the district-assigned universe",
+    sub: "SDCI RECORDTYPE · " + S.num(all) + " records",
+    cats: ["Complaints (CP)", "Violations / NOV (VI)", "Tenant relocation (CT)", "Other record types"],
+    values: [cp, vi, ct, all - cp - vi - ct],
+    notes: [cp, vi, ct, all - cp - vi - ct].map(function (v) {
+      return (v / all * 100).toFixed(1) + "% of district-assigned records";
+    }),
+    labelW: 220, unit: "records", seriesName: "Records", catLabel: "Record type",
+    caption: "Summed from the seven district extracts. These four categories partition the " +
+             "district-assigned universe."
+  });
+
+  document.getElementById("prov").innerHTML =
+    "<b>Source</b> " + S.esc(f.source.file) + "<br><b>SHA-256</b> " + f.source.sha256 +
+    " <em>(verified at build time)</em><br>" +
+    "<b>Universe</b> " + S.num(u.records) + " landlord-tenant candidate records through " + u.through +
+    "<br><b>Not</b> the citywide all-record universe (" + S.num(u.citywide_all_records) + " records)" +
+    "<br><b>Reconciliation</b> " + S.num(D.reconciliation.districts_sum) + " assigned + " +
+    S.num(u.unassigned) + " unassigned = " + S.num(u.records) + " — " + D.reconciliation.status +
+    "<br><b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

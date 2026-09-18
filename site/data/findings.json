@@ -1,0 +1,108 @@
+{
+  "_note": "Fixed core findings. Language is frozen and traceable to GOVERNANCE/README_STLCA_SITE_GOVERNANCE.md. Do not strengthen, expand, or paraphrase any 'supports' / 'does_not_support' string.",
+  "universe": {
+    "label": "Focused landlord-tenant candidate universe",
+    "records": 56258,
+    "assigned_to_district": 55590,
+    "unassigned": 668,
+    "through": "2025-12-31",
+    "citywide_all_records": 233543,
+    "citywide_label": "Citywide all-record universe",
+    "warning": "The 56,258-row landlord-tenant universe must never be labelled 'citywide'. The citywide universe is a different and larger thing."
+  },
+  "source": {
+    "file": "case_nov_MASTER_SOURCE_CITYWIDE_LLT_THRU_20251231_ENRICHED_01272026__PLUS_RECORDLIST-RARE.csv",
+    "sha256": "abe7883a89caae22a7c896d08e3f5d83a5346d15d7c904a18d52b7643347cdeb",
+    "sha256_verified": true,
+    "location": "SOURCE_RECORDS/master_extracts/",
+    "enriched": "2026-01-27",
+    "scope": "Records open through 2025-12-31"
+  },
+  "inspection_date_limitation": "Inspection-date values analyzed in this build come from the post-July-2025 published LASTINSPDATE field. Earlier public exports reviewed by STLCA, including exports from December 2024 and early July 2025, carried geographic coordinate data in that field rather than usable inspection dates. STLCA observed actual date values appearing in the public extract between approximately July 6 and July 20, 2025. Accordingly, the completeness and latency figures in this build describe the later published record grouped by each record's OPENYEAR. A blank LASTINSPDATE does not establish that no physical inspection occurred, and changes across OPENYEAR must not by themselves be characterized as changes in inspection performance without independent supporting evidence.",
+  "findings": [
+    {
+      "id": "finding-01",
+      "number": "01",
+      "title": "Last Inspection Date / Timeline Traceability",
+      "headline_value": 36106,
+      "headline_denominator": 56258,
+      "headline_pct": 64.2,
+      "headline_label": "records with no recorded LastInspDate",
+      "statement": "36,106 of 56,258 records — 64.2% — have no recorded LastInspDate.",
+      "critical_limitation": "Before 2025, this field was not functioning as a true historical inspection-date field. It was used for point/geospatial data or left blank.",
+      "supports": "A documentation and timeline-traceability finding.",
+      "does_not_support": "A claim that 64.2% of records were never inspected.",
+      "carries_inspection_limitation": true
+    },
+    {
+      "id": "finding-02",
+      "number": "02",
+      "title": "Ordinance 125054 / Annual Reporting",
+      "headline_value": null,
+      "headline_denominator": null,
+      "headline_pct": null,
+      "headline_label": "No complete annual report series located",
+      "statement": "Section 9 required annual reporting beginning June 15, 2017 on activity connected to the tenant-protection provision.",
+      "evidence_safe_language": "STLCA did not locate a complete annual report series matching that obligation in the public record searched.",
+      "critical_limitation": "This is a search result, not an absence proof.",
+      "supports": "A public-record search result bounded by the record searched.",
+      "does_not_support": "That zero reports existed; that the City never filed reports; or any broader claim of intentional nondisclosure.",
+      "carries_inspection_limitation": false
+    },
+    {
+      "id": "finding-03",
+      "number": "03",
+      "title": "Closed Without a Documented Inspection Result",
+      "headline_value": 31330,
+      "headline_denominator": 50817,
+      "headline_pct": 61.7,
+      "headline_label": "closed/completed records with no recorded LastInspResult",
+      "statement": "Among 50,817 records whose StatusCurrent contains Closed or Completed, 31,330 — 61.7% — have no recorded LastInspResult, and 31,321 — 61.6% — are missing both LastInspDate and LastInspResult.",
+      "secondary_value": 31321,
+      "secondary_pct": 61.6,
+      "secondary_label": "missing both LastInspDate and LastInspResult",
+      "critical_limitation": "The denominator here is the closed/completed subset (50,817), not the full 56,258-row universe.",
+      "supports": "A documentation gap at case closure; inspection results are not consistently captured in the reviewed record.",
+      "does_not_support": "Proof that no inspection occurred, no correction occurred, or nothing happened outside the fields available in the source record.",
+      "carries_inspection_limitation": true
+    }
+  ],
+  "feature_story": {
+    "id": "rrio-loop",
+    "title": "RRIO Compliance Gap",
+    "status": "Separate feature story — not one of the three fixed core findings",
+    "scope": "Landlord-tenant complaints at matched RRIO-certified properties, 2017–2025",
+    "matched_complaints": 21811,
+    "with_documented_inspection_pct": 18.1,
+    "categories": [
+      { "label": "Mold / mildew", "value": 1451 },
+      { "label": "Pests", "value": 1332 },
+      { "label": "Flooding / water damage / sewage", "value": 1159 },
+      { "label": "Plumbing", "value": 925 },
+      { "label": "Electrical", "value": 609 },
+      { "label": "No heat", "value": 605 }
+    ],
+    "purpose": "To examine the difference between certification/minimum-standard inspection and tenant-reported conditions over time.",
+    "caution": "Certification inspection and tenant-reported condition are different measures and must not be presented as interchangeable."
+  },
+  "denominator_rules": [
+    {
+      "metric": "NOV-to-complaint record ratio",
+      "formula": "VI record count divided by CP record count, within a stated year and universe",
+      "must_not_be_called": "enforcement rate",
+      "why": "The figure is VI divided by CP — a record ratio. Calling it a rate implies complaint-to-violation linkage that the record does not establish."
+    },
+    {
+      "metric": "NOV composition share",
+      "value_pct": 17.7,
+      "formula": "NOV records as a share of the landlord-tenant universe",
+      "must_not_be_called": "complaint-to-NOV conversion rate",
+      "why": "Composition and conversion are different questions with different denominators."
+    }
+  ],
+  "coexisting_universes": [
+    { "count": 56258, "definition": "case_nov master, LT as delivered", "permitted_use": "Authoritative for all LT figures" },
+    { "count": 29824, "definition": "LT complaint records, closure-verification audit", "permitted_use": "Closure verification only" },
+    { "count": 40062, "definition": "keyword-expanded LT, all record types", "permitted_use": "None. Retired — undercounts." }
+  ]
+}

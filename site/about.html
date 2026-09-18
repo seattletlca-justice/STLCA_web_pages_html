@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About — STLCA</title>
+<meta name="description" content="What STLCA and Seattle R.A.R.E. are, what they are not, and the boundary between evidence review and government enforcement.">
+<link rel="stylesheet" href="assets/stlca.css">
+</head>
+<body class="paper" data-page="about.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="index.html">The Record</a> → About</div>
+
+  <div class="page-head">
+    <div class="eyebrow">About</div>
+    <h1>Two roles, held apart</h1>
+    <p class="lede">
+      STLCA develops the public-facing analysis, editorial stories, findings and accountability
+      recommendations. Seattle R.A.R.E. protects the evidence trail behind that work. Keeping the two
+      separate is what makes the work checkable.
+    </p>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="eyebrow">STLCA</div>
+      <h3>Seattle Tenant-Landlord Compliance &amp; Accountability</h3>
+      <p>Develops the analysis, the findings, the editorial framing and the practical accountability
+      recommendations that follow from documented gaps.</p>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Seattle R.A.R.E.</div>
+      <h3>Records Accountability &amp; Review Engine</h3>
+      <p>Preserves source records, defines the record universe, documents methodology, separates fact
+      from analysis, and keeps public claims bounded by what the evidence supports.</p>
+    </div>
+  </div>
+
+  <h2>What this is not</h2>
+  <div class="notice">
+    <b>STLCA is not an enforcement agency and is not an authority.</b>
+    It issues no orders, levies no fines, compels no compliance, and makes no legal findings of guilt
+    or liability. Where older material in the archive uses the word "Authority" in the organisation's
+    name, that usage is superseded — it implies a government body with enforcement power that STLCA's
+    charter explicitly disclaims.
+  </div>
+  <p style="max-width:66ch">
+    The purpose is public accountability: make the record reviewable, identify documented gaps, state
+    limitations plainly, and present feasible controls. The current direction on solutions is to
+    strengthen traceability, reporting, QA and public visibility within existing systems rather than
+    treating the creation of a new agency as the default answer.
+  </p>
+
+  <h2>Publication standards</h2>
+  <ul class="tight" style="max-width:66ch">
+    <li><b>No public number without provenance.</b> Source snapshot, record universe, date scope,
+      extraction date, QA status, exclusions and limitations travel with every figure.</li>
+    <li><b>Facts, analysis and allegations stay separate.</b> Documented fact, reported statement,
+      calculation, inference, allegation, finding and limitation are not blended into one claim.</li>
+    <li><b>Missing data is not proof of non-occurrence.</b></li>
+    <li><b>Failed QA does not publish.</b></li>
+    <li><b>Public record, public name.</b> A person is named only when the name appears in a public
+      record, and the name stays attached to the record it came from.</li>
+    <li><b>Generated is not delivered.</b> Design mockup content is not automatically approved
+      content, and figures are not copied from mockups.</li>
+  </ul>
+
+  <h2>Public posture</h2>
+  <p style="max-width:66ch">
+    Civic. Evidence-based. Transparent. Bounded. Independently reviewable.
+  </p>
+
+  <h2>Editorial frame</h2>
+  <p style="max-width:66ch">
+    Seattle's Council passed Council Bill 121254, expanding renter-protection enforcement tools and
+    responsibilities. The question that follows is not whether renters should be protected. It is how
+    the public knows that expanded authority is being used consistently, completely and as intended —
+    and what records would show it either way.
+  </p>
+  <p style="max-width:66ch">
+    The related framing question, "if records are required to prove landlord compliance, what records
+    prove government enforcement," is an accountability analogy. It is not a claim that landlord
+    evidentiary rules legally apply to SDCI.
+  </p>
+
+  <div class="notice" style="border-left-color:var(--navy)">
+    <b>Don't take our word for it. Follow the record.</b>
+    Every figure on this site traces to a named file with a published checksum. The
+    <a href="methodology.html">methodology</a> explains how to reproduce it, and
+    <a href="reports/index.html">Reports &amp; Source Records</a> holds the underlying evidence.
+  </div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="assets/data.js"></script>
+<script src="assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings;
+  document.getElementById("prov").innerHTML =
+    "<b>Site</b> static HTML, CSS and JavaScript; no build framework<br>" +
+    "<b>Data layer</b> data/*.json, bound through assets/data.js, regenerated by build.py<br>" +
+    "<b>Primary source</b> " + S.esc(f.source.file) + "<br><b>SHA-256</b> " + f.source.sha256 +
+    "<br><b>Universe</b> " + S.num(f.universe.records) + " landlord-tenant candidate records through " +
+    f.universe.through + "<br><b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

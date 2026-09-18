@@ -1,0 +1,59 @@
+{
+  "id": "addison-on-4th",
+  "title": "The Addison on 4th",
+  "address": "308 4th Ave S, Seattle",
+  "source": {
+    "file": "ADDISON Code_Complaints_and_Violations_20250509.csv",
+    "sha256": "26570c27fa7310b6124411eb128b1b6921ef12b0f6f8774fc647ba2e69c8551b",
+    "export_date": "2025-05-09",
+    "location": "SOURCE_RECORDS/case_addison/Data and Analysis/"
+  },
+  "totals": {
+    "records_at_address": 156,
+    "rows_in_export": 157,
+    "rows_excluded_other_address": 1,
+    "unique_years": 19
+  },
+  "by_record_type": {
+    "Complaint": 135,
+    "Notice of Violation": 18,
+    "Tenant Relocation": 3
+  },
+  "by_status": {
+    "COMPLETED": 101,
+    "REVIEWS IN PROCESS": 1,
+    "CLOSED": 48,
+    "UNDER INVESTIGATION": 6
+  },
+  "by_year": {
+    "2004": 2,
+    "2005": 2,
+    "2007": 1,
+    "2009": 1,
+    "2010": 4,
+    "2011": 2,
+    "2012": 2,
+    "2014": 2,
+    "2015": 1,
+    "2016": 1,
+    "2017": 11,
+    "2018": 10,
+    "2019": 21,
+    "2020": 39,
+    "2021": 13,
+    "2022": 17,
+    "2023": 18,
+    "2024": 6,
+    "2025": 3
+  },
+  "field_integrity": {
+    "lastinspdate_containing_geometry": 155,
+    "lastinspdate_blank": 1,
+    "lastinspdate_usable_dates": 0,
+    "lastinspdate_geometry_pct": 99.4,
+    "lastinspresult_blank": 99,
+    "lastinspresult_blank_pct": 63.5
+  },
+  "supports": "That in this export the LastInspDate field carried geographic point geometry rather than inspection dates, at building level, across the full record history for this address.",
+  "does_not_support": "That no inspection of this building ever occurred, or that any specific condition went unaddressed."
+}

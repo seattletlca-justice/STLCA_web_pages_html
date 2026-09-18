@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exhibit — One Inspector, Both Sides of Enforcement</title>
+<meta name="description" content="Four City of Seattle RRIO violation records at 1102 8th Ave, and a City-issued private inspector certificate bearing the same name.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1628; --navy-2:#12203a; --gold:#f59e0b; --gold-dim:#c17f00;
+  --ink:#12181f; --ink-2:#4e5a68; --ink-3:#6b7787; --rule:#d7dde6;
+  --paper:#ffffff; --paper-2:#f7f8fa; --red:#b91c1c;
+  --serif:"Newsreader", ui-serif, Georgia, "Times New Roman", serif;
+  --sans:ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono:ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper-2);color:var(--ink);font-family:var(--sans);line-height:1.6}
+.sheet{max-width:940px;margin:0 auto;background:var(--paper);box-shadow:0 2px 20px rgba(10,22,40,.08)}
+
+.head{background:var(--navy);color:#fff;padding:34px clamp(22px,4vw,52px) 30px;border-bottom:5px solid var(--gold)}
+.tag{font:600 10.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.head h1{font-family:var(--serif);font-weight:600;font-size:clamp(28px,4.2vw,44px);line-height:1.08;margin:12px 0 8px;letter-spacing:-.015em}
+.head p{margin:0;color:#aebbd0;font-size:15px}
+.head .rec{margin-top:14px;font:11.5px/1.7 var(--mono);color:#8496b3}
+
+.body{padding:clamp(22px,4vw,52px)}
+h2{font-family:var(--serif);font-weight:600;font-size:22px;margin:0 0 4px;letter-spacing:-.01em}
+.sub{font:11.5px/1.5 var(--mono);color:var(--ink-3);margin:0 0 20px}
+
+/* timeline */
+.tl{position:relative;margin:0 0 38px;padding-left:34px}
+.tl::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:var(--rule)}
+.ev{position:relative;padding:0 0 22px}
+.ev::before{content:"";position:absolute;left:-30px;top:6px;width:14px;height:14px;border-radius:50%;
+  background:var(--navy);box-shadow:0 0 0 3px #fff}
+.ev.wd::before{background:var(--gold)}
+.ev .when{font:600 11.5px/1 var(--mono);letter-spacing:.06em;color:var(--ink-3)}
+.ev .what{font-family:var(--serif);font-size:19px;font-weight:600;margin:5px 0 2px}
+.ev.wd .what{color:var(--gold-dim)}
+.ev .who{font-size:14.5px;color:var(--ink-2);margin:0 0 6px}
+.ev .who b{color:var(--ink)}
+.ev ul{margin:6px 0 0;padding-left:18px;font-size:13.5px;color:var(--ink-2)}
+.ev ul li{margin-bottom:2px}
+.ev .num{display:inline-block;font:600 10.5px/1 var(--mono);letter-spacing:.06em;color:#fff;
+  background:var(--navy);border-radius:3px;padding:4px 7px;margin-bottom:2px}
+.ev.wd .num{background:var(--gold-dim)}
+
+/* certificate card */
+.cert{border:1px solid var(--rule);border-left:5px solid var(--gold);background:var(--paper-2);
+  padding:22px 24px;margin:0 0 34px;border-radius:0 8px 8px 0}
+.cert h3{font-family:var(--serif);font-size:20px;font-weight:600;margin:0 0 12px}
+.cert dl{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:0 0 14px;font-size:14px}
+.cert dt{font:600 11px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.cert dd{margin:0;font-family:var(--mono);font-size:13px}
+.cert blockquote{margin:0;padding:10px 0 0;border-top:1px solid var(--rule);
+  font-family:var(--serif);font-style:italic;font-size:15.5px;color:var(--ink)}
+
+/* two panels */
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:0 0 30px}
+.panel{border:1px solid var(--rule);border-radius:8px;padding:18px 20px}
+.panel.yes{border-top:4px solid var(--navy);background:#f4f7fc}
+.panel.no{border-top:4px solid var(--red);background:#fdf5f5}
+.panel h4{font:600 11px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;margin:0 0 9px}
+.panel.yes h4{color:var(--navy)}
+.panel.no h4{color:var(--red)}
+.panel p, .panel li{font-size:14px;color:var(--ink-2);margin:0 0 8px}
+.panel ul{margin:0;padding-left:17px}
+
+.foot{border-top:1px solid var(--rule);padding-top:14px;font:11px/1.8 var(--mono);color:var(--ink-3);
+  overflow-wrap:anywhere}
+.foot b{color:var(--ink-2)}
+.stamp{display:inline-block;font:700 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--navy);background:var(--gold);padding:5px 9px;border-radius:3px;margin-bottom:10px}
+
+@media (max-width:720px){ .panels{grid-template-columns:1fr} }
+@media print{
+  body{background:#fff}
+  .sheet{box-shadow:none;max-width:none}
+  .head{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ev, .cert, .panel{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="head">
+    <div class="tag">STLCA Evidence Exhibit · RRIO Enforcement</div>
+    <h1>One Inspector. Both Sides of Enforcement.</h1>
+    <p>Four City of Seattle RRIO violation records at a single property — 1102 8th Ave, Seattle</p>
+    <div class="rec">Records 003-0005129 · 003-0041465 · 003-0043565 · 003-0046457</div>
+  </header>
+
+  <main class="body">
+
+    <h2>The record, in order</h2>
+    <p class="sub">Every line below is taken from the Status tab of the City of Seattle Services Portal record page.</p>
+
+    <div class="tl">
+      <div class="ev wd">
+        <span class="num">003-0005129</span>
+        <div class="when">Opened 07/24/2015</div>
+        <div class="what">Violation Withdrawn — 07/27/2015</div>
+        <p class="who">“Investigate Violation” due 07/24/2015, assigned to <b>Don Masoero</b>.</p>
+        <ul><li>The related RRIO inspection record was marked “Inspection Overdue” on 07/24/2015, three days before the violation was withdrawn.</li></ul>
+      </div>
+
+      <div class="ev">
+        <span class="num">003-0041465</span>
+        <div class="when">Opened 08/30/2023</div>
+        <div class="what">NOV Issued — 05/08/2024</div>
+        <p class="who">Investigation, NOV preparation and NOV final review assigned to <b>Don Masoero</b>.</p>
+        <ul>
+          <li>Violation Confirmed 08/30/2023 — assigned to Don Masoero</li>
+          <li>Preparing NOV 09/29/2023 — assigned to Don Masoero</li>
+          <li>NOV Issued 05/08/2024 — assigned to Elizabeth Krzyminski</li>
+          <li><b>Performing NOV Final Review</b> 05/08/2024 — assigned to Don Masoero</li>
+        </ul>
+      </div>
+
+      <div class="ev">
+        <span class="num">003-0043565</span>
+        <div class="when">Opened 11/13/2023</div>
+        <div class="what">NOV Issued — 05/08/2024</div>
+        <p class="who">Every recorded step on this record is assigned to <b>Don Masoero</b>.</p>
+        <ul>
+          <li>Violation Confirmed 11/14/2023</li>
+          <li>Warning Issued 11/14/2023</li>
+          <li>Preparing NOV 12/14/2023</li>
+          <li>NOV Issued 05/08/2024 · NOV sent 05/09/2024 · target compliance 06/08/2024</li>
+        </ul>
+      </div>
+
+      <div class="ev wd">
+        <span class="num">003-0046457</span>
+        <div class="when">Opened 05/23/2024</div>
+        <div class="what">Violation Withdrawn — 05/23/2024</div>
+        <p class="who">“Investigate Violation” due 05/23/2024, assigned to <b>Don Masoero</b>; withdrawn and closed the same day.</p>
+        <ul><li>Fifteen days after the two Notices of Violation above were issued at the same property.</li></ul>
+      </div>
+    </div>
+
+    <div class="cert">
+      <h3>The same name, on a City certificate</h3>
+      <dl>
+        <dt>Document</dt><dd>Private Qualified Residential Housing Inspector — Certificate of Registration</dd>
+        <dt>Issued by</dt><dd>Seattle Department of Construction &amp; Inspections, Code Compliance Division</dd>
+        <dt>Inspector</dt><dd>DON MASOERO</dd>
+        <dt>Business</dt><dd>Quality Construction Consultan</dd>
+        <dt>Inspector no.</dt><dd>002-0001118</dd>
+        <dt>Authority</dt><dd>Seattle Municipal Code 22.214.020(9)(b)</dd>
+        <dt>Expires</dt><dd>August 22, 2025</dd>
+        <dt>Printed</dt><dd>June 14, 2024 — five weeks after the NOV final review above</dd>
+      </dl>
+      <blockquote>“Private Qualified Residential Housing Inspectors are not agents of the City.”
+        <span style="display:block;font:normal 11px/1.6 var(--mono);color:var(--ink-3);margin-top:7px">
+          — from the certificate itself</span>
+      </blockquote>
+    </div>
+
+    <div class="panels">
+      <div class="panel yes">
+        <h4>What the record shows</h4>
+        <ul>
+          <li>City portal status pages assign the investigation, warning, NOV preparation, NOV issuance, NOV final review and violation withdrawal steps at this one property to the same named individual, from 2015 through 2024.</li>
+          <li>A City-issued certificate shows the same name registered as a private RRIO inspector, valid through August 22, 2025.</li>
+          <li>That certificate was printed five weeks after the same individual performed NOV final review for the City.</li>
+        </ul>
+      </div>
+      <div class="panel no">
+        <h4>What the record does not show</h4>
+        <ul>
+          <li>The date the private registration was first issued.</li>
+          <li>Whether any City post-employment or conflict-of-interest rule applied.</li>
+          <li>Any finding of wrongdoing by any body. No motive is asserted here.</li>
+          <li>Whether this pattern extends beyond this property. Assignee names appear only on portal status pages, not in the published datasets.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot">
+      <span class="stamp">Draft — not yet redteamed</span><br>
+      <b>Sources</b> City of Seattle Services Portal record status pages, records 003-0005129, 003-0041465,
+      003-0043565 and 003-0046457, all at 1102 8th Ave; SDCI Code Compliance Division, Private Qualified
+      Residential Housing Inspector Certificate of Registration, inspector no. 002-0001118, document printed 2024-06-14.<br>
+      <b>Record type</b> Rental Property Violation (RRIO) · <b>Property</b> 1102 8th Ave, Seattle · District 7<br>
+      <b>Names</b> appear here because they appear in the public record, attached to the record they come from.
+      No residential address of any individual is published.<br>
+      <b>STLCA</b> Seattle Tenant-Landlord Compliance &amp; Accountability · Powered by Seattle R.A.R.E.
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

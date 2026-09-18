@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Record — STLCA</title>
+<meta name="description" content="Seattle Tenant-Landlord Compliance &amp; Accountability: an evidence-first review of Seattle housing-enforcement records.">
+<link rel="stylesheet" href="assets/stlca.css">
+</head>
+<body class="paper" data-page="index.html">
+
+<main class="wrap">
+
+  <div class="page-head">
+    <div class="eyebrow">The Record</div>
+    <h1>If records are required to prove landlord compliance,<br>what records prove government enforcement?</h1>
+    <p class="lede">
+      Seattle's Council passed Council Bill 121254, expanding renter-protection enforcement tools
+      and responsibilities. That creates one accountability question: when government gives an agency
+      more authority to protect renters, how does the public know that authority is actually being
+      used consistently, completely, and as intended?
+    </p>
+    <p class="lede" style="font-size:15px">
+      This is an accountability analogy, not a claim that landlord evidentiary rules legally apply to SDCI.
+    </p>
+  </div>
+
+  <section id="headline" class="grid g4" aria-label="Headline figures"></section>
+  <p class="chart-sub" id="headline-note" style="margin-top:-6px"></p>
+
+  <h2>Start here</h2>
+  <div class="grid g3">
+    <a class="card" href="findings/index.html">
+      <h3>Findings</h3>
+      <p>Three fixed core findings, each stating what the evidence establishes — and what it does not.</p>
+    </a>
+    <a class="card" href="districts/index.html">
+      <h3>Districts</h3>
+      <p>The same record, cut seven ways. Record counts, inspection completeness, and closure documentation per Council district.</p>
+    </a>
+    <a class="card" href="dashboards/index.html">
+      <h3>Dashboards</h3>
+      <p>Charts built directly on the record: the NOV-to-complaint record ratio over time, and completeness by district.</p>
+    </a>
+    <a class="card" href="case-studies/index.html">
+      <h3>Case Studies</h3>
+      <p>One building, its full enforcement history, and what its record does and does not show.</p>
+    </a>
+    <a class="card" href="methodology.html">
+      <h3>Methodology</h3>
+      <p>How the record universe is defined, verified, traced, and bounded — and where the limits are.</p>
+    </a>
+    <a class="card" href="reports/index.html">
+      <h3>Reports &amp; Source Records</h3>
+      <p>The underlying extracts, public-records correspondence, and the documents behind the analysis.</p>
+    </a>
+  </div>
+
+  <h2>What this is</h2>
+  <p style="max-width:66ch">
+    STLCA uses public records to examine whether Seattle's housing-enforcement systems can be
+    reconstructed and evaluated from complaint through investigation, inspection or finding,
+    correction, closure, and reporting. Seattle R.A.R.E. — the Records Accountability &amp; Review
+    Engine — protects the evidence trail behind that work by preserving source records, defining the
+    record universe, documenting methodology, separating facts from analysis, and keeping public
+    claims bounded by what the evidence actually supports.
+  </p>
+
+  <div class="notice">
+    <b>This site is not a replacement enforcement agency.</b>
+    STLCA does not issue orders, levy fines, compel compliance, or make legal findings of guilt or
+    liability. Its purpose is public accountability: make the record reviewable, identify documented
+    gaps, state limitations, and present feasible controls.
+  </div>
+
+  <h2>How to read anything here</h2>
+  <ol style="max-width:64ch">
+    <li>See the question.</li>
+    <li>Open a finding or story.</li>
+    <li>Inspect the supporting record.</li>
+    <li>Review what the evidence establishes.</li>
+    <li>Review what it does <em>not</em> establish.</li>
+    <li>Follow methodology and source records.</li>
+    <li>Reach an independent conclusion.</li>
+  </ol>
+
+  <div class="limitation">
+    <b>Missing data is not proof of non-occurrence</b>
+    A blank inspection field does not prove that an inspection never occurred. A closed status does
+    not by itself prove correction. A report not located in the searched public record is not proof
+    that the report never existed elsewhere.
+  </div>
+
+</main>
+
+<script src="assets/data.js"></script>
+<script src="assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, u = D.findings.universe, F = D.findings.findings;
+  var f01 = F[0], f03 = F[2];
+
+  // Four headline figures. Depth lives on the finding and district pages.
+  var tiles = [
+    { v: S.num(u.records), k: "Landlord-tenant candidate records reviewed",
+      d: "through " + u.through },
+    { v: S.pct(f01.headline_pct), k: f01.headline_label,
+      d: S.num(f01.headline_value) + " of " + S.num(f01.headline_denominator) },
+    { v: S.pct(f03.headline_pct), k: f03.headline_label,
+      d: S.num(f03.headline_value) + " of " + S.num(f03.headline_denominator) + " closed/completed" },
+    { v: "7", k: "Council districts, each with its own record",
+      d: S.num(u.assigned_to_district) + " assigned · " + S.num(u.unassigned) + " unassigned" }
+  ];
+  document.getElementById("headline").innerHTML = tiles.map(function (t) {
+    return '<div class="tile"><div class="v">' + t.v + '</div><div class="k">' + S.esc(t.k) +
+           '</div><div class="d">' + S.esc(t.d) + "</div></div>";
+  }).join("");
+
+  document.getElementById("headline-note").textContent =
+    "These are counts of field states in SDCI's own export, not conclusions about intent. " +
+    "Each figure carries its denominator and its limitations on the page where it is explained. " +
+    "The " + S.num(u.records) + "-record landlord-tenant universe is not the citywide universe (" +
+    S.num(u.citywide_all_records) + " records); the two are different things.";
+})();
+</script>
+</body>
+</html>

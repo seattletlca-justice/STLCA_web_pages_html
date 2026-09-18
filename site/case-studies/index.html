@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Studies — STLCA</title>
+<meta name="description" content="Building-level case studies: one property, its full enforcement record, and what that record does and does not show.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="paper" data-page="case-studies/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → Case Studies</div>
+
+  <div class="page-head">
+    <div class="eyebrow">Case Studies</div>
+    <h1>One building at a time</h1>
+    <p class="lede">
+      A citywide finding is hard to check. A single building's record is not. These case studies take
+      one property, reconstruct its enforcement history from the public record, and state plainly
+      what that history establishes — and where it stops.
+    </p>
+  </div>
+
+  <div class="grid g2" id="cards"></div>
+
+  <h2>How a case study is bounded</h2>
+  <p style="max-width:66ch">
+    A case study illustrates; it does not generalise. One property's record cannot establish a
+    pattern across the city, and this site does not use it that way. Its job is to make a
+    field-level or process-level observation concrete enough that a reader can verify it against
+    the same public export.
+  </p>
+
+  <div class="limitation">
+    <b>Names come from the record</b>
+    A person is named only where the name appears in a public record, and each name stays attached
+    to the record it came from. Material that asserts individual fault beyond what the record shows
+    is held for separate review rather than published.
+  </div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, a = D.addison, fi = a.field_integrity;
+  document.getElementById("cards").innerHTML =
+    '<a class="card" href="addison-on-4th.html"><div class="eyebrow">Field integrity</div>' +
+    "<h3>" + S.esc(a.title) + "</h3>" +
+    '<div style="font-size:31px;font-weight:680;letter-spacing:-.02em">' +
+    S.num(fi.lastinspdate_usable_dates) + " of " + S.num(a.totals.records_at_address) + "</div>" +
+    '<div style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3);margin:2px 0 9px">' +
+    "records with a usable inspection date</div>" +
+    "<p>" + S.esc(a.address) + " — what the <code>LastInspDate</code> column actually held in the " +
+    a.source.export_date + " export, across the building's full record history.</p></a>";
+
+  document.getElementById("prov").innerHTML =
+    "<b>Case studies published</b> 1 · <b>Source records</b> SOURCE_RECORDS/case_addison/<br>" +
+    "<b>Standard</b> figures computed from the source export at build time, not transcribed<br>" +
+    "<b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

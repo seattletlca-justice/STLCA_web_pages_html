@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finding 01 — Last Inspection Date — STLCA</title>
+<meta name="description" content="Most landlord-tenant records carry no recorded LastInspDate. A documentation and timeline-traceability finding, with its figures bound to the source extract.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="paper" data-page="findings/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → <a href="index.html">Findings</a> → Finding 01</div>
+
+  <div class="page-head">
+    <div class="eyebrow" id="eyebrow"></div>
+    <h1 id="title"></h1>
+    <p class="lede" id="statement"></p>
+  </div>
+
+  <section class="grid g3" id="tiles"></section>
+
+  <div class="limitation">
+    <b>Critical limitation</b>
+    <span id="crit"></span>
+  </div>
+
+  <div class="bounds">
+    <div class="yes"><b>What this supports</b><p id="yes"></p></div>
+    <div class="no"><b>What this does not support</b><p id="no"></p></div>
+  </div>
+
+  <h2>The same gap, cut by district</h2>
+  <p style="max-width:66ch">
+    Every district shows the same pattern. The share of records with no recorded
+    <code>LastInspDate</code> ranges across the seven districts, but no district is an exception to
+    the documentation gap. Bars are direct-labelled and the underlying counts are available as a table.
+  </p>
+  <div id="by-district"></div>
+
+  <h2>What the field actually contained</h2>
+  <p style="max-width:66ch">
+    The reason this is a documentation finding rather than an inspection finding is visible in the
+    source exports themselves. In public exports reviewed before July 2025, the
+    <code>LastInspDate</code> column carried geographic point geometry rather than dates. The
+    <a href="../case-studies/addison-on-4th.html">Addison on 4th case study</a> shows this at
+    building level, across that property's full record history.
+  </p>
+  <div id="geom-note" class="notice"></div>
+
+  <div class="limitation">
+    <b>Inspection-date limitation — reproduced verbatim</b>
+    <span id="verbatim"></span>
+  </div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings, x = f.findings[0];
+
+  document.getElementById("eyebrow").textContent = "Finding " + x.number;
+  document.getElementById("title").textContent = x.title;
+  document.getElementById("statement").textContent = x.statement;
+  document.getElementById("crit").textContent = x.critical_limitation;
+  document.getElementById("yes").textContent = x.supports;
+  document.getElementById("no").textContent = x.does_not_support;
+  document.getElementById("verbatim").textContent = f.inspection_date_limitation;
+
+  document.getElementById("tiles").innerHTML = [
+    { v: S.pct(x.headline_pct), k: x.headline_label,
+      d: S.num(x.headline_value) + " of " + S.num(x.headline_denominator) },
+    { v: S.num(x.headline_value), k: "Records with the field blank",
+      d: "landlord-tenant universe" },
+    { v: S.num(x.headline_denominator - x.headline_value), k: "Records with a recorded value",
+      d: S.pct(100 - x.headline_pct) + " of the universe" }
+  ].map(function (t) {
+    return '<div class="tile"><div class="v">' + t.v + '</div><div class="k">' + S.esc(t.k) +
+      '</div><div class="d">' + S.esc(t.d) + "</div></div>";
+  }).join("");
+
+  var ids = Object.keys(D.districts).sort();
+  S.barChartH(document.getElementById("by-district"), {
+    title: "Share of records with no recorded LastInspDate, by Council district",
+    sub: "Landlord-tenant universe · district-assigned records only · through " + f.universe.through,
+    cats: ids.map(function (i) { return "D" + i + " · " + D.districts[i].name; }),
+    values: ids.map(function (i) { return D.districts[i].inspection_completeness.no_lastinspdate_pct; }),
+    notes: ids.map(function (i) {
+      var d = D.districts[i];
+      return S.num(d.inspection_completeness.no_lastinspdate) + " of " +
+             S.num(d.totals.record_count) + " records";
+    }),
+    fmt: function (v) { return v.toFixed(1) + "%"; },
+    max: 100, unit: "blank LastInspDate", seriesName: "% blank", catLabel: "District",
+    caption: "Each bar is that district's own record count as denominator, not a share of the citywide total. " +
+             "A blank field does not establish that no inspection occurred."
+  });
+
+  var a = D.addison, fi = a.field_integrity;
+  document.getElementById("geom-note").innerHTML =
+    "<b>Reproducible at building level.</b> In the " + S.esc(a.source.export_date) +
+    " portal export for " + S.esc(a.address) + ", " + S.num(fi.lastinspdate_containing_geometry) +
+    " of " + S.num(a.totals.records_at_address) + " records (" + S.pct(fi.lastinspdate_geometry_pct) +
+    ") carried <code>POINT (longitude latitude)</code> geometry in the <code>LastInspDate</code> " +
+    "column, and " + S.num(fi.lastinspdate_usable_dates) + " carried a usable inspection date.";
+
+  document.getElementById("prov").innerHTML =
+    "<b>Source</b> " + S.esc(f.source.file) + "<br><b>SHA-256</b> " + f.source.sha256 +
+    "<br><b>Universe</b> " + S.num(f.universe.records) + " landlord-tenant candidate records (" +
+    S.num(f.universe.assigned_to_district) + " district-assigned)<br>" +
+    "<b>Date scope</b> through " + f.universe.through + " · <b>Enriched</b> " + f.source.enriched +
+    "<br><b>Exclusions</b> none within the landlord-tenant universe · " +
+    "<b>QA</b> district extracts reconcile to " + S.num(D.reconciliation.districts_sum) +
+    " assigned records (" + D.reconciliation.status + ")<br>" +
+    "<b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>

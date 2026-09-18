@@ -1,0 +1,122 @@
+{
+  "note": "Violations issued per complaint, by year. Same 2017-2018 inflection point as the LastInspDate inspection-completeness collapse. Pattern documented across all 7 districts; cause not asserted.",
+  "by_year": {
+    "2003": {
+      "cp": 81,
+      "vi": 31,
+      "vi_to_cp_pct": 38.3
+    },
+    "2004": {
+      "cp": 437,
+      "vi": 390,
+      "vi_to_cp_pct": 89.2
+    },
+    "2005": {
+      "cp": 405,
+      "vi": 338,
+      "vi_to_cp_pct": 83.5
+    },
+    "2006": {
+      "cp": 544,
+      "vi": 411,
+      "vi_to_cp_pct": 75.6
+    },
+    "2007": {
+      "cp": 490,
+      "vi": 452,
+      "vi_to_cp_pct": 92.2
+    },
+    "2008": {
+      "cp": 439,
+      "vi": 374,
+      "vi_to_cp_pct": 85.2
+    },
+    "2009": {
+      "cp": 465,
+      "vi": 359,
+      "vi_to_cp_pct": 77.2
+    },
+    "2010": {
+      "cp": 468,
+      "vi": 352,
+      "vi_to_cp_pct": 75.2
+    },
+    "2011": {
+      "cp": 507,
+      "vi": 346,
+      "vi_to_cp_pct": 68.2
+    },
+    "2012": {
+      "cp": 555,
+      "vi": 397,
+      "vi_to_cp_pct": 71.5
+    },
+    "2013": {
+      "cp": 646,
+      "vi": 460,
+      "vi_to_cp_pct": 71.2
+    },
+    "2014": {
+      "cp": 623,
+      "vi": 470,
+      "vi_to_cp_pct": 75.4
+    },
+    "2015": {
+      "cp": 613,
+      "vi": 443,
+      "vi_to_cp_pct": 72.3
+    },
+    "2016": {
+      "cp": 649,
+      "vi": 473,
+      "vi_to_cp_pct": 72.9
+    },
+    "2017": {
+      "cp": 1095,
+      "vi": 546,
+      "vi_to_cp_pct": 49.9
+    },
+    "2018": {
+      "cp": 2808,
+      "vi": 401,
+      "vi_to_cp_pct": 14.3
+    },
+    "2019": {
+      "cp": 2960,
+      "vi": 465,
+      "vi_to_cp_pct": 15.7
+    },
+    "2020": {
+      "cp": 2812,
+      "vi": 627,
+      "vi_to_cp_pct": 22.3
+    },
+    "2021": {
+      "cp": 3004,
+      "vi": 942,
+      "vi_to_cp_pct": 31.4
+    },
+    "2022": {
+      "cp": 4828,
+      "vi": 720,
+      "vi_to_cp_pct": 14.9
+    },
+    "2023": {
+      "cp": 5159,
+      "vi": 335,
+      "vi_to_cp_pct": 6.5
+    },
+    "2024": {
+      "cp": 5210,
+      "vi": 343,
+      "vi_to_cp_pct": 6.6
+    },
+    "2025": {
+      "cp": 5742,
+      "vi": 286,
+      "vi_to_cp_pct": 5.0
+    }
+  },
+  "pre_2018_baseline_2011_2016_avg_pct": 74.2,
+  "post_2018_2022_2025_avg_pct": 7.9
+}

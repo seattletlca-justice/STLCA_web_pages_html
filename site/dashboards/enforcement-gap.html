@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NOV-to-Complaint Record Ratio — STLCA</title>
+<meta name="description" content="Violation records against complaint records by year, 2003–2025, across the landlord-tenant universe. A record ratio, not a conversion rate.">
+<link rel="stylesheet" href="../assets/stlca.css">
+</head>
+<body class="screen" data-page="dashboards/index.html">
+
+<main class="wrap">
+  <div class="crumb"><a href="../index.html">The Record</a> → <a href="index.html">Dashboards</a> → Record ratio</div>
+
+  <div class="page-head">
+    <div class="eyebrow">Dashboard</div>
+    <h1>NOV-to-complaint record ratio</h1>
+    <p class="lede">
+      For each year, the count of violation records divided by the count of complaint records opened
+      in the landlord-tenant universe. The ratio is much lower after 2017 than before it. What that
+      change means is not established by this chart, and this page does not assert a cause.
+    </p>
+  </div>
+
+  <div class="limitation">
+    <b>This is a record ratio, not a rate</b>
+    The figure is violation records divided by complaint records within a year. It does not track
+    whether any particular complaint led to a violation — the source record does not link a complaint
+    to a resulting violation, so no conversion rate can be computed from it. Reading this as
+    "the share of complaints that produced a violation" is the single most likely way to misuse the
+    chart below.
+  </div>
+
+  <section class="grid g4" id="tiles"></section>
+
+  <h2>The ratio over time</h2>
+  <div id="ratio"></div>
+
+  <h2>The two counts behind it</h2>
+  <p style="max-width:66ch">
+    The ratio moves for two reasons at once, and separating them matters. Complaint records rise
+    sharply from 2018. Violation records do not fall to zero — they stay broadly within their
+    historical band while the complaint count multiplies. Both series are record counts in the same
+    unit, so they share one axis.
+  </p>
+  <div id="counts"></div>
+
+  <h2>Before and after</h2>
+  <div class="grid g2" id="bands"></div>
+
+  <div class="limitation">
+    <b>What this chart does not establish</b>
+    It does not establish that enforcement performance changed, that inspections stopped, or that any
+    obligation went unmet. Record-keeping practice, record-type usage, intake routing and complaint
+    volume all move these counts. An abrupt change in a published field grouped by year is a
+    documentation observation. Treating it as a performance measure would require independent
+    supporting evidence that this site does not have.
+  </div>
+
+  <div class="prov" id="prov"></div>
+</main>
+
+<script src="../assets/data.js"></script>
+<script src="../assets/stlca.js"></script>
+<script>
+(function () {
+  var S = window.STLCA, D = S.data, f = D.findings, g = D.citywide_enforcement_gap;
+  var years = Object.keys(g.by_year).sort();
+  var cp = years.map(function (y) { return g.by_year[y].cp; });
+  var vi = years.map(function (y) { return g.by_year[y].vi; });
+  var ratio = years.map(function (y) { return g.by_year[y].vi_to_cp_pct; });
+
+  document.getElementById("tiles").innerHTML = [
+    { v: S.pct(g.pre_2018_baseline_2011_2016_avg_pct), k: "Average ratio, 2011–2016", d: "pre-2018 baseline" },
+    { v: S.pct(g.post_2018_2022_2025_avg_pct), k: "Average ratio, 2022–2025", d: "most recent four years" },
+    { v: S.num(cp.reduce(function (a, b) { return a + b; }, 0)), k: "Complaint records, 2003–2025", d: "landlord-tenant universe" },
+    { v: S.num(vi.reduce(function (a, b) { return a + b; }, 0)), k: "Violation records, 2003–2025", d: "landlord-tenant universe" }
+  ].map(function (t) {
+    return '<div class="tile"><div class="v">' + t.v + '</div><div class="k">' + S.esc(t.k) +
+      '</div><div class="d">' + S.esc(t.d) + "</div></div>";
+  }).join("");
+
+  S.lineChart(document.getElementById("ratio"), {
+    title: "NOV-to-complaint record ratio by year",
+    sub: "Violation records ÷ complaint records opened that year · landlord-tenant universe",
+    cats: years, catLabel: "Year",
+    series: [{ name: "NOV-to-complaint record ratio", values: ratio }],
+    fmt: function (v) { return v.toFixed(0) + "%"; },
+    max: 100, height: 320, labelEvery: 2,
+    bands: [{ from: years.indexOf("2017"), to: years.length - 1 }],
+    caption: "Shaded from 2017. The last point is labelled directly; hover any year for both counts " +
+             "and the ratio. Values are the ratio of two record counts, not a measured conversion."
+  });
+
+  S.barChart(document.getElementById("counts"), {
+    title: "Complaint and violation records opened per year",
+    sub: "Both series are record counts in the same unit, so they share one axis",
+    cats: years, catLabel: "Year",
+    series: [{ name: "Complaints (CP)", values: cp }, { name: "Violations / NOV (VI)", values: vi }],
+    height: 320, labelEvery: 2,
+    caption: "Counts of records opened in each year by SDCI record type, across the landlord-tenant universe."
+  });
+
+  function band(label, from, to) {
+    var idx = years.map(function (y, i) { return y >= from && y <= to ? i : -1; }).filter(function (i) { return i >= 0; });
+    var c = idx.reduce(function (s, i) { return s + cp[i]; }, 0);
+    var v = idx.reduce(function (s, i) { return s + vi[i]; }, 0);
+    return '<div class="card"><h3>' + label + "</h3>" +
+      '<div style="font-size:31px;font-weight:680;letter-spacing:-.02em">' + S.pct(v / c * 100) + "</div>" +
+      '<div style="font-family:var(--mono);font-size:11.5px;color:#8496b3;margin:2px 0 9px">' +
+      S.num(v) + " violation records ÷ " + S.num(c) + " complaint records</div>" +
+      "<p>Pooled across the period rather than averaged across years, so larger years weigh more.</p></div>";
+  }
+  document.getElementById("bands").innerHTML = band("2011–2016", "2011", "2016") + band("2022–2025", "2022", "2025");
+
+  document.getElementById("prov").innerHTML =
+    "<b>Source</b> citywide_enforcement_gap.json, derived from " + S.esc(f.source.file) +
+    "<br><b>SHA-256</b> " + f.source.sha256 +
+    "<br><b>Universe</b> landlord-tenant records, " + S.num(f.universe.records) + " through " +
+    f.universe.through + " — <em>not</em> the citywide all-record universe of " +
+    S.num(f.universe.citywide_all_records) + "<br>" +
+    "<b>Metric</b> VI record count ÷ CP record count, by OPENYEAR · " +
+    "<b>Permitted label</b> NOV-to-complaint record ratio<br>" +
+    "<b>Limitation</b> the source record does not link a complaint to a resulting violation; " +
+    "no conversion rate is computable<br><b>Data layer built</b> " + D.generated;
+})();
+</script>
+</body>
+</html>
