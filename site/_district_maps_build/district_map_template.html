@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>District __N__ complaint maps | STLCA</title>
+<meta name="description" content="Two maps of Seattle landlord-tenant complaint records, habitability and paperwork side by side, with Council District __N__ highlighted.">
+<style>
+/*__SITE_CSS__*/
+
+/* ---------------- district map page ---------------- */
+.mapintro{padding:clamp(26px,5vh,48px) 0 20px;border-bottom:1px solid var(--rule);
+  background:radial-gradient(45% 80% at 90% 0%,rgba(45,127,249,.08),transparent 70%),radial-gradient(40% 70% at 0% 100%,var(--glow),transparent 70%)}
+.mapintro h1{font:500 clamp(30px,3.4vw,46px)/1.08 var(--serif);margin:0 0 12px}
+.mapintro .lede{margin:0 0 4px}
+.dtabs{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+.dtabs a{font:600 13px/1 var(--sans);padding:10px 14px;border:1px solid var(--rule);border-radius:999px;color:var(--ink2);text-decoration:none}
+.dtabs a.on{background:var(--amber);border-color:var(--amber);color:var(--navy)}
+.dtabs a:not(.on):hover{border-color:var(--amber);color:var(--amber)}
+.dtabs .sp{flex:1}
+.dtabs a.ghost{border-style:dashed}
+.mapsec{padding:22px 0 12px}
+details.fdet>summary{display:none;list-style:none;cursor:pointer;font:600 14px/1.2 var(--sans);color:var(--amber);padding:13px 16px;border:1px solid var(--rule);border-radius:10px;background:rgba(12,29,56,.55)}
+details.fdet>summary::-webkit-details-marker{display:none}
+details.fdet>summary span{color:var(--ink3);font-weight:400;margin-left:8px}
+.fbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px 14px;border:1px solid var(--rule);border-radius:10px;background:rgba(12,29,56,.55);padding:14px 16px 12px;align-items:end}
+.fbar .f2{grid-column:span 2}
+.fbar label{display:block;font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin:0 0 6px}
+.fbar input[type=search],.fbar select{width:100%;background:#0a1830;color:var(--ink);border:1px solid var(--rule);border-radius:6px;padding:9px 10px;font:14px var(--sans)}
+.fbar input[type=search]:focus,.fbar select:focus{outline:2px solid var(--amber);outline-offset:1px}
+.fbar .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fbar .foot{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
+.fcount{font-size:13.5px;color:var(--ink2)}
+.fcount b{color:var(--ink);font-family:var(--mono)}
+.reset{font:600 13px/1 var(--sans);padding:10px 14px;border-radius:6px;border:1px solid var(--rule);background:none;color:var(--ink);cursor:pointer}
+.reset:hover{border-color:var(--amber);color:var(--amber)}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.pane{margin:0;min-width:0}
+.phead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:6px 12px;margin:0 0 8px;min-height:62px}
+.phead h2{font:600 18px/1.2 var(--sans);margin:0;max-width:none}
+.phead h2 small{display:block;font:400 12.5px/1.35 var(--sans);color:var(--ink3);margin-top:3px}
+.views{display:flex;gap:6px}
+.views button{font:600 12px/1 var(--sans);padding:8px 10px;border-radius:999px;border:1px solid var(--rule);background:none;color:var(--ink2);cursor:pointer}
+.views button:hover,.views button:focus-visible{border-color:var(--amber);color:var(--amber);outline:none}
+.mapwrap{position:relative;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:#eef1f4;height:clamp(460px,72vh,720px);touch-action:none;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+.mapwrap canvas{display:block;width:100%;height:100%;cursor:grab;outline:none}
+.mapwrap canvas.drag{cursor:grabbing}
+.mapwrap canvas:focus-visible{box-shadow:inset 0 0 0 3px var(--amber)}
+.mapcount{position:absolute;left:10px;top:44px;background:rgba(255,255,255,.92);color:#2b3442;border-radius:6px;padding:4px 8px;font:600 11.5px/1.25 var(--sans);box-shadow:0 1px 5px rgba(0,0,0,.18);pointer-events:none}
+.zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
+.zoom button{width:36px;height:36px;border-radius:8px;border:1px solid #c5ccd6;background:#fff;color:#1b2433;font:600 19px/1 var(--sans);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.zoom button:hover{background:#f1f3f6}.zoom button:focus-visible{outline:3px solid var(--amber)}
+.attr{position:absolute;left:10px;bottom:6px;right:10px;font:10.5px/1.3 var(--sans);color:#6a7482;pointer-events:none;text-shadow:0 0 3px #eef1f4,0 0 3px #eef1f4}
+.tip{position:absolute;pointer-events:none;background:rgba(8,20,38,.95);color:#e9eef7;border-radius:6px;padding:7px 9px;font:12px/1.35 var(--sans);max-width:250px;display:none;z-index:5;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.tip b{font-family:var(--mono);font-size:12px}
+.tip i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+.rcard{position:absolute;left:10px;bottom:30px;width:min(340px,calc(100% - 66px));max-height:calc(100% - 80px);overflow:auto;background:#fff;color:#1b2433;border-radius:10px;padding:12px 14px 11px;font:13px/1.4 var(--sans);box-shadow:0 8px 30px rgba(0,0,0,.35);display:none;z-index:6}
+.rcard .ch{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.rcard .ch b{font:700 14px var(--mono)}
+.rcard .ch button{border:0;background:#eef1f4;border-radius:6px;width:28px;height:28px;font:600 16px/1 var(--sans);cursor:pointer;color:#1b2433}
+.rcard .cd{color:#556070;margin:4px 0 2px}
+.rcard .ca{font-weight:700;font-size:14.5px;margin:2px 0 8px}
+.rcard .chips{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px}
+.rcard .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid #d2d8e0;border-radius:999px;padding:3px 9px 3px 7px;font-size:12px;background:#f7f9fb}
+.rcard .chip i{width:9px;height:9px;display:inline-block;border-radius:50%}
+.rcard .chip i.s{border-radius:2px}.rcard .chip i.d{transform:rotate(45deg) scale(.85);border-radius:1px}
+.rcard .cf{color:#556070;font-size:12.5px;margin:0 0 6px}
+.rcard .ev{font-size:12.5px;margin:0 0 8px;color:#1b2433;background:#f3f6fb;border-left:3px solid #0072b2;padding:5px 8px;border-radius:0 6px 6px 0}
+.rcard .ev.jc{border-left-color:#7a1f3d;background:#faf3f5}
+.rcard h3{font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#6a7482;margin:10px 0 6px}
+.rcard ul{list-style:none;margin:0;padding:0}
+.rcard li{padding:3px 0;border-top:1px solid #eef1f4;font-size:12.5px}
+.rcard li a{color:#0b4ea2;cursor:pointer;text-decoration:none}.rcard li a:hover{text-decoration:underline}
+.rcard .go{display:inline-block;margin:8px 6px 0 0;font-weight:700;color:#fff;background:#081426;border-radius:6px;padding:9px 12px;text-decoration:none;font-size:12.5px}
+.rcard .go.alt{background:#fff;color:#081426;border:1px solid #081426;padding:8px 11px}
+.lgd{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:0 12px;margin:10px 0 0;padding:10px 14px 8px;border:1px solid var(--rule);border-radius:10px;background:rgba(12,29,56,.45)}
+.lgd .lane{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;margin:2px 0 4px;font:700 11px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.lgd .lane button{font:600 11px/1 var(--mono);color:var(--amber);background:none;border:0;cursor:pointer;padding:2px 0;text-transform:none;letter-spacing:0}
+.chk{display:grid;grid-template-columns:18px 16px 1fr auto;gap:7px;align-items:center;padding:4px 0;font-size:13px;color:var(--ink2);cursor:pointer;line-height:1.25}
+.chk:hover{color:var(--ink)}
+.chk input{margin:0;width:16px;height:16px;accent-color:#e8a928}
+.chk .n{font:11.5px var(--mono);color:var(--ink3)}
+.sw{display:inline-block;width:13px;height:13px;border:1px solid rgba(255,255,255,.7);box-sizing:border-box}
+.sw.c{border-radius:50%}.sw.s{border-radius:2px}.sw.d{transform:rotate(45deg) scale(.82);border-radius:1px}
+.sumrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:18px 0 0}
+.sumrow div{border:1px solid var(--rule);border-radius:10px;padding:14px 16px;background:rgba(12,29,56,.45)}
+.sumrow b{display:block;font:600 clamp(24px,2.4vw,32px)/1 var(--serif)}
+.sumrow span{display:block;margin-top:7px;font-size:13px;line-height:1.4;color:var(--ink2)}
+.twocol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 34px}
+.bars{display:grid;gap:8px;margin:14px 0 0;padding:0;list-style:none;align-content:start}
+.bars li{display:grid;grid-template-columns:minmax(150px,230px) 1fr 58px 50px;gap:10px;align-items:center}
+.bars .lab{display:flex;gap:9px;align-items:center;font-size:13.5px;color:var(--ink)}
+.bars .bar2{height:12px;border-radius:6px;background:rgba(31,53,88,.6);overflow:hidden}
+.bars .bar2 i{display:block;height:100%;border-radius:6px}
+.bars .num{font:600 13.5px var(--mono);text-align:right}.bars .pc{font:11.5px var(--mono);color:var(--ink3);text-align:right}
+.notes{padding:26px 0 40px}
+.notes h2{font:500 clamp(22px,2.2vw,28px)/1.2 var(--serif);margin:0 0 4px}
+.notes h3{font:700 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin:18px 0 0}
+.notes ul.plain{margin:0;padding-left:20px;color:var(--ink2);line-height:1.65;font-size:15px;max-width:920px}
+.notes ul.plain li{margin:0 0 7px}.notes ul.plain li b{color:var(--ink)}
+.src2{margin-top:16px;font:11.5px/1.6 var(--mono);color:var(--ink3);overflow-wrap:anywhere}
+details.lst{margin-top:16px;border:1px solid var(--rule);border-radius:10px;background:rgba(12,29,56,.45);padding:12px 16px}
+details.lst summary{cursor:pointer;font:600 14px/1.4 var(--sans);color:var(--amber)}
+details.lst .tw{max-height:420px;overflow:auto}
+details.lst td,details.lst th{white-space:normal}
+details.lst tr[data-i]{cursor:pointer}details.lst tr[data-i]:hover td{background:rgba(232,169,40,.08)}
+@media (max-width:980px){details.fdet>summary{display:block}details.fdet[open]>summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom-color:transparent}details.fdet>.fbar{border-top:0;border-radius:0 0 10px 10px}.duo{grid-template-columns:1fr}.mapwrap{height:clamp(440px,66vh,680px)}.sumrow{grid-template-columns:repeat(2,minmax(0,1fr))}.twocol{grid-template-columns:1fr}.fbar .f2{grid-column:auto}}
+@media (max-width:560px){.sumrow{grid-template-columns:1fr}.dtabs a{padding:9px 11px}.bars li{grid-template-columns:1fr 54px 46px;gap:4px 10px}.bars .lab{grid-column:1/-1}.bars .bar2{grid-column:1}}
+@media print{.fbar,.zoom,.dtabs,.views{display:none}}
+</style>
+</head>
+<body>
+<!--SITE_HEADER-->
+<noscript><p style="padding:16px 24px;color:#e8a928">These maps need JavaScript. The counts by problem type are further down the page.</p></noscript>
+<main>
+<section class="mapintro"><div class="wrap">
+  <p class="kick">Maps &middot; Council District __N__</p>
+  <h1>District __N__ complaint maps</h1>
+  <p class="lede" id="lede"></p>
+  <nav class="dtabs" aria-label="Choose a district"><!--DISTRICT_TABS--><span class="sp"></span><a class="ghost" href="district-__N__-dashboard.html">District __N__ dashboard</a><a class="ghost" href="district-__N__-dossier.html">District __N__ dossier</a></nav>
+</div></section>
+
+<section class="mapsec" id="mapsec"><div class="wrap">
+  <details class="fdet" id="fdet" open><summary>Filters <span id="fsum"></span></summary>
+  <div class="fbar" role="group" aria-label="Filters for both maps">
+    <div class="f2"><label for="q">Find an address or record number</label><input type="search" id="q" placeholder="Address or record number" autocomplete="off"></div>
+    <div><label>Year opened</label><div class="row2"><select id="yf" aria-label="From year"></select><select id="yt" aria-label="To year"></select></div></div>
+    <div><label for="st">Status</label><select id="st"></select></div>
+    <div><label for="inn">Inspection date in the record</label><select id="inn"><option value="">All</option><option value="1">Has an inspection date</option><option value="0">No inspection date</option></select></div>
+    <div><label for="lb" title="A code staff type into the City's record. It is not used to color the dots.">City label (staff-entered)</label><select id="lb"></select></div>
+    <div><label for="oth">Rest of the city</label><select id="oth"><option value="fade">Faded</option><option value="full">Full color</option><option value="hide">Hidden</option></select></div>
+    <div class="foot"><span class="fcount" id="fcount" aria-live="polite"></span><button class="reset" id="reset" type="button">Reset filters</button></div>
+  </div>
+  </details>
+
+  <div class="duo">
+    <figure class="pane" id="pane0">
+      <div class="phead"><h2>Housing conditions<small>Habitability: the description names a problem with the unit or building</small></h2><div class="views"><button type="button" data-v="city">Whole city</button><button type="button" data-v="dist">District __N__</button></div></div>
+      <div class="mapwrap" id="mw0">
+        <canvas id="cv0" tabindex="0" role="img" aria-label="Map of the whole city: housing-condition complaints, with District __N__ in full color. Use the filters or the list below the maps to read the records."></canvas>
+        <div class="mapcount" id="mc0" aria-hidden="true"></div>
+        <div class="zoom"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">&minus;</button></div>
+        <div class="rcard" id="card0" role="dialog" aria-label="Selected complaint"></div>
+        <div class="tip" id="tip0"></div>
+        <div class="attr">Dots: SDCI landlord-tenant complaint records. Gray: residential properties. Light areas are the council districts; blue-gray is water or outside the city. Zoom in to see the buildings with complaints. No street tiles.</div>
+      </div>
+      <div class="lgd" id="lg0"></div>
+    </figure>
+    <figure class="pane" id="pane1">
+      <div class="phead"><h2>Paperwork and landlord-tenant law<small>Evictions, just cause (JCEO), notices, rent, deposits and leases</small></h2><div class="views"><button type="button" data-v="city">Whole city</button><button type="button" data-v="dist">District __N__</button></div></div>
+      <div class="mapwrap" id="mw1">
+        <canvas id="cv1" tabindex="0" role="img" aria-label="Map of the whole city: paperwork and landlord-tenant-law complaints, with District __N__ in full color. Use the filters or the list below the maps to read the records."></canvas>
+        <div class="mapcount" id="mc1" aria-hidden="true"></div>
+        <div class="zoom"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">&minus;</button></div>
+        <div class="rcard" id="card1" role="dialog" aria-label="Selected complaint"></div>
+        <div class="tip" id="tip1"></div>
+        <div class="attr">Dots: SDCI landlord-tenant complaint records. Gray: residential properties. Light areas are the council districts; blue-gray is water or outside the city. Zoom in to see the buildings with complaints. No street tiles.</div>
+      </div>
+      <div class="lgd" id="lg1"></div>
+    </figure>
+  </div>
+
+  <div class="sumrow" id="sumrow"></div>
+
+  <div class="note" id="workbox" style="margin:18px 0 0;padding:14px 16px;border:1px solid rgba(255,255,255,.18);border-radius:10px">
+    <b>Show our work: every complaint behind these maps, as a CSV.</b>
+    <a id="csvlink" href="#" download style="margin-left:8px;font-weight:700"></a>
+    <div style="margin-top:6px" id="csvnote"></div>
+  </div>
+
+  <details class="lst" id="lstd"><summary>List the District __N__ records now on the maps (first 300, newest first)</summary><div class="tw"><table><thead><tr><th>Record</th><th>Opened</th><th>Address</th><th>Housing map</th><th>Paperwork map</th></tr></thead><tbody id="lstb"></tbody></table></div></details>
+</div></section>
+
+<section class="notes"><div class="wrap">
+  <h2>District __N__ complaints by problem type</h2>
+  <p class="note" style="margin-top:6px">A complaint that names several problems is counted under each one, so each list adds up to more than its total.</p>
+  <div class="twocol"><div><h3>Housing conditions</h3><ul class="bars" id="bars0"></ul></div><div><h3>Paperwork and landlord-tenant law</h3><ul class="bars" id="bars1"></ul></div></div>
+  <h2 style="margin-top:34px">How to read these maps</h2>
+  <ul class="plain">
+    <li><b>One dot is one complaint record.</b> Several complaints from one address sit on top of each other; click a dot to see the others at that address.</li>
+    <li><b>Left map: housing conditions. Right map: paperwork and landlord-tenant law.</b> A complaint that names both appears on both maps. The two maps move together.</li>
+    <li><b>The light shapes are the seven council districts</b> (outlines from the City&rsquo;s council district file); blue-gray is water or outside the city. District __N__ has the dark outline. The map has no street tiles, so industrial areas with few homes, such as the Duwamish valley, show no gray dots but are still land.</li>
+    <li><b>District __N__ is in full color; the rest of the city is faded context.</b> Click a faded dot to jump to that district&rsquo;s page for the details.</li>
+    <li id="bldli"><b>Zoom in to street level to see buildings.</b> Each building that has complaints is drawn from the City&rsquo;s building outlines (2023, from the open data portal). The darker the building, the more complaints on that map are at it, counting only what passes the filters and the ticked groups. Hover over a building for its count and addresses; click it to open its newest complaint. <span id="bldNote"></span></li>
+    <li><b>The color is the problem named in the description.</b> A complaint that names several problems in one map takes the first matching color in that map&rsquo;s list, and the card lists all of them.</li>
+    <li><b>3-day notices are found by wording.</b> The description or the City&rsquo;s staff note (DESCRIPTION1) says &ldquo;3-day notice&rdquo; or &ldquo;three day notice&rdquo; (or a 3-day pay, comply or vacate). It can be an eviction notice or another kind, such as a notice of entry or repairs. The card shows the phrase and which field it came from.</li>
+    <li><b>Just cause eviction (JCEO) comes from the City&rsquo;s JCEO label or from &ldquo;just cause&rdquo; wording.</b> The JCEO label is a staff code, usually in DESCRIPTION1 (some are typed in the description). The card says which one a dot is based on. Many of these complaints also name an eviction, a rent increase or a lease problem. They show the JCEO color (only a 3-day notice is listed ahead of it); untick JCEO to see their other color.</li>
+    <li><b>Unassigned (black) means no problem could be assigned from the description.</b> It does not mean there was no problem. <span id="unasList"></span></li>
+    <li><b>The other problem types come from the rules in the vocabulary audit.</b> Borderline wording is left out, so a missing color is not a finding either way.</li>
+    <li><b>The City label (POTA, HOUSING and others) is staff-entered, in DESCRIPTION1.</b> The filter lets you compare it with the map. Apart from JCEO it never colors a dot. <span id="potaNote"></span></li>
+    <li><b>&ldquo;Inspection date in the record&rdquo; is a data flag.</b> It shows whether the City&rsquo;s export has an inspection date for the complaint. It is not proof that an inspection did or did not happen.</li>
+    <li id="nocoordnote"></li>
+  </ul>
+  <p class="src2" id="src2"></p>
+</div></section>
+</main>
+<!--SITE_FOOTER-->
+
+<script id="D" type="application/json">/*__DATA__*/null</script>
+<script>
+(function(){
+'use strict';
+var D = JSON.parse(document.getElementById('D').textContent);
+var G = D.groups, NG = G.length, T = D.totals, CP = D.pts, OT = D.ot;
+var Nc = CP.id.length, No = OT.la.length, N = Nc + No;
+var DN = D.district ? 'District ' + D.district : 'Citywide', DIN = D.district ? 'in District ' + D.district : 'citywide';
+var $ = function(s){ return document.querySelector(s); };
+var fmt = function(n){ return Number(n).toLocaleString('en-US'); };
+var esc = function(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+var LAT0 = D.q.lat0, LON0 = D.q.lon0;
+var i, j, g, p;
+
+/* ---------- all complaints in one set of arrays: 0..Nc-1 = this district (full detail), Nc.. = the rest of the city ---------- */
+var lat = new Float64Array(N), lon = new Float64Array(N), yr = new Int16Array(N), st = new Int8Array(N), inn = new Int8Array(N), gm = new Int32Array(N), dist = new Int8Array(N), lbm = new Int32Array(N);
+for (i = 0; i < Nc; i++){ lat[i] = LAT0 + CP.la[i] / 1e5; lon[i] = LON0 + CP.lo[i] / 1e5; yr[i] = CP.yr[i]; st[i] = CP.st[i]; inn[i] = CP.inn[i]; gm[i] = CP.gm[i]; dist[i] = CP.d ? CP.d[i] : D.district; lbm[i] = CP.lb[i]; }
+for (j = 0; j < No; j++){ i = Nc + j; lat[i] = LAT0 + OT.la[j] / 1e5; lon[i] = LON0 + OT.lo[j] / 1e5; yr[i] = 2000 + OT.yr[j]; st[i] = OT.st[j]; inn[i] = OT.inn[j]; gm[i] = OT.gm[j]; dist[i] = OT.d[j]; lbm[i] = OT.lb[j]; }
+var qla = new Int32Array(N), qlo = new Int32Array(N);
+for (i = 0; i < Nc; i++){ qla[i] = CP.la[i]; qlo[i] = CP.lo[i]; }
+for (j = 0; j < No; j++){ qla[Nc + j] = OT.la[j]; qlo[Nc + j] = OT.lo[j]; }
+var padn = function(n, w){ var s = String(n); while (s.length < w) s = '0' + s; return s; };
+var idStr = function(k){ var n = k < Nc ? CP.id[k] : OT.id[k - Nc]; return padn(Math.floor(n / 100), 6) + '-' + padn(n % 100, 2) + 'CP'; };
+var idsC = []; for (i = 0; i < Nc; i++) idsC.push(idStr(i));
+var dayFmt = function(d){ return d < 0 ? 'date not recorded' : new Date(Date.UTC(2000, 0, 1 + d)).toISOString().slice(0, 10); };
+var addrToIdx = {};
+for (i = 0; i < Nc; i++){ var a0 = CP.ad[i]; if (D.addrs[a0]) (addrToIdx[a0] = addrToIdx[a0] || []).push(i); }
+var bC = D.baseC, BNC = bC.la.length, bclat = new Float64Array(BNC), bclon = new Float64Array(BNC);
+for (i = 0; i < BNC; i++){ bclat[i] = LAT0 + bC.la[i] * D.q.coarse; bclon[i] = LON0 + bC.lo[i] * D.q.coarse; }
+var bF = D.baseF, BNF = bF.la.length, bflat = new Float64Array(BNF), bflon = new Float64Array(BNF);
+for (i = 0; i < BNF; i++){ bflat[i] = LAT0 + bF.la[i] * D.q.fine; bflon[i] = LON0 + bF.lo[i] * D.q.fine; }
+var cosLat = Math.cos(D.view.lat0 * Math.PI / 180);
+/* district outlines: delta-coded rings -> {d, rings: [Float64Array of lon,lat pairs]} */
+var OUTL = D.outlines.map(function(o){
+  var rings = [];
+  o.p.forEach(function(poly){ var rs = []; poly.forEach(function(f){
+    var n = f.length / 2, a = new Float64Array(f.length), x = f[0], y = f[1], q;
+    a[0] = LON0 + x / 1e5; a[1] = LAT0 + y / 1e5;
+    for (q = 1; q < n; q++){ x += f[2 * q]; y += f[2 * q + 1]; a[2 * q] = LON0 + x / 1e5; a[2 * q + 1] = LAT0 + y / 1e5; }
+    rs.push(a); }); rings.push(rs); });
+  return { d: o.d, polys: rings };
+});
+/* building outlines (City of Seattle), only the buildings that have a complaint on this page: delta-coded rings in 1e-6 degree units */
+var BL = D.bl || { p: [], id: [] }, NB = BL.p.length, BQ = BL.q || 1e6, BLR = [], BLB = new Float64Array(NB * 4), BLD_MPP = 4;
+var BSTEP = [1, 2, 5, 10, 25], BRAMP = ['#c3cede', '#93a6c2', '#6580a6', '#3d5d8a', '#1b3a66'], BLAB = ['1', '2–4', '5–9', '10–24', '25+'];
+for (i = 0; i < NB; i++){
+  var brs = [], bx0 = 1e9, bx1 = -1e9, by0 = 1e9, by1 = -1e9;
+  for (j = 0; j < BL.p[i].length; j++){
+    var f = BL.p[i][j], fn = f.length / 2, a = new Float64Array(f.length), x = f[0], y = f[1], q;
+    for (q = 0; q < fn; q++){
+      if (q){ x += f[2 * q]; y += f[2 * q + 1]; }
+      a[2 * q] = LON0 + x / BQ; a[2 * q + 1] = LAT0 + y / BQ;
+      if (a[2 * q] < bx0) bx0 = a[2 * q]; if (a[2 * q] > bx1) bx1 = a[2 * q]; if (a[2 * q + 1] < by0) by0 = a[2 * q + 1]; if (a[2 * q + 1] > by1) by1 = a[2 * q + 1];
+    }
+    brs.push(a);
+  }
+  BLR.push(brs); BLB[4 * i] = bx0; BLB[4 * i + 1] = bx1; BLB[4 * i + 2] = by0; BLB[4 * i + 3] = by1;
+}
+var bOf = function(k){ return k >= 0 && k < Nc && CP.b ? CP.b[k] : -1; };
+var SHAPE = {H:'c', P:'s', O:'d', U:'c'};
+var LANEOF = ['H', 'P'], LANE_TITLE = {H: 'Housing conditions', P: 'Paperwork and landlord-tenant law'};
+
+/* ---------- panes ---------- */
+var S = { from: T.yearMin, to: T.yearMax, st: '', inn: '', lb: '', others: 'fade', q: '' };
+var PANES = [0, 1].map(function(pi){
+  var P = { pi: pi, lane: LANEOF[pi], cv: $('#cv' + pi), mw: $('#mw' + pi), tip: $('#tip' + pi), card: $('#card' + pi), lg: $('#lg' + pi), mc: $('#mc' + pi), on: [], groups: [], mask: 0,
+            vg: new Int8Array(N), cur: [], oth: [], visC: [], visO: [], shownC: 0, shownO: 0, hover: -1, W: 0, H: 0, ptrs: {}, moved: 0, lastPinch: 0,
+            bc: new Int32Array(NB), bk: new Int32Array(NB), hb: -1, tipB: -1, tipF: -1 };
+  P.ctx = P.cv.getContext('2d');
+  for (var k = 0; k < NG; k++){
+    var ln = G[k].lane;
+    if (ln === P.lane || ln === 'O' || ln === 'U'){ P.groups.push(k); P.on[k] = (ln !== 'O'); } else P.on[k] = false;
+  }
+  return P;
+});
+function recomputeMasks(){ PANES.forEach(function(P){ var m = 0; P.groups.forEach(function(k){ if (P.on[k]) m |= (1 << k); }); P.mask = m; }); }
+recomputeMasks();
+
+/* ---------- controls ---------- */
+(function buildControls(){
+  var yf = '', yt = '';
+  for (var y = T.yearMin; y <= T.yearMax; y++){ yf += '<option value="' + y + '">' + y + '</option>'; yt += '<option value="' + y + '"' + (y === T.yearMax ? ' selected' : '') + '>' + y + '</option>'; }
+  $('#yf').innerHTML = yf; $('#yt').innerHTML = yt;
+  var so = '<option value="">All statuses</option>';
+  D.statuses.forEach(function(s, k){ if (D.statusCounts[k]) so += '<option value="' + k + '">' + esc(s) + ' (' + fmt(D.statusCounts[k]) + ' ' + DIN + ')</option>'; });
+  $('#st').innerHTML = so;
+  var lo = '<option value="">All records</option>';
+  D.labelNames.forEach(function(nm, k){ if (D.labelCounts[k]) lo += '<option value="' + k + '">' + esc(nm) + ' (' + fmt(D.labelCounts[k]) + ' ' + DIN + ')</option>'; });
+  $('#lb').innerHTML = lo;
+  PANES.forEach(function(P){
+    var h = '', lastLane = '';
+    P.groups.forEach(function(k){
+      var gr = G[k];
+      if (gr.lane !== lastLane){
+        var nm = gr.lane === 'H' || gr.lane === 'P' ? LANE_TITLE[gr.lane] : (gr.lane === 'O' ? 'Also show' : '');
+        if (gr.lane === 'H' || gr.lane === 'P') h += '<div class="lane"><span>' + nm + '</span><span><button type="button" data-all="1">all</button> &middot; <button type="button" data-all="0">none</button></span></div>';
+        else if (gr.lane === 'O') h += '<div class="lane"><span>Also show</span><span></span></div>';
+        lastLane = gr.lane;
+      }
+      h += '<label class="chk"><input type="checkbox" data-g="' + k + '"' + (P.on[k] ? ' checked' : '') + '><span class="sw ' + SHAPE[gr.lane] + '" style="background:' + gr.color + '"></span><span>' + esc(gr.label) + '</span><span class="n">' + fmt(gr.n) + '</span></label>';
+    });
+    P.lg.innerHTML = h;
+    P.nEl = {}; P.groups.forEach(function(k){ var el = P.lg.querySelector('input[data-g="' + k + '"]'); if (el) P.nEl[k] = el.parentNode.querySelector('.n'); });
+    P.lg.addEventListener('change', function(e){ var t = e.target; if (t.dataset.g !== undefined){ P.on[+t.dataset.g] = t.checked; recomputeMasks(); applyFilters(); } });
+    P.lg.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-all]'); if (!b) return; var on = b.getAttribute('data-all') === '1';
+      P.groups.forEach(function(k){ if (G[k].lane === P.lane){ P.on[k] = on; P.lg.querySelector('input[data-g="' + k + '"]').checked = on; } });
+      recomputeMasks(); applyFilters();
+    });
+  });
+})();
+
+/* ---------- text ---------- */
+$('#lede').textContent = 'The whole city on two maps, side by side: housing conditions on the left, paperwork and landlord-tenant law on the right. ' + (D.district ? 'Council District ' + D.district + ' is in full color; the rest of the city is faded. ' : 'Every council district is in full color. ') + 'Each dot is one complaint record, ' + T.yearMin + '–' + T.yearMax + '; the color is the problem named in its description.';
+$('#nocoordnote').innerHTML = '<b>' + fmt(T.complaints) + ' complaints are on record' + (D.district ? ' for District ' + D.district : ' citywide') + '; ' + fmt(T.plotted) + ' have coordinates and are drawn.</b> ' + (T.nocoord ? fmt(T.nocoord) + ' ' + (T.nocoord === 1 ? 'has' : 'have') + ' no coordinates and ' + (T.nocoord === 1 ? 'is' : 'are') + ' not on the maps. ' : 'All have coordinates. ') + (D.district ? 'The faded dots are the other ' + fmt(T.others) + ' complaints that have coordinates, including ' + fmt(T.noDistrictPlotted) + ' with no council district on record. Another ' + fmt(T.noDistrict - T.noDistrictPlotted) + ' complaints with no district have no coordinates and are not drawn.' : fmt(T.noDistrictPlotted) + ' of the drawn complaints have no council district on record; they sit mostly outside the city limits. Another ' + fmt(T.noDistrict - T.noDistrictPlotted) + ' complaints with no district have no coordinates.');
+$('#csvlink').setAttribute('href', D.csv.file); $('#csvlink').textContent = 'Download ' + D.csv.file + ' (' + fmt(D.csv.rows) + ' complaints)';
+$('#csvnote').innerHTML = 'One row for each ' + (D.district ? 'District ' + D.district + ' ' : '') + 'complaint, including the ' + fmt(T.nocoord) + ' with no coordinates (the &ldquo;drawn_on_map&rdquo; column says which). Each legend group has a yes/blank column, so every count in the legends can be reproduced by filtering that column. The file also gives the City record link, the problem types named, the exact words that put the complaint in each problem type (from ' + esc(D.build.audit) + '), the 3-day notice and JCEO wording, and the City labels. Keep the CSV in the same folder as this page for the link to work.';
+$('#src2').textContent = 'Source: ' + D.build.source + ' (sha256 ' + D.build.sha + '…); problem types from ' + D.build.audit + '; district as assigned in that file' + (NB ? '; buildings from ' + BL.name + (BL.downloaded ? ' (downloaded ' + BL.downloaded + ')' : '') : '') + '. Page built ' + D.build.built + '. Flags are flags, not findings.';
+if (NB) $('#bldNote').textContent = 'A complaint is placed in a building when its map point falls inside the outline (' + fmt(T.bldIn) + ' complaints) or within ' + BL.near + ' m of it (' + fmt(T.bldNear) + '). The other ' + fmt(T.bldNone) + ' have no building outline that close and show as dots only. ' + fmt(NB) + ' buildings ' + DIN + ' have complaints.';
+else $('#bldli').style.display = 'none';
+
+/* ---------- which dots are shown on which map ---------- */
+var passC = 0, passO = 0, FST = 0;
+function lowBit(m){ var b = 0; while (!((m >> b) & 1)) b++; return b; }
+function applyFilters(){
+  FST++; PANES.forEach(function(P){ P.bc.fill(0); P.bk.fill(-1); });
+  var stn = S.st === '' ? -9 : +S.st, innf = S.inn === '' ? -9 : +S.inn, lbn = S.lb === '' ? 0 : (1 << +S.lb), q = S.q.trim().toUpperCase();
+  PANES.forEach(function(P){ P.cur = []; P.oth = []; for (var k = 0; k < NG; k++){ P.cur.push([]); P.oth.push([]); } P.visC = []; P.visO = []; P.curU = []; P.curK = []; P.othU = []; P.othK = []; });
+  passC = 0; passO = 0; FS = { g: new Array(NG).fill(0), h: 0, p: 0, u: [0, 0, 0, 0, 0, 0], papN: 0, potaN: 0 };
+  var potaI = D.labelNames.indexOf('POTA'), skeys = [{}, {}], sl = [[], []];
+  var m0 = PANES[0].mask, m1 = PANES[1].mask, A = PANES[0], B = PANES[1];
+  for (var n = 0; n < N; n++){
+    var ok = yr[n] >= S.from && yr[n] <= S.to && (stn === -9 || st[n] === stn) && (innf === -9 || inn[n] === innf) && (!lbn || (lbm[n] & lbn) !== 0);
+    if (ok && n >= Nc && S.others === 'hide') ok = false;
+    if (ok && q) ok = n < Nc ? (idsC[n].indexOf(q) >= 0 || D.addrs[CP.ad[n]].indexOf(q) >= 0) : (idStr(n).indexOf(q) >= 0);
+    var v0 = -1, v1 = -1;
+    if (ok){
+      if (n < Nc){
+        passC++; var gmn = gm[n], gg;
+        for (gg = 0; gg < NG; gg++) if ((gmn >> gg) & 1) FS.g[gg]++;
+        if (gmn & HMASK) FS.h++;
+        if (gmn & PMASK){ FS.p++; FS.papN++; if (potaI >= 0 && ((lbm[n] >> potaI) & 1)) FS.potaN++; }
+        if (CP.ur[n]) FS.u[CP.ur[n]]++;
+      } else passO++;
+      var x0 = gm[n] & m0, x1 = gm[n] & m1;
+      if (x0) v0 = lowBit(x0); if (x1) v1 = lowBit(x1);
+    }
+    A.vg[n] = v0; B.vg[n] = v1;
+    var bb = bOf(n);    /* records are in date order, so the last one kept per building is its newest */
+    if (bb >= 0){ if (v0 >= 0){ A.bc[bb]++; A.bk[bb] = n; } if (v1 >= 0){ B.bc[bb]++; B.bk[bb] = n; } }
+    if (v0 >= 0 || v1 >= 0){ var sk = qla[n] * 100000 + qlo[n]; if (v0 >= 0){ var e0 = skeys[0][sk]; if (e0) e0.n++; else { e0 = skeys[0][sk] = { k: n, n: 1 }; sl[0].push(e0); } } if (v1 >= 0){ var e1 = skeys[1][sk]; if (e1) e1.n++; else { e1 = skeys[1][sk] = { k: n, n: 1 }; sl[1].push(e1); } } }
+    if (v0 >= 0){ var u0 = G[v0].lane === 'U' || G[v0].lane === 'O'; if (n < Nc){ A.cur[v0].push(n); A.visC.push(n); (u0 ? A.curU : A.curK).push(n); } else { A.oth[v0].push(n); A.visO.push(n); (u0 ? A.othU : A.othK).push(n); } }
+    if (v1 >= 0){ var u1 = G[v1].lane === 'U' || G[v1].lane === 'O'; if (n < Nc){ B.cur[v1].push(n); B.visC.push(n); (u1 ? B.curU : B.curK).push(n); } else { B.oth[v1].push(n); B.visO.push(n); (u1 ? B.othU : B.othK).push(n); } }
+  }
+  PANES.forEach(function(P, pi){ P.stacks = sl[pi].filter(function(e){ return e.n >= 2; }).sort(function(a, b){ return b.n - a.n; }); });
+  updateStats();
+  PANES.forEach(function(P){ P.mc.textContent = fmt(P.visC.length) + ' ' + DIN + (S.others === 'hide' || !No ? '' : ' · ' + fmt(P.visO.length) + ' elsewhere'); });
+  $('#fsum').textContent = fmt(passC) + ' of ' + fmt(Nc) + ' ' + DN + ' complaints shown';
+  $('#fcount').innerHTML = DN + ': <b>' + fmt(passC) + '</b> of <b>' + fmt(Nc) + '</b> complaints pass the filters' + (S.others === 'hide' || !No ? '' : ' &middot; rest of the city: <b>' + fmt(passO) + '</b> of <b>' + fmt(No) + '</b>');
+  if (sel >= 0 && PANES[0].vg[sel] < 0 && PANES[1].vg[sel] < 0) closeCards();
+  fillList(); draw();
+}
+
+/* ---------- shared view ---------- */
+var V = { cLon: 0, cLat: 0, k: 1 }, K_CITY = 1, K_DIST = 1, K_REF = 1, sel = -1, selPane = null;
+var BCITY = D.view.city, BDIST = D.view.district;
+function fitK(b){ var W = PANES[0].W, H = PANES[0].H; return Math.min((W * 0.94) / ((b[1] - b[0]) * cosLat), (H * 0.94) / (b[3] - b[2])); }
+function fit(b){ V.cLon = (b[0] + b[1]) / 2; V.cLat = (b[2] + b[3]) / 2; V.k = fitK(b); }
+function kMin(){ return K_CITY * 0.8; } function kMax(){ return 450000; }
+var DPR = 1;
+function resize(){
+  var r = PANES[0].mw.getBoundingClientRect(), first = (PANES[0].W === 0);
+  var W = Math.max(220, r.width), H = Math.max(220, r.height);
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  PANES.forEach(function(P){ P.W = W; P.H = H; P.cv.width = Math.round(W * DPR); P.cv.height = Math.round(H * DPR); P.ctx.setTransform(DPR, 0, 0, DPR, 0, 0); });
+  var oldCity = K_CITY, ratio = V.k / (oldCity || 1);
+  K_CITY = fitK(BCITY); K_DIST = fitK(BDIST); K_REF = K_DIST;
+  if (first) fit(hashRec() >= 0 || /[#&]view=district/i.test(location.hash || '') ? BDIST : BCITY); else V.k = Math.max(kMin(), K_CITY * ratio);
+  cache.ok = false; draw();
+}
+
+/* ---------- base layer cache (gray dots + labels), shared by both maps ---------- */
+var cache = { cv: document.createElement('canvas'), ok: false, k: 0, cLon: 0, cLat: 0, mx: 0, my: 0, W: 0, H: 0 };
+cache.ctx = cache.cv.getContext('2d');
+var dens = null, img32 = null, imgData = null, lut = null;
+function stamp(pw, ph, x, y, s, a){
+  /* write a small square of 'ink' into the density buffer (plain typed-array writes, no canvas path work) */
+  var ix = Math.round(x - s / 2), iy = Math.round(y - s / 2), xx, yy, q, v;
+  if (ix < 0 || iy < 0 || ix + s > pw || iy + s > ph) return;
+  for (yy = 0; yy < s; yy++){ q = (iy + yy) * pw + ix; for (xx = 0; xx < s; xx++, q++){ v = dens[q] + a; dens[q] = v > 255 ? 255 : v; } }
+}
+function renderCache(){
+  var W = PANES[0].W, H = PANES[0].H, mx = Math.round(W * 0.35), my = Math.round(H * 0.35), cw = W + 2 * mx, ch = H + 2 * my, c = cache.ctx;
+  var pw = Math.round(cw * DPR), ph = Math.round(ch * DPR);
+  if (cache.cv.width !== pw || cache.cv.height !== ph || !imgData){
+    cache.cv.width = pw; cache.cv.height = ph; imgData = c.createImageData(pw, ph); img32 = new Uint32Array(imgData.data.buffer); dens = new Uint8Array(pw * ph);
+    lut = new Uint32Array(256);
+    for (var d = 0; d < 256; d++){ var t = d / 255; lut[d] = (Math.round(255 * t) << 24) | (115 << 16) | (95 << 8) | 80; }
+  }
+  dens.fill(0);
+  var kx = V.k * cosLat * DPR, ky = V.k * DPR, cx = pw / 2, cy = ph / 2, k, x, y, useFine = V.k >= 4500, zr = V.k / K_REF;
+  var sc = useFine ? Math.max(1, Math.round(1.1 * DPR)) : Math.max(1, Math.min(2, Math.round(Math.max(1.0, D.q.coarse * V.k * 0.8) * DPR)));
+  for (k = 0; k < BNC; k++){
+    x = (bclon[k] - V.cLon) * kx + cx; if (x < 0 || x >= pw) continue;
+    y = (V.cLat - bclat[k]) * ky + cy; if (y < 0 || y >= ph) continue;
+    stamp(pw, ph, x, y, sc, useFine ? 70 : 85);
+  }
+  if (useFine){
+    var sf = Math.max(1, Math.min(4, Math.round((0.9 + Math.sqrt(zr) * 0.5) * DPR)));
+    for (k = 0; k < BNF; k++){
+      x = (bflon[k] - V.cLon) * kx + cx; if (x < 0 || x >= pw) continue;
+      y = (V.cLat - bflat[k]) * ky + cy; if (y < 0 || y >= ph) continue;
+      stamp(pw, ph, x, y, sf, 70);
+    }
+  }
+  for (k = 0, x = pw * ph; k < x; k++) img32[k] = lut[dens[k]];
+  if (!cache.dc){ cache.dc = document.createElement('canvas'); }
+  cache.dc.width = pw; cache.dc.height = ph; cache.dc.getContext('2d').putImageData(imgData, 0, 0);
+  /* water, then district land, then the gray dots, then outlines */
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  c.fillStyle = '#cddbe8'; c.fillRect(0, 0, pw, ph);
+  var kxp = V.k * cosLat * DPR, kyp = V.k * DPR;
+  function tracePoly(o, rs){ c.beginPath(); rs.forEach(function(a){ for (var q = 0; q < a.length; q += 2){ var X = (a[q] - V.cLon) * kxp + cx, Y = (V.cLat - a[q + 1]) * kyp + cy; if (q === 0) c.moveTo(X, Y); else c.lineTo(X, Y); } c.closePath(); }); }
+  OUTL.forEach(function(o){ c.fillStyle = (!D.district || o.d === D.district) ? '#f9fafb' : '#edf0f3'; o.polys.forEach(function(rs){ tracePoly(o, rs); c.fill('evenodd'); }); });
+  c.drawImage(cache.dc, 0, 0);
+  c.lineJoin = 'round';
+  OUTL.forEach(function(o){ if (o.d === D.district) return; c.strokeStyle = D.district ? 'rgba(70,90,115,.55)' : '#33496b'; c.lineWidth = D.district ? Math.max(1, DPR) : 1.5 * DPR; o.polys.forEach(function(rs){ tracePoly(o, rs); c.stroke(); }); });
+  OUTL.forEach(function(o){ if (o.d !== D.district) return; c.strokeStyle = '#0b2a52'; c.lineWidth = 2 * DPR; o.polys.forEach(function(rs){ tracePoly(o, rs); c.stroke(); }); });
+  c.setTransform(DPR, 0, 0, DPR, 0, 0);
+  kx = V.k * cosLat; ky = V.k;
+  drawLabels(c, cw, ch, kx, ky);
+  cache.ok = true; cache.k = V.k; cache.cLon = V.cLon; cache.cLat = V.cLat; cache.mx = mx; cache.my = my; cache.W = W; cache.H = H;
+}
+function drawLabels(c, cw, ch, kx, ky){
+  var items = [], k, x, y;
+  for (k = 0; k < D.labels.length; k++){ var L = D.labels[k]; x = (L.lo - V.cLon) * kx + cw / 2; y = (V.cLat - L.la) * ky + ch / 2; if (x < -60 || x > cw + 60 || y < -12 || y > ch + 12) continue; items.push({ t: L.n, x: x, y: y, w: L.w }); }
+  items.sort(function(a, b){ return b.w - a.w; });
+  c.textAlign = 'center'; c.textBaseline = 'middle';
+  var placed = [];
+  function put(it, fill, font){
+    c.font = font;
+    var tw = c.measureText(it.t).width, hw = tw / 2 + 5, hh = 9;
+    for (var q = 0; q < placed.length; q++){ var r = placed[q]; if (it.x - hw < r[1] && it.x + hw > r[0] && it.y - hh < r[3] && it.y + hh > r[2]) return; }
+    placed.push([it.x - hw, it.x + hw, it.y - hh, it.y + hh]);
+    c.lineWidth = 3.2; c.strokeStyle = 'rgba(238,241,244,.96)'; c.strokeText(it.t, it.x, it.y); c.fillStyle = fill; c.fillText(it.t, it.x, it.y);
+  }
+  D.water.forEach(function(Wt){ var wx = (Wt.lo - V.cLon) * kx + cw / 2, wy = (V.cLat - Wt.la) * ky + ch / 2; if (wx > -80 && wx < cw + 80 && wy > -20 && wy < ch + 20) put({ t: Wt.n, x: wx, y: wy }, '#3f78b5', 'italic 600 13px "Segoe UI",Arial,sans-serif'); });
+  items.forEach(function(it){ put(it, '#56606f', 'italic 600 11.5px "Segoe UI",Arial,sans-serif'); });
+}
+function ensureCache(){
+  var need = !cache.ok || cache.k !== V.k || cache.W !== PANES[0].W || cache.H !== PANES[0].H;
+  if (!need){
+    var dx = (cache.cLon - V.cLon) * V.k * cosLat, dy = (V.cLat - cache.cLat) * V.k;
+    if (Math.abs(dx) > cache.mx - 6 || Math.abs(dy) > cache.my - 6) need = true;
+  }
+  if (need) renderCache();
+}
+
+/* ---------- drawing ---------- */
+var raf = 0;
+function draw(){ if (!raf) raf = requestAnimationFrame(render); }
+function niceScale(){
+  var mPerPx = 110574 / V.k, target = 100 * mPerPx, opts = [20, 50, 100, 200, 500, 1000, 2000, 5000, 10000], m = opts[0];
+  for (var k = 0; k < opts.length; k++) if (opts[k] <= target) m = opts[k];
+  return { px: m / mPerPx, label: m >= 1000 ? (m / 1000) + ' km' : m + ' m' };
+}
+function render(){
+  raf = 0; ensureCache();
+  PANES.forEach(renderPane);
+}
+/* complaint dots are stamped as small pre-computed sprites straight into a pixel buffer: far cheaper than thousands of canvas arcs */
+var sprites = {};
+function hex3(h){ return [parseInt(h.substr(1, 2), 16), parseInt(h.substr(3, 2), 16), parseInt(h.substr(5, 2), 16)]; }
+function getSprite(g, rr, faded){
+  var key = g + ':' + rr + (faded ? 'f' : 'n'); if (sprites[key]) return sprites[key];
+  var gr = G[g], shape = SHAPE[gr.lane], col = hex3(gr.color), pad = rr + 2, dxs = [], dys = [], cs = [];
+  var fillA = faded ? 0.24 : 0.94, ringA = faded ? 0 : (rr <= 2 ? 0.5 : 0.92), x, y, d, ax, ay, covF, covR, aF, aR, a, w;
+  for (y = -pad; y <= pad; y++) for (x = -pad; x <= pad; x++){
+    ax = Math.abs(x); ay = Math.abs(y);
+    d = shape === 'c' ? Math.sqrt(x * x + y * y) : (shape === 's' ? Math.max(ax, ay) / 0.9 : (ax + ay) / 1.2);
+    covF = Math.max(0, Math.min(1, rr + 0.5 - d)); covR = ringA ? Math.max(0, Math.min(1, rr + 1.5 - d)) : 0;
+    aF = fillA * covF; aR = ringA * covR; a = aF + aR * (1 - aF);
+    if (a < 0.02) continue;
+    w = 255 * aR * (1 - aF);
+    dxs.push(x); dys.push(y); cs.push(Math.round(col[0] * aF + w), Math.round(col[1] * aF + w), Math.round(col[2] * aF + w), Math.round(a * 255));
+  }
+  return (sprites[key] = { n: dxs.length, dx: Int16Array.from(dxs), dy: Int16Array.from(dys), c: Uint8Array.from(cs), pad: pad });
+}
+function stampPoints(buf, pw, ph, list, vg, sps, kx, ky){
+  var n = list.length, cx = pw / 2, cy = ph / 2, a, s, q, x, y, inside, px, py, di, o, sa, ia, sp, m, ddx, ddy, sc, pad;
+  for (a = 0; a < n; a++){
+    q = list[a]; sp = sps[vg[q]];
+    pad = sp.pad; x = Math.round((lon[q] - V.cLon) * kx + cx); if (x < -pad || x >= pw + pad) continue;
+    y = Math.round((V.cLat - lat[q]) * ky + cy); if (y < -pad || y >= ph + pad) continue;
+    m = sp.n; ddx = sp.dx; ddy = sp.dy; sc = sp.c;
+    inside = x >= pad && x < pw - pad && y >= pad && y < ph - pad;
+    for (s = 0; s < m; s++){
+      px = x + ddx[s]; py = y + ddy[s];
+      if (!inside && (px < 0 || px >= pw || py < 0 || py >= ph)) continue;
+      di = (py * pw + px) << 2; o = s << 2; sa = sc[o + 3]; ia = 255 - sa;
+      buf[di] = sc[o] + (((buf[di] * ia + 127) / 255) | 0);
+      buf[di + 1] = sc[o + 1] + (((buf[di + 1] * ia + 127) / 255) | 0);
+      buf[di + 2] = sc[o + 2] + (((buf[di + 2] * ia + 127) / 255) | 0);
+      buf[di + 3] = sa + (((buf[di + 3] * ia + 127) / 255) | 0);
+    }
+  }
+}
+function spriteSet(r, faded){
+  var out = [], g2, gr, rr;
+  for (g2 = 0; g2 < NG; g2++){ gr = G[g2]; rr = Math.max(1, (faded ? Math.floor : Math.round)(r * (faded ? 0.78 : 1) * (gr.lane === 'U' ? 0.9 : 1) * DPR)); out.push(getSprite(g2, rr, faded)); }
+  return out;
+}
+function ensureOverlay(P){
+  var pw = Math.round(P.W * DPR), ph = Math.round(P.H * DPR);
+  if (!P.ovc || P.ovc.width !== pw || P.ovc.height !== ph){
+    P.ovc = document.createElement('canvas'); P.ovc.width = pw; P.ovc.height = ph; P.ovx = P.ovc.getContext('2d');
+    P.ovd = P.ovx.createImageData(pw, ph); P.pm = new Uint8ClampedArray(pw * ph * 4);
+  }
+}
+/* a small number badge where several complaints share one spot (counted per map, after the filters and legend ticks) */
+function drawBadges(P, ctx, W, H, kx, ky, r){
+  var mpp = 110574 / V.k, minN = mpp > 60 ? 60 : (mpp > 25 ? 30 : (mpp > 10 ? 8 : (mpp > 4 ? 3 : 2))), st = P.stacks || [], list = [], i, e, x, y;
+  for (i = 0; i < st.length; i++){
+    e = st[i]; if (e.n < minN) break;
+    x = (lon[e.k] - V.cLon) * kx + W / 2; y = (V.cLat - lat[e.k]) * ky + H / 2;
+    if (x < -30 || x > W + 30 || y < -30 || y > H + 30) continue;
+    var hit = false; for (var q = 0; q < list.length; q++){ if (Math.abs(list[q].x - x) < 26 && Math.abs(list[q].y - y) < 17){ hit = true; break; } }
+    if (hit) continue;
+    list.push({ n: e.n, x: x, y: y }); if (list.length >= 300) break;
+  }
+  if (!list.length) return;
+  ctx.font = '700 10.5px "Segoe UI",Arial,sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineWidth = 1.2;
+  list.forEach(function(o){
+    var t = String(o.n), w = Math.max(15, ctx.measureText(t).width + 8), h = 15, bx = o.x + r * 0.5, by = o.y - r - h + 1, rad = 7;
+    ctx.beginPath(); ctx.moveTo(bx + rad, by); ctx.lineTo(bx + w - rad, by); ctx.arc(bx + w - rad, by + rad, rad, -1.5708, 1.5708); ctx.lineTo(bx + rad, by + h); ctx.arc(bx + rad, by + rad, rad, 1.5708, 4.7124); ctx.closePath();
+    ctx.fillStyle = '#081426'; ctx.fill(); ctx.strokeStyle = '#ffffff'; ctx.stroke();
+    ctx.fillStyle = '#ffffff'; ctx.fillText(t, bx + w / 2, by + h / 2 + 0.5);
+  });
+}
+/* buildings: shown once zoomed in to street level; shade = complaints on this map at that building (after the filters and legend ticks) */
+function bldOn(){ return NB > 0 && 110574 / V.k <= BLD_MPP; }
+function bCol(c){ for (var q = BSTEP.length - 1; q > 0; q--) if (c >= BSTEP[q]) return BRAMP[q]; return BRAMP[0]; }
+function traceB(ctx, b, W, H, kx, ky){
+  ctx.beginPath();
+  BLR[b].forEach(function(a){ for (var q = 0; q < a.length; q += 2){ var X = (a[q] - V.cLon) * kx + W / 2, Y = (V.cLat - a[q + 1]) * ky + H / 2; if (q === 0) ctx.moveTo(X, Y); else ctx.lineTo(X, Y); } ctx.closePath(); });
+}
+function drawBuildings(P, ctx, W, H, kx, ky){
+  var x0 = V.cLon - W / 2 / kx, x1 = V.cLon + W / 2 / kx, y0 = V.cLat - H / 2 / ky, y1 = V.cLat + H / 2 / ky, b, sb = bOf(sel);
+  ctx.lineJoin = 'round';
+  for (b = 0; b < NB; b++){
+    if (!P.bc[b] || BLB[4 * b + 1] < x0 || BLB[4 * b] > x1 || BLB[4 * b + 3] < y0 || BLB[4 * b + 2] > y1) continue;
+    traceB(ctx, b, W, H, kx, ky); ctx.fillStyle = bCol(P.bc[b]); ctx.fill('evenodd');
+    ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(11,42,82,.8)'; ctx.stroke();
+  }
+  [[P.hb, '#081426', 2.2], [sb, '#e8a928', 3]].forEach(function(h){ if (h[0] >= 0 && P.bc[h[0]]){ traceB(ctx, h[0], W, H, kx, ky); ctx.lineWidth = h[2]; ctx.strokeStyle = h[1]; ctx.stroke(); } });
+}
+function drawBKey(ctx){
+  var x = 10, y = 70, sw = 34, w = 22 + sw * BLAB.length, h = 44, q;
+  ctx.fillStyle = 'rgba(255,255,255,.92)'; ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = '#2b3442'; ctx.font = '600 11px "Segoe UI",Arial,sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.fillText('Buildings: complaints on this map', x + 8, y + 15);
+  ctx.textAlign = 'center'; ctx.font = '600 10.5px "Segoe UI",Arial,sans-serif';
+  for (q = 0; q < BLAB.length; q++){
+    var bx = x + 8 + q * sw;
+    ctx.fillStyle = BRAMP[q]; ctx.fillRect(bx, y + 21, sw - 4, 9); ctx.strokeStyle = 'rgba(11,42,82,.8)'; ctx.lineWidth = 1; ctx.strokeRect(bx + .5, y + 21.5, sw - 5, 8);
+    ctx.fillStyle = '#2b3442'; ctx.fillText(BLAB[q], bx + (sw - 4) / 2, y + 41);
+  }
+}
+function bHit(P, x, y){
+  if (!bldOn()) return -1;
+  var kx = V.k * cosLat, ky = V.k, lo = V.cLon + (x - P.W / 2) / kx, la = V.cLat - (y - P.H / 2) / ky, best = -1, ba = 1e9, b;
+  for (b = 0; b < NB; b++){
+    if (!P.bc[b] || lo < BLB[4 * b] || lo > BLB[4 * b + 1] || la < BLB[4 * b + 2] || la > BLB[4 * b + 3]) continue;
+    var c = false;
+    BLR[b].forEach(function(a){ var n = a.length / 2, q, r = n - 1; for (q = 0; q < n; r = q++){ var xi = a[2 * q], yi = a[2 * q + 1], xj = a[2 * r], yj = a[2 * r + 1]; if ((yi > la) !== (yj > la) && lo < (xj - xi) * (la - yi) / (yj - yi) + xi) c = !c; } });
+    var ar = (BLB[4 * b + 1] - BLB[4 * b]) * (BLB[4 * b + 3] - BLB[4 * b + 2]);
+    if (c && ar < ba){ ba = ar; best = b; }
+  }
+  return best;
+}
+function renderPane(P){
+  var ctx = P.ctx, W = P.W, H = P.H, kx = V.k * cosLat, ky = V.k;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  var dx = (cache.cLon - V.cLon) * kx, dy = (V.cLat - cache.cLat) * ky;
+  ctx.drawImage(cache.cv, dx - cache.mx, dy - cache.my, W + 2 * cache.mx, H + 2 * cache.my);
+  var bon = bldOn();
+  if (bon) drawBuildings(P, ctx, W, H, kx, ky);
+  ensureOverlay(P);
+  var pw = P.ovc.width, ph = P.ovc.height, pm = P.pm; pm.fill(0);
+  var zr = V.k / K_REF, r = Math.max(2, Math.min(8.5, 2.5 * Math.pow(zr, 0.38))), kxd = kx * DPR, kyd = ky * DPR;
+  if (S.others !== 'hide'){
+    var fade = S.others === 'fade', spo = spriteSet(r, fade);
+    stampPoints(pm, pw, ph, P.othU, P.vg, spo, kxd, kyd); stampPoints(pm, pw, ph, P.othK, P.vg, spo, kxd, kyd);
+  }
+  var spc = spriteSet(r, false);
+  stampPoints(pm, pw, ph, P.curU, P.vg, spc, kxd, kyd); stampPoints(pm, pw, ph, P.curK, P.vg, spc, kxd, kyd);
+  var od = P.ovd.data, len = pm.length, a, i, f;
+  for (i = 0; i < len; i += 4){
+    a = pm[i + 3];
+    if (a === 0){ od[i] = 0; od[i + 1] = 0; od[i + 2] = 0; od[i + 3] = 0; }
+    else if (a === 255){ od[i] = pm[i]; od[i + 1] = pm[i + 1]; od[i + 2] = pm[i + 2]; od[i + 3] = 255; }
+    else { f = 255 / a; od[i] = pm[i] * f; od[i + 1] = pm[i + 1] * f; od[i + 2] = pm[i + 2] * f; od[i + 3] = a; }
+  }
+  P.ovx.putImageData(P.ovd, 0, 0);
+  ctx.drawImage(P.ovc, 0, 0, W, H);
+  drawBadges(P, ctx, W, H, kx, ky, r);
+  function ring(idx, col, lw, add){ if (idx < 0 || P.vg[idx] < 0) return; var x = (lon[idx] - V.cLon) * kx + W / 2, y = (V.cLat - lat[idx]) * ky + H / 2; ctx.beginPath(); ctx.arc(x, y, r + add, 0, 6.2832); ctx.lineWidth = lw; ctx.strokeStyle = col; ctx.stroke(); }
+  if (sel >= 0){
+    if (sel < Nc){ var rel = addrToIdx[CP.ad[sel]] || []; for (var t = 0; t < rel.length; t++) if (rel[t] !== sel) ring(rel[t], 'rgba(8,20,38,.75)', 1.6, 3); }
+    ring(sel, '#081426', 2.6, 5); ring(sel, '#ffffff', 1.2, 7.2);
+  }
+  if (P.hover >= 0 && P.hover !== sel) ring(P.hover, '#081426', 2, 4);
+  var sc = niceScale();
+  ctx.fillStyle = 'rgba(255,255,255,.88)'; ctx.fillRect(10, 10, sc.px + 22, 26);
+  ctx.strokeStyle = '#2b3442'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(16, 27); ctx.lineTo(16, 30); ctx.lineTo(16 + sc.px, 30); ctx.lineTo(16 + sc.px, 27); ctx.stroke();
+  ctx.fillStyle = '#2b3442'; ctx.font = '600 11px "Segoe UI",Arial,sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillText(sc.label, 16, 23);
+  if (bon) drawBKey(ctx);
+}
+
+/* ---------- interaction (both maps share one view) ---------- */
+function zoomAt(P, x, y, f){
+  var k0 = V.k, k1 = Math.max(kMin(), Math.min(kMax(), k0 * f)); if (k1 === k0) return;
+  var lo = V.cLon + (x - P.W / 2) / (k0 * cosLat), la = V.cLat - (y - P.H / 2) / k0;
+  V.k = k1; V.cLon = lo - (x - P.W / 2) / (k1 * cosLat); V.cLat = la + (y - P.H / 2) / k1; draw();
+}
+function nearest(P, x, y, maxd){
+  var best = -1, bd = maxd * maxd, kx = V.k * cosLat, ky = V.k, lists = [P.visC, P.visO], li, n, q, dx, dy, d2;
+  for (li = 0; li < 2; li++){
+    if (li === 1 && best >= 0) break;
+    var L = lists[li];
+    for (n = 0; n < L.length; n++){
+      q = L[n]; dx = (lon[q] - V.cLon) * kx + P.W / 2 - x; if (dx > maxd || dx < -maxd) continue;
+      dy = (V.cLat - lat[q]) * ky + P.H / 2 - y; if (dy > maxd || dy < -maxd) continue;
+      d2 = dx * dx + dy * dy; if (d2 <= bd){ bd = d2; best = q; }
+    }
+  }
+  return best;
+}
+function attach(P){
+  var cv = P.cv;
+  cv.addEventListener('pointerdown', function(e){
+    cv.setPointerCapture(e.pointerId); P.ptrs[e.pointerId] = { x: e.offsetX, y: e.offsetY };
+    var ids = Object.keys(P.ptrs); P.moved = 0;
+    if (ids.length === 1) cv.classList.add('drag');
+    if (ids.length === 2){ var a = P.ptrs[ids[0]], b = P.ptrs[ids[1]]; P.lastPinch = Math.hypot(a.x - b.x, a.y - b.y); }
+  });
+  cv.addEventListener('pointermove', function(e){
+    var pt = P.ptrs[e.pointerId];
+    if (pt){
+      var ids = Object.keys(P.ptrs);
+      if (ids.length === 2){
+        P.ptrs[e.pointerId] = { x: e.offsetX, y: e.offsetY };
+        var a = P.ptrs[ids[0]], b = P.ptrs[ids[1]], d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (P.lastPinch > 0) zoomAt(P, (a.x + b.x) / 2, (a.y + b.y) / 2, d / P.lastPinch); P.lastPinch = d; P.moved = 99; return;
+      }
+      var dx = e.offsetX - pt.x, dy = e.offsetY - pt.y; P.moved += Math.abs(dx) + Math.abs(dy);
+      P.ptrs[e.pointerId] = { x: e.offsetX, y: e.offsetY };
+      V.cLon -= dx / (V.k * cosLat); V.cLat += dy / V.k; hideTips(); draw(); return;
+    }
+    var h = nearest(P, e.offsetX, e.offsetY, 8), hb = h < 0 ? bHit(P, e.offsetX, e.offsetY) : -1;
+    if (h !== P.hover || hb !== P.hb){ P.hover = h; P.hb = hb; draw(); }
+    if (h >= 0) showTip(P, h, e.offsetX, e.offsetY); else if (hb >= 0) showBTip(P, hb, e.offsetX, e.offsetY); else hideTip(P);
+    cv.style.cursor = h >= 0 || hb >= 0 ? 'pointer' : '';
+  });
+  function endPtr(e){
+    var had = P.ptrs[e.pointerId]; delete P.ptrs[e.pointerId]; cv.classList.remove('drag'); P.lastPinch = 0;
+    if (had && P.moved < 6 && Object.keys(P.ptrs).length === 0){
+      var h = nearest(P, e.offsetX, e.offsetY, 10);
+      var hb = h < 0 ? bHit(P, e.offsetX, e.offsetY) : -1;
+      if (h >= 0) selectRec(h, P, false); else if (hb >= 0 && P.bk[hb] >= 0) selectRec(P.bk[hb], P, false); else closeCards();
+    }
+  }
+  cv.addEventListener('pointerup', endPtr); cv.addEventListener('pointercancel', endPtr);
+  cv.addEventListener('pointerleave', function(){ if (P.hover >= 0 || P.hb >= 0){ P.hover = -1; P.hb = -1; draw(); } hideTip(P); });
+  cv.addEventListener('wheel', function(e){ e.preventDefault(); zoomAt(P, e.offsetX, e.offsetY, Math.exp(-e.deltaY * 0.0016)); }, { passive: false });
+  cv.addEventListener('dblclick', function(e){ zoomAt(P, e.offsetX, e.offsetY, 1.9); });
+  cv.addEventListener('keydown', function(e){
+    var step = 60 / V.k;
+    if (e.key === '+' || e.key === '=') zoomAt(P, P.W / 2, P.H / 2, 1.4);
+    else if (e.key === '-' || e.key === '_') zoomAt(P, P.W / 2, P.H / 2, 1 / 1.4);
+    else if (e.key === 'ArrowLeft'){ V.cLon -= step / cosLat; draw(); }
+    else if (e.key === 'ArrowRight'){ V.cLon += step / cosLat; draw(); }
+    else if (e.key === 'ArrowUp'){ V.cLat += step; draw(); }
+    else if (e.key === 'ArrowDown'){ V.cLat -= step; draw(); }
+    else if (e.key === 'Escape') closeCards();
+    else return;
+    e.preventDefault();
+  });
+  P.mw.querySelectorAll('.zoom button').forEach(function(b){ b.onclick = function(){ zoomAt(P, P.W / 2, P.H / 2, b.getAttribute('data-z') === 'in' ? 1.5 : 1 / 1.5); }; });
+  P.mw.parentNode.querySelectorAll('.views button').forEach(function(b){ b.onclick = function(){ fit(b.getAttribute('data-v') === 'city' ? BCITY : BDIST); draw(); }; });
+}
+PANES.forEach(attach);
+
+/* ---------- tooltip and record card ---------- */
+function groupsOf(k){ var out = []; for (var b = 0; b < NG; b++) if ((gm[k] >> b) & 1) out.push(b); return out; }
+function showTip(P, k, x, y){
+  var g0 = P.vg[k] >= 0 ? P.vg[k] : groupsOf(k)[0];
+  var where = k < Nc ? (D.addrs[CP.ad[k]] || 'address not recorded') : (dist[k] ? 'District ' + dist[k] + ' (click to open that page)' : 'No council district');
+  P.tip.innerHTML = '<b>' + esc(idStr(k)) + '</b> &middot; ' + (k < Nc ? dayFmt(CP.dt[k]) : yr[k]) + '<br><i style="background:' + G[g0].color + '"></i>' + esc(G[g0].label) + '<br>' + esc(where);
+  P.tip.style.display = 'block';
+  var tw = P.tip.offsetWidth, th = P.tip.offsetHeight, nx = x + 14, ny = y + 14;
+  if (nx + tw > P.W - 6) nx = x - tw - 14; if (ny + th > P.H - 6) ny = y - th - 14;
+  P.tip.style.left = Math.max(4, nx) + 'px'; P.tip.style.top = Math.max(4, ny) + 'px';
+}
+function showBTip(P, b, x, y){
+  if (P.tipB !== b || P.tipF !== FST){
+    var seen = {}, list = [], q, n, s;
+    for (q = 0; q < P.visC.length; q++){ n = P.visC[q]; if (bOf(n) === b){ s = D.addrs[CP.ad[n]]; if (s && !seen[s]){ seen[s] = 1; list.push(s); } } }
+    P.tip.innerHTML = '<b>' + fmt(P.bc[b]) + '</b> complaint' + (P.bc[b] === 1 ? '' : 's') + ' on this map at this building<br>' + esc(list.slice(0, 3).join(' · ')) +
+      (list.length > 3 ? ' and ' + (list.length - 3) + ' more addresses' : '') + '<br>Click to open the newest one';
+    P.tipB = b; P.tipF = FST;
+  }
+  P.tip.style.display = 'block';
+  var tw = P.tip.offsetWidth, th = P.tip.offsetHeight, nx = x + 14, ny = y + 14;
+  if (nx + tw > P.W - 6) nx = x - tw - 14; if (ny + th > P.H - 6) ny = y - th - 14;
+  P.tip.style.left = Math.max(4, nx) + 'px'; P.tip.style.top = Math.max(4, ny) + 'px';
+}
+function hideTip(P){ P.tip.style.display = 'none'; P.tipB = -1; }
+function hideTips(){ PANES.forEach(hideTip); }
+function closeCards(){ sel = -1; selPane = null; PANES.forEach(function(P){ P.card.style.display = 'none'; }); draw(); }
+function chipHtml(gi, label){ var cl = SHAPE[G[gi].lane] === 's' ? 's' : (SHAPE[G[gi].lane] === 'd' ? 'd' : ''); return '<span class="chip"><i class="' + cl + '" style="background:' + G[gi].color + '"></i>' + esc(label) + '</span>'; }
+function selectRec(k, P, zoom){
+  sel = k; selPane = P; hideTips();
+  PANES.forEach(function(Q){ if (Q !== P) Q.card.style.display = 'none'; });
+  var gs = groupsOf(k), html = '';
+  if (k < Nc){
+    var cats = CP.ct[k], chips = '';
+    if (cats.length) cats.forEach(function(c){ chips += chipHtml(D.catg[c], D.cats[c]); });
+    else chips = '<span class="chip"><i style="background:#000"></i>Unassigned: ' + esc(D.unasText[CP.ur[k]] || 'no problem named') + '</span>';
+    var ph = D.p3[String(k)], pj = D.jc[String(k)], ev = '';
+    if (ph) ev += '<div class="ev"><b>3-day notice:</b> ' + esc(ph) + '</div>';
+    if (pj) ev += '<div class="ev jc"><b>Just cause eviction (JCEO):</b> ' + esc(pj) + '</div>';
+    var rel = (addrToIdx[CP.ad[k]] || []).filter(function(x){ return x !== k; }).sort(function(a, b){ return CP.dt[b] - CP.dt[a]; }), rh = '';
+    if (rel.length){
+      rh = '<h3>' + rel.length + ' other complaint' + (rel.length === 1 ? '' : 's') + ' at this address</h3><ul>';
+      rel.slice(0, 8).forEach(function(x){ var gx = groupsOf(x)[0]; rh += '<li><a data-i="' + x + '">' + dayFmt(CP.dt[x]) + ' &middot; ' + esc(idsC[x]) + '</a> &middot; ' + esc(G[gx].label) + '</li>'; });
+      if (rel.length > 8) rh += '<li>and ' + (rel.length - 8) + ' more</li>';
+      rh += '</ul>';
+    }
+    var lbs = []; D.labelNames.forEach(function(nm, b){ if ((lbm[k] >> b) & 1) lbs.push(nm); });
+    html = '<div class="ch"><b>' + esc(idsC[k]) + '</b><button type="button" aria-label="Close">&times;</button></div>' +
+      '<div class="cd">Opened ' + dayFmt(CP.dt[k]) + ' &middot; ' + (CP.st[k] >= 0 ? esc(D.statuses[CP.st[k]]) : 'status not recorded') + '</div>' +
+      '<div class="ca">' + esc(D.addrs[CP.ad[k]] || 'Address not recorded') + '</div><div class="chips">' + chips + '</div>' + ev +
+      '<div class="cf">Inspection date in the record: ' + (CP.inn[k] ? 'yes' : 'no') + (lbs.length ? ' &middot; City label: ' + esc(lbs.join(', ')) : '') + '</div>' +
+      (bOf(k) >= 0 ? '<div class="cf">This building, with the current filters: ' + fmt(PANES[0].bc[bOf(k)]) + ' on the housing map, ' + fmt(PANES[1].bc[bOf(k)]) + ' on the paperwork map.</div>' : '') + rh +
+      '<a class="go" href="' + D.linkBase + encodeURIComponent(idsC[k]) + '" target="_blank" rel="noopener">Open the City record &#8599;</a>';
+  } else {
+    var ids = idStr(k), chips2 = '';
+    gs.forEach(function(b){ chips2 += chipHtml(b, G[b].label); });
+    var lbs2 = []; D.labelNames.forEach(function(nm, b){ if ((lbm[k] >> b) & 1) lbs2.push(nm); });
+    var dn = dist[k], page = dn ? '<a class="go" href="district-' + dn + '-map.html#rec=' + encodeURIComponent(ids) + '">Open in the District ' + dn + ' map</a>' : '';
+    html = '<div class="ch"><b>' + esc(ids) + '</b><button type="button" aria-label="Close">&times;</button></div>' +
+      '<div class="cd">' + (dn ? 'District ' + dn : 'No council district') + ' &middot; opened ' + yr[k] + ' &middot; ' + (st[k] >= 0 ? esc(D.statuses[st[k]]) : 'status not recorded') + '</div>' +
+      '<div class="chips">' + chips2 + '</div>' +
+      '<div class="cf">Inspection date in the record: ' + (inn[k] ? 'yes' : 'no') + (lbs2.length ? ' &middot; City label: ' + esc(lbs2.join(', ')) : '') + '</div>' +
+      '<div class="cf">' + (dn ? 'The address and full detail are on the District ' + dn + ' page.' : 'It has no council district, so no district page; the City record has the details.') + '</div>' + page +
+      '<a class="go alt" href="' + D.linkBase + encodeURIComponent(ids) + '" target="_blank" rel="noopener">Open the City record &#8599;</a>';
+  }
+  P.card.innerHTML = html; P.card.style.display = 'block';
+  var cb = P.card.querySelector('.ch button'); if (cb) cb.onclick = closeCards;
+  P.card.querySelectorAll('li a[data-i]').forEach(function(el){ el.onclick = function(){ selectRec(+el.getAttribute('data-i'), P, true); }; });
+  if (zoom){ V.cLon = lon[k]; V.cLat = lat[k]; if (V.k < K_REF * 8) V.k = K_REF * 8; }
+  draw();
+}
+function hashRec(){
+  var m = /[#&]rec=([0-9]{6}-[0-9]{2}CP)/i.exec(location.hash || ''); if (!m) return -1;
+  var id = m[1].toUpperCase(); return idsC.indexOf(id);
+}
+
+/* ---------- record list (keyboard and screen-reader route) ---------- */
+function fillList(){ var d = $('#lstd'); if (d.open) buildList(); }
+function buildList(){
+  var idx = [], A = PANES[0], B = PANES[1];
+  for (var n = 0; n < Nc; n++) if (A.vg[n] >= 0 || B.vg[n] >= 0) idx.push(n);
+  idx.sort(function(a, b){ return CP.dt[b] - CP.dt[a]; }); idx = idx.slice(0, 300);
+  var h = '';
+  idx.forEach(function(n){ h += '<tr data-i="' + n + '"><td>' + esc(idsC[n]) + '</td><td>' + dayFmt(CP.dt[n]) + '</td><td>' + esc(D.addrs[CP.ad[n]] || '') + '</td><td>' + (A.vg[n] >= 0 ? esc(G[A.vg[n]].label) : '') + '</td><td>' + (B.vg[n] >= 0 ? esc(G[B.vg[n]].label) : '') + '</td></tr>'; });
+  $('#lstb').innerHTML = h || '<tr><td colspan="5">No ' + (D.district ? 'District ' + D.district + ' ' : '') + 'complaints match the filters.</td></tr>';
+}
+$('#lstd').addEventListener('toggle', function(){ if (this.open) buildList(); });
+$('#lstb').addEventListener('click', function(e){ var tr = e.target.closest('tr[data-i]'); if (tr){ var k = +tr.getAttribute('data-i'), P = PANES[PANES[0].vg[k] >= 0 ? 0 : 1]; selectRec(k, P, true); P.mw.scrollIntoView({ block: 'center', behavior: 'smooth' }); } });
+
+/* ---------- summary, bars, legend numbers: all follow the filters ---------- */
+var FS = null, HMASK = 0, PMASK = 0, GI3 = -1, GIJ = -1, GIU = -1;
+G.forEach(function(x, k){ if (x.lane === 'H') HMASK |= (1 << k); if (x.lane === 'P') PMASK |= (1 << k); if (x.k === 'P3DAY') GI3 = k; if (x.k === 'PJCEO') GIJ = k; if (x.k === 'UNAS') GIU = k; });
+var UP = ['', 'are information requests with no problem stated', 'are staff notes or city labels only', 'have no problem wording the rules recognise', 'have only borderline wording or a city label (not counted)', 'have no description text'];
+function updateStats(){
+  var shown = passC, pc = function(n){ return (100 * n / Math.max(1, shown)).toFixed(1) + '%'; }, filt = (shown !== Nc);
+  $('#sumrow').innerHTML =
+    '<div><b>' + fmt(shown) + '</b><span>' + (D.district ? 'District ' + D.district + ' ' : '') + (filt ? 'complaints match the filters (of ' + fmt(Nc) + ' drawn)' : 'complaints drawn (' + T.yearMin + '–' + T.yearMax + ')') + '</span></div>' +
+    '<div><b>' + pc(FS.h) + '</b><span>name a housing condition (' + fmt(FS.h) + ')</span></div>' +
+    '<div><b>' + pc(FS.p) + '</b><span>name a paperwork or landlord-tenant-law issue (' + fmt(FS.p) + ')</span></div>' +
+    '<div><b>' + fmt(FS.g[GI3]) + '</b><span>mention a 3-day notice (' + pc(FS.g[GI3]) + ')</span></div>' +
+    '<div><b>' + fmt(FS.g[GIJ]) + '</b><span>carry the JCEO label or say &ldquo;just cause&rdquo; (' + pc(FS.g[GIJ]) + ')</span></div>';
+  [0, 1].forEach(function(pi){
+    var lane = LANEOF[pi], list = G.map(function(x, k){ return { x: x, n: FS.g[k] }; }).filter(function(o){ return o.x.lane === lane; }), mx = 0; list.forEach(function(o){ if (o.n > mx) mx = o.n; });
+    var row = function(o){ return '<li><span class="lab"><span class="sw ' + SHAPE[o.x.lane] + '" style="background:' + o.x.color + '"></span>' + esc(o.x.label) + '</span><span class="bar2"><i style="width:' + (100 * o.n / Math.max(1, mx)) + '%;background:' + o.x.color + '"></i></span><span class="num">' + fmt(o.n) + '</span><span class="pc">' + pc(o.n) + '</span></li>'; };
+    var h = ''; list.forEach(function(o){ h += row(o); });
+    if (pi === 1) G.forEach(function(x, k){ if (x.lane === 'O' || x.lane === 'U') h += row({ x: x, n: FS.g[k] }); });
+    $('#bars' + pi).innerHTML = h;
+  });
+  PANES.forEach(function(P){ P.groups.forEach(function(k){ if (P.nEl[k]) P.nEl[k].textContent = fmt(FS.g[k]); }); });
+  var parts = [];
+  for (var u = 1; u <= 5; u++) if (FS.u[u]) parts.push(fmt(FS.u[u]) + ' ' + UP[u]);
+  $('#unasList').textContent = parts.length ? 'Of the ' + fmt(FS.g[GIU]) + ' unassigned ' + DIN + (filt ? ' that match the filters' : '') + ', ' + parts.join('; ') + '.' : '';
+  $('#potaNote').textContent = FS.papN ? (D.district ? 'In District ' + D.district + ', ' : 'Citywide, ') + fmt(FS.potaN) + ' of the ' + fmt(FS.papN) + ' complaints on the paperwork map' + (filt ? ' that match the filters' : '') + ' (' + (100 * FS.potaN / FS.papN).toFixed(0) + '%) carry the POTA label.' : '';
+}
+
+/* ---------- wiring ---------- */
+function yearsChanged(){ S.from = +$('#yf').value; S.to = +$('#yt').value; if (S.from > S.to){ var t = S.from; S.from = S.to; S.to = t; $('#yf').value = S.from; $('#yt').value = S.to; } applyFilters(); }
+$('#yf').onchange = yearsChanged; $('#yt').onchange = yearsChanged;
+$('#st').onchange = function(){ S.st = this.value; applyFilters(); };
+$('#inn').onchange = function(){ S.inn = this.value; applyFilters(); };
+$('#lb').onchange = function(){ S.lb = this.value; applyFilters(); };
+if (!D.district){ $('#oth').parentNode.style.display = 'none'; document.querySelectorAll('.views button[data-v="dist"]').forEach(function(b){ b.style.display = 'none'; }); }
+$('#oth').onchange = function(){ S.others = this.value; applyFilters(); };
+var qt = 0;
+$('#q').addEventListener('input', function(){ clearTimeout(qt); var v = this.value; qt = setTimeout(function(){ S.q = v; applyFilters(); if (v.trim().length >= 3 && PANES[0].visC.length + PANES[1].visC.length > 0) fitResults(); }, 240); });
+function fitResults(){
+  var a = 1e9, b = -1e9, c = 1e9, d = -1e9, cnt = 0;
+  PANES.forEach(function(P){ P.visC.forEach(function(k){ cnt++; if (lon[k] < a) a = lon[k]; if (lon[k] > b) b = lon[k]; if (lat[k] < c) c = lat[k]; if (lat[k] > d) d = lat[k]; }); });
+  if (!cnt || cnt > 600) return;
+  var padx = Math.max(0.0012, (b - a) * 0.25), pady = Math.max(0.0009, (d - c) * 0.25);
+  fit([a - padx, b + padx, c - pady, d + pady]); if (V.k > K_REF * 40) V.k = K_REF * 40; draw();
+}
+$('#reset').onclick = function(){
+  S.from = T.yearMin; S.to = T.yearMax; S.st = ''; S.inn = ''; S.lb = ''; S.others = 'fade'; S.q = '';
+  $('#yf').value = S.from; $('#yt').value = S.to; $('#st').value = ''; $('#inn').value = ''; $('#lb').value = ''; $('#oth').value = 'fade'; $('#q').value = '';
+  PANES.forEach(function(P){ P.groups.forEach(function(k){ P.on[k] = (G[k].lane !== 'O'); var el = P.lg.querySelector('input[data-g="' + k + '"]'); if (el) el.checked = P.on[k]; }); });
+  recomputeMasks(); applyFilters(); fit(BCITY); draw();
+};
+function fdetSync(){ var d = $('#fdet'); if (window.innerWidth > 980) d.open = true; }
+fdetSync(); if (window.innerWidth <= 980) $('#fdet').open = false;
+window.addEventListener('resize', function(){ fdetSync(); resize(); });
+if (window.ResizeObserver) new ResizeObserver(function(){ var r = PANES[0].mw.getBoundingClientRect(); if (Math.abs(r.width - PANES[0].W) > 1 || Math.abs(r.height - PANES[0].H) > 1) resize(); }).observe(PANES[0].mw);
+resize(); applyFilters();
+var hr = hashRec(); if (hr >= 0) selectRec(hr, PANES[PANES[0].vg[hr] >= 0 ? 0 : 1], true);
+window.addEventListener('hashchange', function(){ var h2 = hashRec(); if (h2 >= 0) selectRec(h2, PANES[PANES[0].vg[h2] >= 0 ? 0 : 1], true); });
+})();
+</script>
+</body>
+</html>

@@ -11,6 +11,17 @@ _REFERENCE/
 _INBOX/*
 !_INBOX/README.md
 
+# District maps build: the source extracts are bulk data (the building outlines alone are 104 MB, over GitHub's 100 MB limit).
+# Only the small district outline file is tracked. Backups, the duplicate test build and the upload zip stay on disk.
+site/_district_maps_build/source/*
+!site/_district_maps_build/source/seattle_council_districts_CURRENT.geojson
+site/_district_maps_build/_backup_*/
+site/_district_maps_build/pages_buildings/
+site/_district_maps_build/*.zip
+# Internal notes with local folder paths stay off the public repo.
+site/_district_maps_build/*TRANSFER_DOC*.md
+site/_district_maps_build/*SOURCE_INDEX*.json
+
 __pycache__/
 desktop.ini
 .~lock*
