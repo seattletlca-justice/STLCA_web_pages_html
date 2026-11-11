@@ -1,0 +1,27 @@
+--- topic-rules.py	2026-11-11 06:04:06.880185341 +0000
++++ topic-rules.py	2026-11-11 06:04:06.880185341 +0000
+@@ -542,6 +542,16 @@
+ R('REG-02', P, 'REGISTRATION_PAPERWORK', 'COMPOUND', r"\bRRIO\b",
+   cue=r"\b(?:certificates?|registered|register\w*|registration|expir\w*|exempt\w*|complian\w*|non-?compliant|checklist|violat\w*|licen[cs]e\w*|inspect\w*|program|requirements?|ordinance|required|comply|enroll\w*|not\s+have|doesn't\s+have|does\s+not\s+have|no\s+rrio|without|lapsed|valid\w*)\b", win=60, prio=16, weak_alone=True,
+   desc="'RRIO' written in a sentence (not as a staff label) + certificate / register / expired / inspection / compliant; bare 'RRIO' = borderline")
++# ---- fifth pass (2026-11-11): a rental said to be unregistered, not listed in RRIO, or with an expired / lapsed registration.
++#      Runs just before REG-01 (prio 19 vs 20) so these statements carry their own rule id in match_audit.csv; the category is unchanged.
++R('REG-03', P, 'REGISTRATION_PAPERWORK', 'STRONG',
++  r"\b(?:never|not|without)\s+(?:been\s+|being\s+|yet\s+|currently\s+|properly\s+)?registered\b|n't\s+(?:been\s+|yet\s+|currently\s+)?registered\b"
++  r"|\bnor\s+is\s+(?:the\s+|this\s+|that\s+)?(?:property|unit|house|home|building)\s+registered\b|\bunregistered\b"
++  r"|\bnot\s+(?:listed|on\s+file|found|showing\s+up)\s+(?:on|in|with|under)\s+(?:the\s+)?(?:seattle\s+|city'?s?\s+)?(?:rrio|rental\s+(?:housing\s+)?registrations?)\b"
++  r"|\b(?:rental\s+)?registrations?\s+(?:has\s+|had\s+|is\s+|was\s+)?(?:expired|lapsed)\b|\b(?:expired|lapsed)\s+(?:rental\s+)?registrations?\b"
++  r"|\bunlicensed\s+(?:rentals?|units?|apartments?)\b|\bwhile\s+it\s+was\s+unlicensed\b|\bnot\s+licensed\s+(?:or\s+inspected\s+)?(?:to\s+be\s+|as\s+)a\s+rental\b",
++  reject=r"\b(?:trees?|tsp|(?:service\s+)?providers?|contractors?|vehicles?|cars?|autos?|dogs?|cats?|pets?|elevators?|short[- ]?term|airbnbs?|vrbo|mail|voters?|vote)\b",
++  prio=19, desc="rental said to be not registered / unregistered / not listed in RRIO, registration expired or lapsed, or an unlicensed rental (not a contractor, vehicle, pet, elevator or short-term-rental registration)")
+ R('ELEC-07', H, 'ELECTRICAL', 'COMPOUND', r"\b(?:breaker\s*box(?:es)?|electrical\s+panels?|fuse\s*box(?:es)?|main\s+panel|breaker\s+panel)\b",
+   cue=r"\b(?:no\s+access|access|located|inside|bedroom|closet|uncovered|exposed|blocked|locked|tripp\w*|trips?|overload\w*|buzz\w*|burn\w*|sparks?|sparking|shock\w*|melted|rusted|corroded|flooded|loose)\b", cue2=CUE_PROBLEM, win=70, prio=18, weak_alone=True,
+   desc="breaker box / electrical panel + no access, located in a bedroom, exposed, tripping, sparking; panel mentioned alone = borderline")
+@@ -1632,6 +1642,7 @@
+     'PUB-04': {"id": '006758-22CP', "decision": 'ACCEPT', "phrase": 'hedges', "text": 'Overgrown large hedges in alley between 21st & 22nd Ave - making driving and sight lines difficult'},
+     'REG-01': {"id": '006066-21CP', "decision": 'ACCEPT', "phrase": 'rental registration', "text": 'Units 1, 102, 204, and 302 are rental properties operating without a rental registration license.'},
+     'REG-02': {"id": '003561-25CP', "decision": 'ACCEPT', "phrase": 'RRIO inspected', "text": 'RRIO inspected my unit 25 days ago, and my landlord refused to complete the required maintenance service.'},
++    'REG-03': {"id": '007372-24CP', "decision": 'ACCEPT', "phrase": 'EXPIRED RENTAL REGISTRATION', "text": 'LANDLORD RENTING UNIT WITH AN EXPIRED RENTAL REGISTRATION'},
+     'RELO-01': {"id": '001414-24CP', "decision": 'ACCEPT', "phrase": 'relocation', "text": "No water, ceiling collapsed, wants to know rights as tenant. Landlord won't assist with relocation."},
+     'RELO-02': {"id": '010580-20CP', "decision": 'ACCEPT', "phrase": 'tenant … renovations', "text": 'inquire tenant rights, landlord started renovations to property did not inform me this was happening'},
+     'RENT-01': {"id": '000531-20CP', "decision": 'ACCEPT', "phrase": 'rent increase', "text": 'Apartment is damaged from flooding, rent increase eff 12/1/19, landlord threatening eviction notice.'},
