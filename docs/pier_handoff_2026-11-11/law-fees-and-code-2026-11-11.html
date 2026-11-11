@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RRIO Law, Fees and Code</title>
+<style>
+:root{--bg:#ffffff;--fg:#1b2333;--muted:#5a6475;--navy:#1f3a5f;--red:#a32020;--line:#d9dee7;--quote:#f3f5f9;--code:#eef1f6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#11161f;--fg:#e4e8ef;--muted:#9aa4b5;--navy:#8fb3e0;--red:#ef7a7a;--line:#2c3545;--quote:#1a2130;--code:#1d2533}}
+:root[data-theme="dark"]{--bg:#11161f;--fg:#e4e8ef;--muted:#9aa4b5;--navy:#8fb3e0;--red:#ef7a7a;--line:#2c3545;--quote:#1a2130;--code:#1d2533}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 Georgia,"Times New Roman",serif;margin:0;padding:0 16px}
+main{max-width:860px;margin:0 auto;padding:24px 0 64px}
+.banner{border:2px solid var(--red);color:var(--red);padding:10px 14px;font:600 14px/1.4 system-ui,sans-serif;margin:8px 0 20px}
+h1{color:var(--navy);font-size:1.6rem;line-height:1.25} h2{color:var(--navy);border-bottom:1px solid var(--line);padding-bottom:4px;margin-top:2em} h3{color:var(--navy)}
+a{color:var(--navy);overflow-wrap:anywhere}
+blockquote{background:var(--quote);border-left:4px solid var(--navy);margin:1em 0;padding:8px 16px}
+table{border-collapse:collapse;width:100%;display:block;overflow-x:auto;font:14px/1.4 system-ui,sans-serif}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top} th{background:var(--quote)}
+code{background:var(--code);padding:1px 4px;border-radius:3px;font-size:.9em;overflow-wrap:anywhere}
+pre{background:var(--code);padding:10px;overflow-x:auto} pre code{padding:0}
+</style></head><body><main>
+<div class="banner">DRAFT, REVIEW REQUIRED. Not yet checked with stlca-verify. Leads for review, not findings.</div>
+<h1>2026-11-11 P.I.E.R. Registration Lapses and Evictions: law, fees and build code</h1>
+<p><strong>Status:</strong> DRAFT, REVIEW REQUIRED. Not yet checked with <code>stlca-verify</code>. Nothing here is a finding.
+<strong>Written:</strong> November 11, 2026, cloud chat "2026-11-11 P.I.E.R. Registration Lapses and Evictions".
+<strong>Markdown copy:</strong> <code>LAW_FEES_AND_CODE_2026-11-11.md</code> (same folder).</p>
+<hr />
+<h2>1. The law (steps 1 of the transfer note)</h2>
+<h3>1.1 What could and could not be opened</h3>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seattle Municipal Code on Municode (<code>library.municode.com</code>), SMC 22.206.160 and Chapter 22.214</td>
+<td><strong>Could not be read.</strong> At first the network blocked it. After the session was allowed to reach it, the site answered "Access blocked. Your browser version can't access this site" (HTTP 403) to both a plain request and a real headless browser. The site refuses automated readers. I did not try to get around that.</td>
+</tr>
+<tr>
+<td>Seattle City Clerk code pages (<code>clerk.seattle.gov/~public/toc/22-214.htm</code>, <code>22-206.htm</code>)</td>
+<td><strong>Could not be read.</strong> The page returned a bot-check page, not the code.</td>
+</tr>
+<tr>
+<td>SDCI "Just Cause Eviction Ordinance" web page (seattle.gov)</td>
+<td><strong>Opened.</strong> Quoted below. No "last updated" date is shown on the page.</td>
+</tr>
+<tr>
+<td>SDCI "RRIO Registration Exceptions" PDF</td>
+<td><strong>Opened.</strong> PDF dated September 2025 (created 2025-09-11, modified 2025-09-24). Quoted below.</td>
+</tr>
+<tr>
+<td>SDCI "RRIO Penalties and Violations" PDF</td>
+<td><strong>Opened.</strong> PDF created 2025-11-25, modified 2026-01-06. Quoted below.</td>
+</tr>
+<tr>
+<td>SDCI "RRIO Program Fees" PDF</td>
+<td><strong>Opened.</strong> PDF created 2025-11-25, modified 2026-01-06. Quoted in section 2.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>So the exact wording of the code itself is still not in hand.</strong> What follows is SDCI's own published description of the law, quoted word for word. That is an official City source, but it is a summary, not the code. Before anything about evictions is published, Kimberly needs the code text (open the Municode links in her own browser and save the pages, or ask SDCI).</p>
+<h3>1.2 Just cause and registration: what SDCI's page says</h3>
+<p>From the SDCI page "Just Cause Eviction Ordinance" (<a href="https://www.seattle.gov/sdci/codes/codes-we-enforce-(a-z)/just-cause-eviction-ordinance">https://www.seattle.gov/sdci/codes/codes-we-enforce-(a-z)/just-cause-eviction-ordinance</a>), read 2026-11-11:</p>
+<blockquote>
+<p>"The Just Cause Eviction Ordinance applies to month-to-month renters, renters with verbal agreements, and renters with expiring term leases. To end or not offer to renew one of these agreements, a landlord or property manager must state one of the 16 approved reasons listed in the Just Cause Eviction Ordinance and be in compliance with the Rental Registration &amp; Inspection Ordinance."</p>
+</blockquote>
+<p><strong>Important for the plan: the section number may have changed.</strong> The transfer note cites SMC 22.206.160. The same SDCI page links the Just Cause Eviction Ordinance to Municode node <code>CH22.205JUCAEV</code> (Chapter 22.205, "Just Cause Eviction"), and cites "SMC 22.205.010.P" for criminal-activity notices. Some older complaint records cite "SMC 22.206.160(C)". This points to the just cause rules now sitting in SMC Chapter 22.205. <strong>Not confirmed</strong> until the code text is read. Use "the Just Cause Eviction Ordinance" in any wording until the right section is confirmed.</p>
+<p><strong>Exceptions:</strong> the code's exact registration language and any exceptions (for example, timing of registration relative to a notice) were <strong>not</strong> read. A web search summary pointed to an old council bill with the words "Regardless of whether just cause for eviction may exist, an owner may not evict a residential tenant from a rental housing unit if the unit is not registered…", but that bill is listed as retired and the text was not opened. <strong>Do not quote it.</strong></p>
+<h3>1.3 Who must register, and who is exempt (Chapter 22.214)</h3>
+<p>From the SDCI PDF "RRIO Registration Exceptions" (<a href="https://www.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIORegistrationExceptions.pdf">https://www.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIORegistrationExceptions.pdf</a>):</p>
+<blockquote>
+<p>"The following types of properties or rentals do not need to register with the Rental Registration and Inspection Ordinance (RRIO) program (subsection 22.214.030A of the ordinance):
+1. Housing units lawfully used as short-term rentals, if the housing unit is the primary residence of the short-term rental operator
+2. Housing units rented for less than 12 consecutive months because the property owner, who previously occupied the unit as a primary residence, takes a work-related leave of absence or assignment that temporarily transfers them to another location
+3. Housing units that are a unit unavailable for rent
+4. Rooms for rent in an owner-occupied home
+5. Housing units in hotels, motels, inns, bed and breakfasts, or in similar accommodations that provide lodging for guests
+6. Housing units in facilities licensed or required to be licensed such as Assisted Living Facilities, Adult Family Homes, or Soldiers' and Veteran's Homes (as stated in: RCW 18.20, RCW 70.128, or RCW 72.36)
+7. Housing units in any state licensed hospital, hospice, community-care facility, intermediate-care facility, or nursing home
+8. Housing units in any convent, monastery, or other facility occupied exclusively by members of a religious order or congregation
+9. Emergency or temporary shelter or transitional housing accommodations
+10. Housing units owned, operated, or managed by a major education or medical institution or by a third party for the institution
+11. Housing units that a government entity or housing authority owns, operates, or manages; or units exempted from municipal regulation by federal, state, or local law"</p>
+</blockquote>
+<p>What this means for P.I.E.R.: Seattle Housing Authority buildings, university housing, hospitals, care homes, shelters and owner-occupied room rentals will show up as "never registered" in the data but do not have to register. Each never-registered lead (output C) has to be checked against this list before it is counted.</p>
+<h3>1.4 Penalties</h3>
+<p>From the SDCI PDF "RRIO Program Fees" (<a href="https://www.adc.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIOProgramFees.pdf">https://www.adc.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIOProgramFees.pdf</a>):</p>
+<blockquote>
+<p>"If a property owner does not register their property or complete an inspection by the due date, the City may issue a Notice of Violation and begin assessing financial penalties as provided in Section 22.214.086 of the Seattle Municipal Code. The code allows for cumulative civil penalties of $150 per day for the first ten days and $500 per day thereafter."</p>
+</blockquote>
+<p>From the SDCI PDF "RRIO Penalties and Violations" (<a href="https://www.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIOViolationsandPenaltiesFlyer.pdf">https://www.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIOViolationsandPenaltiesFlyer.pdf</a>):</p>
+<blockquote>
+<p>"Once the due date has passed, we will send a warning letter by postal mail and email to remind you of the requirement that was missed and warn that a violation and penalties may occur if you do not take action. A $52.50 mandatory late fee is added to late registrations and overdue inspections."</p>
+<p>"If you do not take the required action by the date specified in the warning letter, we will issue a Notice of Violation letter. The notice will provide a compliance date to meet the RRIO requirement. After that date, penalties begin to accrue."</p>
+</blockquote>
+<p>What this means for P.I.E.R.: penalties only start <strong>after a Notice of Violation's compliance date</strong>, and SDCI says it "may reduce the applicable penalties". So a gap in registration does not by itself mean any penalty was owed. <strong>The code does not count penalties.</strong> Per the transfer note (section 4.6), no penalty estimate is made until SMC 22.214.086 itself is read.</p>
+<hr />
+<h2>2. The fees (step 2)</h2>
+<p>From the official SDCI PDF "RRIO Program Fees" (PDF title "Seattle SDCI - RRIO Program Fees", created 2025-11-25, modified 2026-01-06):</p>
+<blockquote>
+<p>"RRIO registration is valid for 2 years. As of January 2026, the registration fee is $126 for each property, which includes the first rental unit, plus $31.50 for each additional unit at the same property."</p>
+<p>"A late fee of $52.50 will be applied for overdue registrations and inspections."</p>
+<p>"Note: fees above include the RRIO fees and a 5% SDCI technology fee."</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Fee (as of January 2026)</th>
+<th>Amount</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Registration, per property, 2 years, includes first unit</td>
+<td>$126.00</td>
+<td>SDCI RRIO Program Fees PDF</td>
+</tr>
+<tr>
+<td>Each additional unit at the same property</td>
+<td>$31.50</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Late fee, overdue registration or inspection</td>
+<td>$52.50</td>
+<td>same, and RRIO Penalties and Violations PDF</td>
+</tr>
+<tr>
+<td>City inspection, per property incl. first unit</td>
+<td>$241.50</td>
+<td>same</td>
+</tr>
+<tr>
+<td>City inspection, each additional unit</td>
+<td>$52.50</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Private-inspector filing fee</td>
+<td>$63.00</td>
+<td>same</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Older amounts are not confirmed.</strong> The transfer note listed $110 per property, $20 per extra unit and a $31.50 late fee from older SDCI documents. Those are kept in <code>code/fee_schedule_RRIO.json</code> but marked <code>verified: false</code>, with a guessed start date. Most gaps since 2020 began before 2026, so <strong>the fee calculation (output F) for those gaps is not reliable until the older official fee amounts and their dates are confirmed.</strong></p>
+<hr />
+<h2>3. The build code (step 3)</h2>
+<p>Folder: <code>docs/pier_handoff_2026-11-11/code/</code></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pier_registration_gaps.py</code></td>
+<td>Builds outputs A–F. Python 3, standard library only (<code>shapely</code> only if a district map file is given).</td>
+</tr>
+<tr>
+<td><code>fee_schedule_RRIO.json</code></td>
+<td>Fee amounts with source, start date and a verified flag.</td>
+</tr>
+<tr>
+<td><code>../tests/test_pier_registration_gaps.py</code></td>
+<td>14 tests on made-up SAMPLE rows.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>It has not been run on real data.</strong> It was tested only on a handful of made-up rows whose addresses all contain the word SAMPLE. All 14 tests pass. That shows the logic does what it says on those rows, nothing more.</p>
+<h3>3.1 What it does</h3>
+<ul>
+<li><strong>A. <code>rrio_registration_periods</code></strong> — one row per registration period per address, with start date, expiration date, where each date came from (file and row), and units.</li>
+<li><strong>B. <code>rrio_registration_gaps</code></strong> — every gap that started on or after January 1, 2020: start, end (or "still open as of 2025-11-20"), days, units, district, whether the address later renewed, late-registration violations in the gap, registration-expired status rows, and ownership transfers in the gap.</li>
+<li><strong>C. <code>unregistered_candidates</code></strong> — addresses with evidence they may be rentals but no RRIO registration on file: King County parcels (once the file is named), landlord-tenant records with no RRIO match, the 159 REG-03 complaints, and RRIO violations at addresses with no registration.</li>
+<li><strong>D. <code>evictions_without_registration</code></strong> — each eviction filing labeled: covered, in a gap, before the first registration, never registered on file, undetermined, or could not match. Waits for the eviction file.</li>
+<li><strong>E. <code>complaints_during_gaps</code></strong> — complaints, notices of violation, citations and rent-increase complaints opened during a gap.</li>
+<li><strong>F. <code>rrio_money_estimate</code></strong> — fee calculation per gap, labeled "CALCULATION ONLY - not a record of money owed, charged or unpaid". Late fees shown as "late fees the schedule would apply".</li>
+</ul>
+<h3>3.2 Safety rules built in</h3>
+<ul>
+<li><strong>Unknown column headers stop the run</strong> and list every unknown header. The known headers are the ones in the Drive "Traceability Document: Merging Seattle Rental Property Registration and RRIO Datasets" (and its 2023 load log), plus the ones in the P.I.E.R. skills. Nothing is guessed.</li>
+<li><strong>Bad bytes stop the run.</strong> The two snapshot files that failed before (<code>_20250506</code>, <code>_20250731</code>) will stop it with the byte position, unless <code>--allow-cp1252-fallback</code> is given; that choice is written to the run log.</li>
+<li><strong>Files with 0 valid rows are named in the log</strong>, not dropped silently (for example <code>_20250908</code>).</li>
+<li><strong>Nothing expiring on or after 2025-11-20 is called lapsed.</strong> It is labeled "expires after data end - unknown".</li>
+<li><strong>A registration with no known expiration date does not create a gap.</strong> It is listed in <code>rrio_coverage_unknown</code>. Only if Kimberly passes <code>--assumed-term-years 2</code> does the code estimate an end date, and every such row is labeled <code>ESTIMATED</code>.</li>
+<li><strong>It writes its own new database file</strong>, <code>pier_registration_gaps_DRAFT.sqlite</code>. It refuses to write into <code>stlca_property_intelligence.sqlite</code>. Adding these tables to P.I.E.R. needs Kimberly's approval.</li>
+<li>Every output row keeps the source file and row number for its dates.</li>
+</ul>
+<h3>3.3 How Kimberly runs it (on her computer)</h3>
+<p>Open the folder that holds the RRIO files in File Explorer, Shift + right-click on empty space, choose "Open PowerShell window here", then:</p>
+<ol>
+<li>Check every file's headers first (fast, changes nothing):
+   <code>python pier_registration_gaps.py --check-headers --rrio-dir . --snapshot-dir .</code></li>
+<li>If that passes, build A, B, C, E and F:
+   <code>python pier_registration_gaps.py --rrio-dir . --snapshot-dir . --complaints "PATH\TO\MASTER_SOURCE_CITYWIDE_LLT_THRU_20251231_ENRICHED_01272026__PLUS_RECORDLIST-RARE.csv" --topics "PATH\TO\landlord-tenant-records.csv" --reg03 "PATH\TO\REG03_unregistered_or_lapsed_complaints_2020_2025_DRAFT.csv" --fee-schedule fee_schedule_RRIO.json --out-dir pier_gaps_out</code></li>
+<li>When the eviction file and King County file are known, add:
+   <code>--evictions FILE.csv --evictions-address-col "COLUMN" --evictions-date-col "COLUMN" --evictions-id-col "COLUMN"
+   --kc-file FILE.csv --kc-address-col "COLUMN" --kc-units-col "COLUMN" --min-units N</code></li>
+</ol>
+<p>Results land in <code>pier_gaps_out\</code>: one <code>_DRAFT.csv</code> per output, <code>RUN_LOG.txt</code>, <code>MANIFEST.json</code>, and the draft SQLite file.</p>
+<h3>3.4 Known limits</h3>
+<ul>
+<li>Address-only join. One address can be several buildings; one building can have several addresses. A failed match is not proof a property is unregistered.</li>
+<li>The snapshots only list registrations that were current when each snapshot was taken. Older periods come from RRIO registration and renewal events, which have no expiration date. Without <code>--assumed-term-years</code>, many older periods will be "end unknown" and their gaps will not be computed. That is on purpose.</li>
+<li>RRIO record numbers and snapshot registration numbers are matched only when they are equal. Whether they use the same numbering has not been checked on real data.</li>
+<li>Late-registration violations are matched to a gap by address and date, not by registration number.</li>
+<li>The eviction and King County files have unknown headers, so their column names must be typed on the command line.</li>
+<li>Exemptions (section 1.3) are not applied automatically. Each lead needs a manual check.</li>
+</ul>
+<hr />
+<h2>4. Wording rules for anything that comes out of this</h2>
+<ul>
+<li>"N eviction filings were made at addresses with no RRIO registration on file on the filing date, based on the records reviewed." Never "should not have been evicted."</li>
+<li>Fee numbers are "calculated from the SDCI fee schedule", never "owed" or "uncollected".</li>
+<li>Every number names its source file and date range, and says whether it counts rows, addresses or buildings.</li>
+</ul>
+<h2>Sources</h2>
+<ul>
+<li>SDCI, Just Cause Eviction Ordinance page: <a href="https://www.seattle.gov/sdci/codes/codes-we-enforce-(a-z)/just-cause-eviction-ordinance">https://www.seattle.gov/sdci/codes/codes-we-enforce-(a-z)/just-cause-eviction-ordinance</a></li>
+<li>SDCI, RRIO Registration Exceptions (PDF): <a href="https://www.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIORegistrationExceptions.pdf">https://www.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIORegistrationExceptions.pdf</a></li>
+<li>SDCI, RRIO Penalties and Violations (PDF): <a href="https://www.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIOViolationsandPenaltiesFlyer.pdf">https://www.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIOViolationsandPenaltiesFlyer.pdf</a></li>
+<li>SDCI, RRIO Program Fees (PDF): <a href="https://www.adc.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIOProgramFees.pdf">https://www.adc.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIOProgramFees.pdf</a></li>
+<li>Not readable from this session: Municode SMC 22.206.160 / Chapter 22.205 / Chapter 22.214; City Clerk code pages.</li>
+<li>Drive: "Traceability Document: Merging Seattle Rental Property Registration and RRIO Datasets" (column headers).</li>
+</ul>
+</main></body></html>
