@@ -1,0 +1,28 @@
+{
+  "status": "Entry 2 was checked on 2026-11-11 against the official SDCI PDF 'RRIO Program Fees' (PDF title 'Seattle SDCI - RRIO Program Fees', created 2025-11-25, modified 2026-01-06). Entry 1 is NOT verified: its amounts come from the transfer note and its start date is a guess. Fee amounts in effect before January 2026 must be confirmed from an older official SDCI fee document before any gap that starts before 2026 is priced.",
+  "official_document_checked": "https://www.adc.seattle.gov/documents/Departments/SDCI/Codes/RRIO/RRIOProgramFees.pdf",
+  "schedules": [
+    {
+      "label": "Older amounts listed in the transfer note (section 4.6) - NOT VERIFIED",
+      "effective_from": "2024-01-01",
+      "effective_from_basis": "GUESS from 'form updated 1/2024' in the transfer note. The real start and end dates of these amounts are not known.",
+      "property_fee": 110.00,
+      "additional_unit_fee": 20.00,
+      "late_fee": 31.50,
+      "term_days": 730,
+      "verified": false,
+      "source": "docs/TRANSFER_DOC_PIER_2026-11-11.md section 4.6 (SDCI fee documents found by search in the parent chat; not opened in this chat)"
+    },
+    {
+      "label": "SDCI RRIO Program Fees, as of January 2026 - VERIFIED 2026-11-11",
+      "effective_from": "2026-01-01",
+      "effective_from_basis": "The PDF says 'As of January 2026'. Exact day not stated; the 1st is used.",
+      "property_fee": 126.00,
+      "additional_unit_fee": 31.50,
+      "late_fee": 52.50,
+      "term_days": 730,
+      "verified": true,
+      "source": "SDCI 'RRIO Program Fees' PDF (modified 2026-01-06): 'RRIO registration is valid for 2 years. As of January 2026, the registration fee is $126 for each property, which includes the first rental unit, plus $31.50 for each additional unit at the same property.' and 'A late fee of $52.50 will be applied for overdue registrations and inspections.' Fees include a 5% SDCI technology fee."
+    }
+  ]
+}
